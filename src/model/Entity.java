@@ -4,10 +4,10 @@ import view.Drawable;
 
 public abstract class Entity implements Drawable {
 
-    private int id;
-    private int x;
-    private int y;
-    private String name;
+    protected int id;
+    protected int x;
+    protected int y;
+    protected String name;
 
     public Entity(int id, int x, int y) {
         this.id = id;

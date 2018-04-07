@@ -10,8 +10,8 @@ public class Transition extends Relation {
 
     private Action action;
 
-    public Transition(int id, int x, int y, int x2, int y2, Entity origin, Entity destination) {
-        super(id, x, y, x2, y2, origin, destination);
+    public Transition(int id, Entity origin, Entity destination) {
+        super(id, origin, destination);
     }
 
     @Override

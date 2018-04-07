@@ -1,16 +1,13 @@
 package model;
 
-public abstract class Relation extends Entity {
+import view.Drawable;
 
-    private Entity origin;
-    private Entity destination;
-    private int x2;
-    private int y2;
+public abstract class Relation implements Drawable {
 
-    public Relation(int id, int x, int y, int x2, int y2, Entity origin, Entity destination) {
-        super(id, x, y);
-        this.x2 = x2;
-        this.y2 = y2;
+    protected Entity origin;
+    protected Entity destination;
+
+    public Relation(int id, Entity origin, Entity destination) {
         this.origin = origin;
         this.destination = destination;
     }

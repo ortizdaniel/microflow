@@ -7,8 +7,8 @@ import java.awt.*;
 
 public class Operation extends Relation {
 
-    public Operation(int id, int x, int y, int x2, int y2, Entity origin, Entity destination) {
-        super(id, x, y, x2, y2, origin, destination);
+    public Operation(int id, Entity origin, Entity destination) {
+        super(id, origin, destination);
     }
 
     @Override

@@ -58,26 +58,27 @@ public class Manager {
         return v;
     }
 
-    public static Call createCall(int id, int x, int y, int x2, int y2, Entity origin, Entity destination) {
-        Call c = new Call(calls.size(), x, y, x2, y2, origin, destination);
+    //public static Call createCall(int id, int x, int y, int x2, int y2, Entity origin, Entity destination) {
+    public static Call createCall(Entity origin, Entity destination) {
+        Call c = new Call(calls.size(), origin, destination);
         calls.add(c);
         return c;
     }
 
-    public static Interrupt createInterrupt(int id, int x, int y, int x2, int y2, Entity origin, Entity destination) {
-        Interrupt i = new Interrupt(interrupts.size(), x, y, x2, y2, origin, destination);
+    public static Interrupt createInterrupt(Entity origin, Entity destination) {
+        Interrupt i = new Interrupt(interrupts.size(), origin, destination);
         interrupts.add(i);
         return i;
     }
 
-    public static Operation createOperation(int id, int x, int y, int x2, int y2, Entity origin, Entity destination) {
-        Operation o = new Operation(operations.size(), x, y, x2, y2, origin, destination);
+    public static Operation createOperation(Entity origin, Entity destination) {
+        Operation o = new Operation(operations.size(), origin, destination);
         operations.add(o);
         return o;
     }
 
-    public static Transition createTransition(int id, int x, int y, int x2, int y2, Entity origin, Entity destination) {
-        Transition t = new Transition(transitions.size(), x, y, x2, y2, origin, destination);
+    public static Transition createTransition(Entity origin, Entity destination) {
+        Transition t = new Transition(transitions.size(), origin, destination);
         transitions.add(t);
         return t;
     }
