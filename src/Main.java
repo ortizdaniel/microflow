@@ -1,6 +1,7 @@
 import model.Graph;
 import model.Node;
 import model.NodeType;
+import view.View;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,6 +20,7 @@ public class Main {
         Exportar a PNG
         Generar código motores
         Guardar/cargar JSON
+        Iconos custom toolbar
 
         Opcionales:
         Seleccion multiple
@@ -35,8 +37,9 @@ public class Main {
         }
 
         SwingUtilities.invokeLater(() -> {
-
+            View view = new View();
         });
+
 
         Graph g = new Graph();
         Node n = new Node(NodeType.STATE, new Point(0, 0));
@@ -60,5 +63,6 @@ public class Main {
         for (Node nn : g.getNodes()) {
             System.out.println(nn.getName() + " " + nn.getCenter().toString());
         }
+
     }
 }
