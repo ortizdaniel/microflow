@@ -17,8 +17,12 @@ public class View extends JFrame {
 
         JPanel content = (JPanel) getContentPane();
         content.add(new DrawPanel(this), BorderLayout.CENTER);
-        content.add(new Toolbar(), BorderLayout.NORTH);
+        ToolBar jpToolBar = new ToolBar();
+        content.add(jpToolBar, BorderLayout.NORTH);
+
+        this.setJMenuBar(new MenuBar(this, jpToolBar));
 
         this.setVisible(true);
     }
+
 }

@@ -1,13 +1,9 @@
 package view;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 
-import static java.lang.System.exit;
-
-
-public class Toolbar extends JPanel {
+public class ToolBar extends JPanel {
 
     private JToolBar jtbIcons;
 
@@ -44,12 +40,12 @@ public class Toolbar extends JPanel {
 
     private static int aux = 0;
 
-    public Toolbar() {
+    public ToolBar() {
 
         this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
         this.setPreferredSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
 
-        jtbIcons = new JToolBar("Icons Toolbar");
+        jtbIcons = new JToolBar("Icons ToolBar");
         jtbIcons.setFloatable(false);
         jtbIcons.setRollover(true);
 

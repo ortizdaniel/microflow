@@ -9,7 +9,7 @@ public class Main {
     /*
         TODO
         Pintar cada cosa
-        Toolbar
+        ToolBar
         Seleccionar objeto
         Mover objeto
         Mover pivote de flechas
@@ -30,6 +30,12 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+
+            if (System.getProperty("os.name").startsWith("Mac")) {
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Ted" );
+                System.setProperty("com.apple.macos.useScreenMenuBar", "true" );
+                System.setProperty("apple.laf.useScreenMenuBar", "true" );
+            }
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
