@@ -6,10 +6,17 @@ import java.util.List;
 
 public class Graph {
 
+    private static Graph instance;
+
     private List<Node> nodes;
     private List<Edge> edges;
 
-    public Graph() {
+    public static Graph getInstance() {
+        if (instance == null) instance = new Graph();
+        return instance;
+    }
+
+    private Graph() {
         nodes = new LinkedList<>();
         edges = new LinkedList<>();
     }

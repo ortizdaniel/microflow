@@ -1,5 +1,7 @@
 package view;
 
+import model.Graph;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -19,7 +21,7 @@ public class DrawPanel extends JPanel {
         Graphics2D g = (Graphics2D) g0;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        for (Drawable d : view.getDrawables()) {
+        for (Drawable d : Graph.getInstance().getNodes()) {
             d.draw(g);
         }
     }
