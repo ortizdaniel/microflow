@@ -20,10 +20,10 @@ public class Edge extends Element {
         this.n2 = n2;
         setBounds();
         bidir = false;
+    }
 
-        if (type.equals(EdgeType.CALL)) {
-            super.name = String.valueOf(interfaceCount++);
-        }
+    public Edge(EdgeType type, Node n1, Node n2) {
+        this(type, String.valueOf(interfaceCount++), n1, n2);
     }
 
     public EdgeType getType() {

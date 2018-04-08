@@ -14,10 +14,10 @@ public class Node extends Element {
         this.type = type;
         this.center = center;
         setBounds();
+    }
 
-        if (type.equals(NodeType.STATE)) {
-            super.name = String.valueOf(stateCount++);
-        }
+    public Node(NodeType type, Point center) {
+        this(type, String.valueOf(stateCount++), center);
     }
 
     @Override
