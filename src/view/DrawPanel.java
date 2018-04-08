@@ -5,9 +5,9 @@ import java.awt.*;
 
 public class DrawPanel extends JPanel {
 
-    private MainView view;
+    private View view;
 
-    public DrawPanel(MainView view) {
+    public DrawPanel(View view) {
         super();
         this.view = view;
         setBackground(Color.WHITE);

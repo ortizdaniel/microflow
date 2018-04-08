@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.LinkedList;
 
-public class MainView extends JFrame {
+public class View extends JFrame {
 
     private static final String TITLE = "BubbleWizard";
     private static final int MIN_WIDTH = 640;
@@ -12,7 +12,8 @@ public class MainView extends JFrame {
 
     private LinkedList<Drawable> drawables;
 
-    public MainView() {
+    //TODO toolbar
+    public View() {
         drawables = new LinkedList<>();
 
         setTitle(TITLE);

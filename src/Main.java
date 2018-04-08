@@ -1,9 +1,9 @@
-import model.Manager;
-import model.entities.TAD;
-import model.relations.Call;
-import view.MainView;
+import model.Graph;
+import model.Node;
+import model.NodeType;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class Main {
 
@@ -15,17 +15,29 @@ public class Main {
         }
 
         SwingUtilities.invokeLater(() -> {
-            MainView view = new MainView();
-            view.setVisible(true);
 
-            TAD t1, t2;
-            Call c;
-            view.addDrawable(t1 = Manager.createTAD(20, 20));
-            view.addDrawable(t2 = Manager.createTAD(300, 300));
-            view.addDrawable(Manager.createInterface(100, 30));
-            view.addDrawable(Manager.createState(300, 70));
-            view.addDrawable(Manager.createPeripheral(40, 500));
-            view.addDrawable(c = Manager.createCall(t1, t2));
         });
+
+        Graph g = new Graph();
+        Node n = new Node(NodeType.STATE, "", new Point(4, 4));
+        Node n2 = new Node(NodeType.STATE, "", new Point(9, 4));
+        Node n3 = new Node(NodeType.STATE, "", new Point(1, 4));
+        Node n4 = new Node(NodeType.STATE, "", new Point(2, 4));
+        Node n5 = new Node(NodeType.STATE, "", new Point(3, 4));
+        g.addNode(n);
+        g.addNode(n2);
+        g.addNode(n3);
+        g.addNode(n4);
+        g.addNode(n5);
+
+        for (Node nn : g.getNodes()) {
+            System.out.println(nn.getName());
+        }
+
+        g.deleteNode((Node) g.getElementAt(new Point(4, 4)));
+
+        for (Node nn : g.getNodes()) {
+            System.out.println(nn.getName());
+        }
     }
 }
