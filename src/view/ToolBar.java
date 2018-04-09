@@ -1,7 +1,12 @@
 package view;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
 
 public class ToolBar extends JPanel {
 
@@ -40,6 +45,11 @@ public class ToolBar extends JPanel {
 
     /* Icon paths */
     private static final String NEW_FILE_ICON = "rsc/img/toolbar/new_file.png";
+    private static final String OPEN_FILE_ICON = "rsc/img/toolbar/open_file.png";
+    private static final String SAVE_FILE_ICON = "rsc/img/toolbar/save_file.png";
+    private static final String PRINT_FILE_ICON = "rsc/img/toolbar/print_file.png";
+
+
 
     public ToolBar() {
 
@@ -67,9 +77,9 @@ public class ToolBar extends JPanel {
         JPanel jpButtons = new JPanel();
 
         jbNewFile = makeCustomButton("Create a new file", NEW_FILE_ICON);
-        jbOpenFile = makeCustomButton("Open an existing file", null);
-        jbSaveFile = makeCustomButton("Save actual file", null);
-        jbPrint = makeCustomButton("Print actual file", null);
+        jbOpenFile = makeCustomButton("Open an existing file", OPEN_FILE_ICON);
+        jbSaveFile = makeCustomButton("Save actual file", SAVE_FILE_ICON);
+        jbPrint = makeCustomButton("Print actual file", PRINT_FILE_ICON);
 
         jpButtons.add(jbNewFile);
         jpButtons.add(jbOpenFile);
@@ -133,6 +143,23 @@ public class ToolBar extends JPanel {
 
         jb.setPreferredSize(jbDimension);
         jb.setToolTipText(tipText);
+        jb.setBorder(BorderFactory.createEmptyBorder());
+        jb.addMouseListener(new MouseAdapter() {
+
+            private final Border hovered = BorderFactory.createBevelBorder(BevelBorder.RAISED);
+            private final Border notHovered = BorderFactory.createEmptyBorder();
+
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                jb.setBorder(hovered);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                jb.setBorder(notHovered);
+            }
+
+        });
 
         try {
             //Icons must be the same size as the button
