@@ -63,7 +63,7 @@ public class Edge extends Element {
                 break;
             case OPERATION:
                 break;
-            case CALL:
+            case INTERFACE:
                 break;
         }
     }

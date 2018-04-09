@@ -15,7 +15,7 @@ public class MenuBar extends JMenuBar {
     private View view;
     private JPanel jpToolBar;
 
-    private static final String aboutMsg = "BubbleWizard\nDaniel Ortiz & Joan Gómez\n" +
+    private static final String ABOUT_MSG = "BubbleWizard\nDaniel Ortiz & Joan Gómez\n" +
             "Inspired by the original of F. Escudero\nCopyright (C) 2018";
 
     public MenuBar(View view, JPanel jpToolBar) {
@@ -157,7 +157,7 @@ public class MenuBar extends JMenuBar {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //TODO: pasar el icono del bubblewizard
-                JOptionPane.showMessageDialog(null, aboutMsg, "Credits", JOptionPane.INFORMATION_MESSAGE, null);
+                JOptionPane.showMessageDialog(null, ABOUT_MSG, "Credits", JOptionPane.INFORMATION_MESSAGE, null);
             }
         });
 

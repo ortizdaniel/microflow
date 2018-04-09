@@ -16,7 +16,7 @@ public class View extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel content = (JPanel) getContentPane();
-        content.add(new DrawPanel(this), BorderLayout.CENTER);
+        content.add(new DrawPanel(), BorderLayout.CENTER);
         ToolBar jpToolBar = new ToolBar();
         content.add(jpToolBar, BorderLayout.NORTH);
 

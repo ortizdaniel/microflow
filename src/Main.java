@@ -57,7 +57,7 @@ public class Main {
         g.addNode(n3);
         g.addNode(n4);
         g.addNode(n5);
-        g.addEdge(new Edge(EdgeType.CALL, n2, n3));
+        g.addEdge(new Edge(EdgeType.INTERFACE, n2, n3));
 
         for (Node nn : g.getNodes()) {
             System.out.println(nn.getName());

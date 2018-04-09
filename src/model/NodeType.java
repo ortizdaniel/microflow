@@ -8,7 +8,7 @@ public enum NodeType {
     VARIABLE(80, 40, new BasicStroke(3), Color.BLACK, Color.WHITE),
     PERIPHERAL(80, 40, new BasicStroke(3), Color.BLACK, Color.YELLOW),
     STATE(45, 45, new BasicStroke(3), Color.BLACK, new Color(0.0f, 0.72f, 1.0f)),
-    INTERFACE(40, 40, new BasicStroke(1), Color.BLACK, Color.WHITE);
+    /*INTERFACE(40, 40, new BasicStroke(1), Color.BLACK, Color.WHITE)*/;
 
     private int width;
     private int height;

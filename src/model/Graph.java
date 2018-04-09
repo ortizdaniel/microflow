@@ -69,10 +69,10 @@ public class Graph {
     public void deleteEdge(Edge e) {
         edges.remove(e);
 
-        if (e.getType().equals(EdgeType.CALL)) {
+        if (e.getType().equals(EdgeType.INTERFACE)) {
             int count = 0;
             for (Edge k : edges) {
-                if (k.getType().equals(EdgeType.CALL)) {
+                if (k.getType().equals(EdgeType.INTERFACE)) {
                     k.setName(String.valueOf(count++));
                 }
             }
