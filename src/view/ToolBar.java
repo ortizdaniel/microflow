@@ -14,6 +14,7 @@ public class ToolBar extends JPanel {
     private JButton jbPrint;
 
     /* Main Options */
+    private JButton jbCursor;
     private JButton jbBack;
     private JButton jbDelete;
 
@@ -22,7 +23,6 @@ public class ToolBar extends JPanel {
     private JButton jbVariable;
     private JButton jbPeripheral;
     private JButton jbIface;
-    private JButton jbCall;
     private JButton jbOperation;
     private JButton jbInterrupt;
 
@@ -33,12 +33,13 @@ public class ToolBar extends JPanel {
 
 
     private static final int MIN_WIDTH = 640;
-    private static final int MIN_HEIGHT = 45;
-    private static final int BUTTON_SIZE = 30;
+    private static final int MIN_HEIGHT = 40;
+    private static final int BUTTON_SIZE = 25;
 
     private static final Dimension jbDimension = new Dimension(BUTTON_SIZE, BUTTON_SIZE);
 
-    private static int aux = 0;
+    /* Icon paths */
+    private static final String NEW_FILE_ICON = "rsc/img/toolbar/new_file.png";
 
     public ToolBar() {
 
@@ -65,7 +66,7 @@ public class ToolBar extends JPanel {
     private void addFilesButtons() {
         JPanel jpButtons = new JPanel();
 
-        jbNewFile = makeCustomButton("Create a new file", null);
+        jbNewFile = makeCustomButton("Create a new file", NEW_FILE_ICON);
         jbOpenFile = makeCustomButton("Open an existing file", null);
         jbSaveFile = makeCustomButton("Save actual file", null);
         jbPrint = makeCustomButton("Print actual file", null);
@@ -81,9 +82,11 @@ public class ToolBar extends JPanel {
     private void addMainOpButtons() {
         JPanel jpButtons = new JPanel();
 
+        jbCursor = makeCustomButton("Select cursor", null);
         jbBack = makeCustomButton("Undo last action (Ctrl + Z)", null);
         jbDelete = makeCustomButton("Delete element", null);
 
+        jpButtons.add(jbCursor);
         jpButtons.add(jbBack);
         jpButtons.add(jbDelete);
 
@@ -97,7 +100,6 @@ public class ToolBar extends JPanel {
         jbVariable = makeCustomButton("Create variable", null);
         jbPeripheral = makeCustomButton("Create peripheral", null);
         jbIface = makeCustomButton("Interface cursor", null);
-        jbCall = makeCustomButton("Call cursor", null);
         jbOperation = makeCustomButton("Operation cursor", null);
         jbInterrupt = makeCustomButton("Interrupt cursor", null);
 
@@ -105,7 +107,6 @@ public class ToolBar extends JPanel {
         jpButtons.add(jbVariable);
         jpButtons.add(jbPeripheral);
         jpButtons.add(jbIface);
-        jpButtons.add(jbCall);
         jpButtons.add(jbOperation);
         jpButtons.add(jbInterrupt);
 

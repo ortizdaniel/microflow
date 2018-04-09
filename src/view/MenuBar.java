@@ -11,7 +11,6 @@ public class MenuBar extends JMenuBar {
     private JMenu jmWindow;
     private JMenu jmHelp;
 
-    // TODO: clean?
     private View view;
     private JPanel jpToolBar;
 
