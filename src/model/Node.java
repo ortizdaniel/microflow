@@ -98,6 +98,8 @@ public class Node extends Element {
 
                 break;
             case VARIABLE:
+                g.setColor(type.getFill());
+                g.fill(bounds);
                 setStrokeAndColor(g);
                 g.drawLine(x, y, x + width, y);
                 g.drawLine(x, y + height, x + width, y + height);
@@ -121,7 +123,7 @@ public class Node extends Element {
         g.drawString(name, center.x - nameWidth / 2,
                 center.y + (type.equals(NodeType.STATE) ? large.getSize() / 3 : medium.getSize() / 3));
 
-        g.drawLine(center.x, center.y, center.x, center.y);
+        //g.drawLine(center.x, center.y, center.x, center.y);
     }
 
     private void setStrokeAndColor(Graphics2D g) {

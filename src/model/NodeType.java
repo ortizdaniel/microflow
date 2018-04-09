@@ -5,8 +5,8 @@ import java.awt.*;
 public enum NodeType {
 
     TAD(90, 90, new BasicStroke(3), Color.BLACK, /*new Color(255, 221, 99)*/Color.ORANGE),
-    VARIABLE(80, 40, new BasicStroke(3), Color.BLACK, Color.WHITE),
-    PERIPHERAL(80, 40, new BasicStroke(3), Color.BLACK, Color.YELLOW),
+    VARIABLE(80, 30, new BasicStroke(3), Color.BLACK, Color.WHITE),
+    PERIPHERAL(80, 30, new BasicStroke(3), Color.BLACK, Color.YELLOW),
     STATE(45, 45, new BasicStroke(3), Color.BLACK, new Color(0.0f, 0.72f, 1.0f)),
     /*INTERFACE(40, 40, new BasicStroke(1), Color.BLACK, Color.WHITE)*/;
 

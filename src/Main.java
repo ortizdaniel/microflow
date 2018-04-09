@@ -19,6 +19,7 @@ public class Main {
         Generar código motores
         Guardar/cargar JSON
         Iconos custom toolbar
+        DEFINIR COLORES!!!!
 
         Opcionales:
         Seleccion multiple
@@ -57,7 +58,10 @@ public class Main {
         g.addNode(n3);
         g.addNode(n4);
         g.addNode(n5);
-        g.addEdge(new Edge(EdgeType.INTERFACE, n2, n3));
+        Edge e = new Edge(EdgeType.INTERRUPT, n2, n3);
+        e.updatePivot(new Point(100, 300));
+        g.addEdge(e);
+        g.addEdge(new Edge(EdgeType.TRANSITION, n4, n5));
 
         for (Node nn : g.getNodes()) {
             System.out.println(nn.getName());

@@ -10,6 +10,9 @@ public abstract class Element implements Drawable {
     protected boolean selected;
     protected Rectangle bounds;
 
+    protected static final Stroke DASH_SMALL = new BasicStroke(1, BasicStroke.CAP_BUTT,
+            BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+
     public Element(String name) {
         this.name = name;
         bounds = new Rectangle();
