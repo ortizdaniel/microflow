@@ -13,6 +13,7 @@ public class Edge extends Element {
     private Rectangle pivot; //TODO pivot
     private QuadCurve2D.Float curve;
     private boolean bidir;
+    private Polygon arrow;
 
     private static int interfaceCount = 0;
 
@@ -27,6 +28,13 @@ public class Edge extends Element {
         setBounds();
         bidir = false;
         setPivot(n1.getCenter(), n2.getCenter());
+        arrow = new Polygon();
+        arrow.addPoint(4, 0);
+        arrow.addPoint(0, 10);
+        arrow.addPoint(4, 10);
+        arrow.addPoint(8, 10);
+
+        arrow.translate(50, 50);
     }
 
     private void setPivot(Point n1, Point n2) {
@@ -104,5 +112,7 @@ public class Edge extends Element {
             g.fill(pivot);
             g.draw(bounds);
         }
+
+        g.draw(arrow);
     }
 }

@@ -63,16 +63,6 @@ public class Main {
         g.addEdge(e);
         g.addEdge(new Edge(EdgeType.TRANSITION, n4, n5));
 
-        for (Node nn : g.getNodes()) {
-            System.out.println(nn.getName());
-        }
-
-        //g.deleteNode((Node) g.getElementAt(new Point(101, 102)));
-
-        System.out.println();
-        for (Node nn : g.getNodes()) {
-            System.out.println(nn.getName() + " " + nn.getCenter().toString());
-        }
 
     }
 }
