@@ -39,17 +39,18 @@ public class ToolBar extends JPanel {
 
     private static final int MIN_WIDTH = 640;
     private static final int MIN_HEIGHT = 40;
-    private static final int BUTTON_SIZE = 25;
+    private static final int BUTTON_SIZE = 27;
 
     private static final Dimension jbDimension = new Dimension(BUTTON_SIZE, BUTTON_SIZE);
 
     /* Icon paths */
-    private static final String NEW_FILE_ICON = "rsc/img/toolbar/new_file.png";
-    private static final String OPEN_FILE_ICON = "rsc/img/toolbar/open_file.png";
-    private static final String SAVE_FILE_ICON = "rsc/img/toolbar/save_file.png";
-    private static final String PRINT_FILE_ICON = "rsc/img/toolbar/print_file.png";
-
-
+    private static final String NEW_FILE_ICON = "res/img/toolbar/new_file.png";
+    private static final String OPEN_FILE_ICON = "res/img/toolbar/open_file.png";
+    private static final String SAVE_FILE_ICON = "res/img/toolbar/save_file.png";
+    private static final String PRINT_FILE_ICON = "res/img/toolbar/print_file.png";
+    private static final String CURSOR_ICON = "res/img/toolbar/cursor.png";
+    private static final String UNDO_ICON = "res/img/toolbar/undo.png";
+    private static final String DELETE_ICON = "res/img/toolbar/delete.png";
 
     public ToolBar() {
 
@@ -92,9 +93,9 @@ public class ToolBar extends JPanel {
     private void addMainOpButtons() {
         JPanel jpButtons = new JPanel();
 
-        jbCursor = makeCustomButton("Select cursor", null);
-        jbBack = makeCustomButton("Undo last action (Ctrl + Z)", null);
-        jbDelete = makeCustomButton("Delete element", null);
+        jbCursor = makeCustomButton("Select cursor", CURSOR_ICON);
+        jbBack = makeCustomButton("Undo last action (Ctrl + Z)", UNDO_ICON);
+        jbDelete = makeCustomButton("Delete element", DELETE_ICON);
 
         jpButtons.add(jbCursor);
         jpButtons.add(jbBack);
