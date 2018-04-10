@@ -2,12 +2,14 @@ package view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
 
 public class View extends JFrame {
 
     private static final String TITLE = "BubbleWizard";
     private static final int MIN_WIDTH = 640;
     private static final int MIN_HEIGHT = 480;
+    private final DrawPanel drawPanel;
 
     public View() {
         setTitle(TITLE);
@@ -16,7 +18,8 @@ public class View extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel content = (JPanel) getContentPane();
-        content.add(new DrawPanel(), BorderLayout.CENTER);
+        drawPanel = new DrawPanel();
+        content.add(drawPanel, BorderLayout.CENTER);
         ToolBar jpToolBar = new ToolBar();
         content.add(jpToolBar, BorderLayout.NORTH);
 
@@ -25,4 +28,8 @@ public class View extends JFrame {
         this.setVisible(true);
     }
 
+    public void registerController(MouseAdapter ma) {
+        drawPanel.addMouseListener(ma);
+        drawPanel.addMouseMotionListener(ma);
+    }
 }

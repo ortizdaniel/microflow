@@ -1,3 +1,4 @@
+import controller.Controller;
 import model.*;
 import view.View;
 
@@ -44,13 +45,15 @@ public class Main {
 
         SwingUtilities.invokeLater(() -> {
             View view = new View();
+            Controller controller = new Controller(view);
+            view.registerController(controller);
         });
 
         System.out.println(System.getProperty("user.dir"));
 
         Graph g = Graph.getInstance();
         Node n = new Node(NodeType.TAD, new Point(0, 0));
-        Node n2 = new Node(NodeType.VARIABLE, "char* cua[MAX_SIZE]",new Point(100, 100));
+        Node n2 = new Node(NodeType.VARIABLE, "char cua[MAX_CUA][MAX_LEGNTH]", new Point(100, 100));
         Node n3 = new Node(NodeType.PERIPHERAL, "Nombre largo",new Point(200, 200));
         Node n4 = new Node(NodeType.STATE, "55", new Point(300, 300));
         Node n5 = new Node(NodeType.TAD, "Loco",new Point(400, 400));
@@ -60,7 +63,6 @@ public class Main {
         g.addNode(n4);
         g.addNode(n5);
         Edge e = new Edge(EdgeType.INTERRUPT, n2, n3);
-        System.out.println("nuevo pivot!");
         e.updatePivot(new Point(100, 300));
         g.addEdge(e);
         //g.addEdge(new Edge(EdgeType.TRANSITION, n4, n5));

@@ -9,7 +9,7 @@ public class DrawPanel extends JPanel {
 
     public DrawPanel() {
         super();
-        setBackground(Color.WHITE);
+        setBackground(Color.decode("#fefefe"));
     }
 
     @Override

@@ -45,6 +45,8 @@ public class Node extends Element {
 
     public void setCenter(Point center) {
         this.center = center;
+        setBounds();
+        setName(name);
     }
 
     public static void decrementStateCount() {

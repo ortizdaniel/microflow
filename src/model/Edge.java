@@ -25,9 +25,9 @@ public class Edge extends Element {
         this.type = type;
         this.n1 = n1;
         this.n2 = n2;
-        setBounds();
         bidir = false;
         setPivot(n1.getCenter(), n2.getCenter());
+        setBounds();
         arrow = new Polygon();
         arrow.addPoint(4, 0);
         arrow.addPoint(0, 10);
@@ -68,12 +68,13 @@ public class Edge extends Element {
 
     @Override
     protected void setBounds() {
-        bounds.setBounds(
+        /*bounds.setBounds(
                 Math.min(n1.getCenter().x, n2.getCenter().x),
                 Math.min(n1.getCenter().y, n2.getCenter().y),
                 Math.abs(n2.getCenter().x - n1.getCenter().x),
                 Math.abs(n2.getCenter().y - n1.getCenter().y)
-        );
+        );*/
+        bounds = curve.getBounds();
     }
 
     public void updatePivot(Point p) {
@@ -83,6 +84,7 @@ public class Edge extends Element {
         pivot = new Rectangle(p.x - PIVOT_WIDTH / 2, p.y - PIVOT_HEIGHT / 2,
                 PIVOT_WIDTH, PIVOT_HEIGHT);
         curve = new QuadCurve2D.Float(p1.x, p1.y, pivotPoint.x, pivotPoint.y, p2.x, p2.y);
+        setBounds();
     }
 
     @Override
