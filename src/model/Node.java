@@ -67,7 +67,7 @@ public class Node extends Element {
     @Override
     public void draw(Graphics2D g) {
         if (selected) {
-            g.draw(bounds);
+            drawOutline(g);
         }
 
         int x = bounds.x;

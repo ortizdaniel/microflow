@@ -87,7 +87,10 @@ public class Edge extends Element {
 
     @Override
     public void draw(Graphics2D g) {
-        if (selected) g.draw(bounds);
+        if (selected) {
+            drawOutline(g);
+            g.fill(pivot);
+        }
 
         g.setStroke(type.getStroke());
         g.setColor(type.getColor());
@@ -104,13 +107,6 @@ public class Edge extends Element {
                 g.drawLine(p1.x, p1.y, pivotPoint.x, pivotPoint.y);
                 g.drawLine(pivotPoint.x, pivotPoint.y, p2.x, p2.y);
                 break;
-        }
-
-        if (selected) {
-            g.setStroke(DASH_SMALL);
-            g.setColor(Color.BLACK);
-            g.fill(pivot);
-            g.draw(bounds);
         }
 
         g.draw(arrow);

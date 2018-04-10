@@ -46,6 +46,7 @@ public class Main {
             View view = new View();
         });
 
+        System.out.println(System.getProperty("user.dir"));
 
         Graph g = Graph.getInstance();
         Node n = new Node(NodeType.TAD, new Point(0, 0));
@@ -59,9 +60,10 @@ public class Main {
         g.addNode(n4);
         g.addNode(n5);
         Edge e = new Edge(EdgeType.INTERRUPT, n2, n3);
+        System.out.println("nuevo pivot!");
         e.updatePivot(new Point(100, 300));
         g.addEdge(e);
-        g.addEdge(new Edge(EdgeType.TRANSITION, n4, n5));
+        //g.addEdge(new Edge(EdgeType.TRANSITION, n4, n5));
 
 
     }

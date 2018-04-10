@@ -13,6 +13,8 @@ public abstract class Element implements Drawable {
     protected static final Stroke DASH_SMALL = new BasicStroke(1, BasicStroke.CAP_BUTT,
             BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
 
+    protected static final Stroke SMALL = new BasicStroke(1);
+
     public Element(String name) {
         this.name = name;
         bounds = new Rectangle();
@@ -38,5 +40,11 @@ public abstract class Element implements Drawable {
 
     public void setSelected(boolean selected) {
         this.selected = selected;
+    }
+
+    protected void drawOutline(Graphics2D g) {
+        g.setStroke(SMALL);
+        g.setColor(Color.GRAY);
+        g.draw(bounds);
     }
 }
