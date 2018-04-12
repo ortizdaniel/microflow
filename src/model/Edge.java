@@ -96,9 +96,9 @@ public class Edge extends Element {
     private Polygon makeArrow(double distance, Point p0, Point p1, Point p2, Node dest) {
         Point last = p0;
         NodeType destType = dest.getType();
-        double initial = distance > 30 ? 0.70 : 0.49;
+        double initial = distance > 30 ? 0.60 : 0.49;
         for (double t = initial; t <= 1; t += 0.005) {
-            Point actual = bezierQuadratic(t, p0, p1, p2);
+            Point actual = type.equals(EdgeType.OPERATION) ? bezierLinear(t, p1, p2) : bezierQuadratic(t, p0, p1, p2);
             //si el nodo destino es un TAD o un STATE, mirar su circulo, no su bound entero
             if ((destType.equals(NodeType.TAD) || destType.equals(NodeType.STATE)) ?
                     dest.circleContains(actual) :
@@ -109,6 +109,13 @@ public class Edge extends Element {
             }
         }
         return new Polygon(); //no puedo encontrar el punto, -->>nunca se da este caso
+    }
+
+    private Point bezierLinear(double t, Point p0, Point p1) {
+        return new Point(
+                (int) (p0.x + t * (p1.x - p0.x)),
+                (int) (p0.y + t * (p1.y - p0.y))
+        );
     }
 
     private Point bezierQuadratic(double t, Point p0, Point p1, Point p2) {
