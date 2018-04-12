@@ -18,8 +18,8 @@ public class Edge extends Element {
 
     private static int interfaceCount = 0;
 
-    private static final int PIVOT_WIDTH = 12;
-    private static final int PIVOT_HEIGHT = 12;
+    private static final int PIVOT_WIDTH = 15;
+    private static final int PIVOT_HEIGHT = 15;
 
     public Edge(EdgeType type, String name, Node n1, Node n2) {
         super(name);
@@ -67,6 +67,10 @@ public class Edge extends Element {
         interfaceCount--;
     }
 
+    public void update() {
+        setBounds();
+    }
+
     @Override
     protected void setBounds() {
         /*bounds.setBounds(
@@ -75,32 +79,36 @@ public class Edge extends Element {
                 Math.abs(n2.getCenter().x - n1.getCenter().x),
                 Math.abs(n2.getCenter().y - n1.getCenter().y)
         );*/
+        Point p0 = n1.getCenter();
+        Point p2 = n2.getCenter();
+        curve = new QuadCurve2D.Float(p0.x, p0.y, pivotPoint.x, pivotPoint.y, p2.x, p2.y);
         bounds = curve.getBounds();
+
         double distance = Math.hypot(
                 n1.getCenter().getX() - n2.getCenter().getX(),
                 n1.getCenter().getY() - n2.getCenter().getY()
         );
 
-        Point p0 = n1.getCenter();
-        Point p1 = pivotPoint;
-        Point p2 = n2.getCenter();
-
-        arrow = makeArrow(distance, p0, p1, p2, n2);
-        if (bidir) arrowBidir = makeArrow(distance, p2, p1, p0, n1);
+        arrow = makeArrow(distance, p0, pivotPoint, p2, n2);
+        if (bidir) arrowBidir = makeArrow(distance, p2, pivotPoint, p0, n1);
     }
 
-    private Polygon makeArrow(double distance, Point p0, Point p1, Point p2, Node destination) {
+    private Polygon makeArrow(double distance, Point p0, Point p1, Point p2, Node dest) {
         Point last = p0;
-        double initial = distance > 30 ? 0.85 : 0.70;
+        NodeType destType = dest.getType();
+        double initial = distance > 30 ? 0.70 : 0.49;
         for (double t = initial; t <= 1; t += 0.005) {
             Point actual = bezierQuadratic(t, p0, p1, p2);
-            if (destination.contains(actual)) {
+            //si el nodo destino es un TAD o un STATE, mirar su circulo, no su bound entero
+            if ((destType.equals(NodeType.TAD) || destType.equals(NodeType.STATE)) ?
+                    dest.circleContains(actual) :
+                    dest.contains(actual)) {
                 return getArrowFor(last, actual);
             } else {
                 last = actual;
             }
         }
-        return new Polygon(); //no puedo encontrar el punto
+        return new Polygon(); //no puedo encontrar el punto, -->>nunca se da este caso
     }
 
     private Point bezierQuadratic(double t, Point p0, Point p1, Point p2) {
@@ -116,7 +124,7 @@ public class Edge extends Element {
     private Polygon getArrowFor(Point p1, Point p2) {
         int dx = p2.x - p1.x, dy = p2.y - p1.y;
         double D = Math.sqrt(dx * dx + dy * dy);
-        double xm = D - 15, xn = xm, ym = 7, yn = -7, x;
+        double xm = D - 15, xn = xm, ym = 7, yn = -7, x; //15 y 7 -> ancho y largo de la flecha
         double sin = dy / D, cos = dx / D;
 
         x = xm * cos - ym * sin + p1.x;
@@ -134,12 +142,9 @@ public class Edge extends Element {
     }
 
     public void updatePivot(Point p) {
-        Point p1 = n1.getCenter();
-        Point p2 = n2.getCenter();
         pivotPoint = p;
         pivot = new Rectangle(p.x - PIVOT_WIDTH / 2, p.y - PIVOT_HEIGHT / 2,
                 PIVOT_WIDTH, PIVOT_HEIGHT);
-        curve = new QuadCurve2D.Float(p1.x, p1.y, pivotPoint.x, pivotPoint.y, p2.x, p2.y);
         setBounds();
     }
 

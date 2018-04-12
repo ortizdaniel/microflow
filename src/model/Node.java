@@ -53,6 +53,13 @@ public class Node extends Element {
         stateCount--;
     }
 
+    public boolean circleContains(Point p) {
+        //radio^2 -> 45^2 = 2025 para un TAD
+        //           22.5^2 = 506.25 para un estado
+        //verificar si es circulo dado por esto tiene un punto p
+        return Math.pow(p.x - center.x, 2) + Math.pow(p.y - center.y, 2) <= (type.equals(NodeType.TAD) ? 2025 : 506.25);
+    }
+
     @Override
     public void setName(String name) {
         Canvas c = new Canvas();
