@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 
+import static view.ToolBar.TAD_ICON;
+
 public class View extends JFrame {
 
     private static final String TITLE = "BubbleWizard";
@@ -20,6 +22,8 @@ public class View extends JFrame {
         setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
+
 
         JPanel content = (JPanel) getContentPane();
         drawPanel = new DrawPanel();
@@ -41,6 +45,10 @@ public class View extends JFrame {
     public void addActionListener(Controller c) {
         jpToolBar.addButtonListener(c);
         jmbMenuBar.addButtonListener(c);
+    }
+
+    public void changeCursor(Cursor cursor) {
+        drawPanel.setCursor(cursor);
     }
 
 

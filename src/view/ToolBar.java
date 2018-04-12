@@ -52,16 +52,16 @@ public class ToolBar extends JPanel {
     private static final String PRINT_FILE_ICON = "res/img/toolbar/print_file.png";
     private static final String CURSOR_ICON = "res/img/toolbar/cursor.png";
     private static final String UNDO_ICON = "res/img/toolbar/undo.png";
-    private static final String DELETE_ICON = "res/img/toolbar/delete.png";
-    private static final String TAD_ICON = "res/img/toolbar/TAD.png";
-    private static final String VAR_ICON = "res/img/toolbar/var.png";
-    private static final String PERIPHERAL_ICON = "res/img/toolbar/peripheral.png";
-    private static final String INTERFACE_ICON = "res/img/toolbar/interface.png";
-    private static final String OPERATION_ICON = "res/img/toolbar/operation.png";
-    private static final String INTERRUPT_ICON = "res/img/toolbar/interrupt.png";
-    private static final String STATE_ICON = "res/img/toolbar/state.png";
-    private static final String TRANSITION_CURSOR = "res/img/toolbar/transition.png";
-    private static final String ACTION_CURSOR = "res/img/toolbar/action.png";
+    public static final String DELETE_ICON = "res/img/toolbar/delete.png";
+    public static final String TAD_ICON = "res/img/toolbar/TAD.png";
+    public static final String VAR_ICON = "res/img/toolbar/var.png";
+    public static final String PERIPHERAL_ICON = "res/img/toolbar/peripheral.png";
+    public static final String INTERFACE_ICON = "res/img/toolbar/interface.png";
+    public static final String OPERATION_ICON = "res/img/toolbar/operation.png";
+    public static final String INTERRUPT_ICON = "res/img/toolbar/interrupt.png";
+    public static final String STATE_ICON = "res/img/toolbar/state.png";
+    public static final String TRANSITION_CURSOR = "res/img/toolbar/transition.png";
+    public static final String ACTION_CURSOR = "res/img/toolbar/action.png";
 
     public ToolBar() {
 

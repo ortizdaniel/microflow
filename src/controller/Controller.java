@@ -1,11 +1,10 @@
 package controller;
 
-import model.Edge;
-import model.Element;
-import model.Graph;
-import model.Node;
+import model.*;
+import view.ToolBar;
 import view.View;
 
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -17,6 +16,11 @@ public class Controller extends MouseAdapter implements ActionListener {
     private final Graph model;
     private Element clicked;
     private CursorState state;
+
+    //TODO: change
+    private static final Toolkit toolkit = Toolkit.getDefaultToolkit();
+    private static Image cursorImage;
+    private static Cursor c;
 
     /* Action commands */
     public static final String NEW_FILE = "NEW_FILE";
@@ -49,6 +53,8 @@ public class Controller extends MouseAdapter implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println(e.getActionCommand());
+        //TODO: cambiar tipo de cursor segun el state
+        //TODO: meter todo lo de cambio de cursor en una clase para precargar las imagenes
         switch(e.getActionCommand()) {
             case NEW_FILE:
                 break;
@@ -65,28 +71,70 @@ public class Controller extends MouseAdapter implements ActionListener {
             case GEN_MOTOR:
                 break;
             case CURSOR:
+                state = CursorState.SELECTING;
+                view.changeCursor(Cursor.getDefaultCursor());
                 break;
             case UNDO:
                 break;
             case DELETE:
+                state = CursorState.DELETING;
+                cursorImage = toolkit.getImage(ToolBar.DELETE_ICON);
+                c = toolkit.createCustomCursor(cursorImage, new Point(0,0), "Cursor");
+                view.changeCursor(c);
                 break;
             case TAD:
+                state = CursorState.ADD_TAD;
+                cursorImage = toolkit.getImage(ToolBar.TAD_ICON);
+                c = toolkit.createCustomCursor(cursorImage, new Point(0,0), "Cursor");
+                view.changeCursor(c);
                 break;
             case VAR:
+                state = CursorState.ADD_VARIABLE;
+                cursorImage = toolkit.getImage(ToolBar.VAR_ICON);
+                c = toolkit.createCustomCursor(cursorImage, new Point(0,0), "Cursor");
+                view.changeCursor(c);
                 break;
             case PERIPHERAL:
+                state = CursorState.ADD_PERIPHERAL;
+                cursorImage = toolkit.getImage(ToolBar.PERIPHERAL_ICON);
+                c = toolkit.createCustomCursor(cursorImage, new Point(0,0), "Cursor");
+                view.changeCursor(c);
                 break;
             case INTERFACE:
+                state = CursorState.ADD_PERIPHERAL;
+                cursorImage = toolkit.getImage(ToolBar.INTERFACE_ICON);
+                c = toolkit.createCustomCursor(cursorImage, new Point(0,0), "Cursor");
+                view.changeCursor(c);
                 break;
             case OPERATION:
+                state = CursorState.ADD_OPERATION;
+                cursorImage = toolkit.getImage(ToolBar.OPERATION_ICON);
+                c = toolkit.createCustomCursor(cursorImage, new Point(0,0), "Cursor");
+                view.changeCursor(c);
                 break;
             case INTERRUPT:
+                state = CursorState.ADD_INTERRUPT;
+                cursorImage = toolkit.getImage(ToolBar.INTERRUPT_ICON);
+                c = toolkit.createCustomCursor(cursorImage, new Point(0,0), "Cursor");
+                view.changeCursor(c);
                 break;
             case STATE:
+                state = CursorState.ADD_STATE;
+                cursorImage = toolkit.getImage(ToolBar.STATE_ICON);
+                c = toolkit.createCustomCursor(cursorImage, new Point(0,0), "Cursor");
+                view.changeCursor(c);
                 break;
             case TRANSITION:
+                state = CursorState.ADD_TRANSITION;
+                cursorImage = toolkit.getImage(ToolBar.TRANSITION_CURSOR);
+                c = toolkit.createCustomCursor(cursorImage, new Point(0,0), "Cursor");
+                view.changeCursor(c);
                 break;
             case ACTION:
+                state = CursorState.ADD_ACTION;
+                cursorImage = toolkit.getImage(ToolBar.ACTION_CURSOR);
+                c = toolkit.createCustomCursor(cursorImage, new Point(0,0), "Cursor");
+                view.changeCursor(c);
                 break;
         }
 
@@ -94,6 +142,7 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+
         switch (state) {
             case SELECTING:
                 selecting(e);
@@ -101,6 +150,8 @@ public class Controller extends MouseAdapter implements ActionListener {
             case DELETING:
                 break;
             case ADD_TAD:
+                Node n = new Node(NodeType.TAD, e.getPoint());
+                model.addNode(n);
                 break;
             case ADD_VARIABLE:
                 break;
@@ -115,6 +166,8 @@ public class Controller extends MouseAdapter implements ActionListener {
             case ADD_OPERATION:
                 break;
             case ADD_INTERFACE:
+                break;
+            case ADD_ACTION:
                 break;
         }
         e.getComponent().repaint();

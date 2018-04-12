@@ -1,9 +1,12 @@
+import com.apple.eawt.Application;
 import controller.Controller;
 import model.*;
 import view.View;
 
 import javax.swing.*;
 import java.awt.*;
+
+import static view.ToolBar.TAD_ICON;
 
 public class Main {
 
@@ -31,9 +34,11 @@ public class Main {
     public static void main(String[] args) {
         try {
             if (System.getProperty("os.name").startsWith("Mac")) {
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "User" );
-                System.setProperty("com.apple.macos.useScreenMenuBar", "true" );
                 System.setProperty("apple.laf.useScreenMenuBar", "true" );
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "User" );
+                Application application = Application.getApplication();
+                Image image = Toolkit.getDefaultToolkit().getImage(TAD_ICON);
+                application.setDockIconImage(image);
             }
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {

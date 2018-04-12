@@ -13,5 +13,6 @@ public enum CursorState {
     ADD_TRANSITION,
     ADD_INTERRUPT,
     ADD_OPERATION,
-    ADD_INTERFACE
+    ADD_INTERFACE,
+    ADD_ACTION
 }
