@@ -167,16 +167,13 @@ public class Edge extends Element {
         if (type.equals(EdgeType.OPERATION)) {
             g.drawLine(p1.x, p1.y, pivotPoint.x, pivotPoint.y);
             g.drawLine(pivotPoint.x, pivotPoint.y, p2.x, p2.y);
-        } else if (namePoint != null) {
+        } else {
             if (type.equals(EdgeType.TRANSITION)) {
 
             } else if (type.equals(EdgeType.INTERRUPT)) {
 
             } else if (type.equals(EdgeType.INTERFACE)) {
-                g.setStroke(STROKE_SMALL);
-                g.draw(nameBounds);
-                g.setFont(FONT_MED);
-                g.drawLine(namePoint.x, namePoint.y, namePoint.x, namePoint.y);
+
             }
             g.draw(curve);
         }
