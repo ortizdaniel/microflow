@@ -6,7 +6,6 @@ import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseWheelEvent;
 
 public class ToolBar extends JPanel {
 
@@ -51,6 +50,17 @@ public class ToolBar extends JPanel {
     private static final String CURSOR_ICON = "res/img/toolbar/cursor.png";
     private static final String UNDO_ICON = "res/img/toolbar/undo.png";
     private static final String DELETE_ICON = "res/img/toolbar/delete.png";
+    private static final String TAD_ICON = "res/img/toolbar/TAD.png";
+    private static final String VAR_ICON = "res/img/toolbar/var.png";
+    private static final String PERIPHERAL_ICON = "res/img/toolbar/peripheral.png";
+    private static final String INTERFACE_ICON = "res/img/toolbar/interface.png";
+    private static final String OPERATION_ICON = "res/img/toolbar/operation.png";
+    private static final String INTERRUPT_ICON = "res/img/toolbar/interrupt.png";
+    private static final String STATE_ICON = "res/img/toolbar/state.png";
+    private static final String TRANSITION_CURSOR = "res/img/toolbar/transition.png";
+    private static final String ACTION_CURSOR = "res/img/toolbar/action.png";
+
+
 
     public ToolBar() {
 
@@ -107,12 +117,12 @@ public class ToolBar extends JPanel {
     private void addTADButtons() {
         JPanel jpButtons = new JPanel();
 
-        jbTAD = makeCustomButton("Create TAD", null);
-        jbVariable = makeCustomButton("Create variable", null);
-        jbPeripheral = makeCustomButton("Create peripheral", null);
-        jbIface = makeCustomButton("Interface cursor", null);
-        jbOperation = makeCustomButton("Operation cursor", null);
-        jbInterrupt = makeCustomButton("Interrupt cursor", null);
+        jbTAD = makeCustomButton("Create TAD", TAD_ICON);
+        jbVariable = makeCustomButton("Create variable", VAR_ICON);
+        jbPeripheral = makeCustomButton("Create peripheral", PERIPHERAL_ICON);
+        jbIface = makeCustomButton("Interface cursor", INTERFACE_ICON);
+        jbOperation = makeCustomButton("Operation cursor", OPERATION_ICON);
+        jbInterrupt = makeCustomButton("Interrupt cursor", INTERRUPT_ICON);
 
         jpButtons.add(jbTAD);
         jpButtons.add(jbVariable);
@@ -127,9 +137,9 @@ public class ToolBar extends JPanel {
     private void addStatesButtons() {
         JPanel jpButtons = new JPanel();
 
-        jbState = makeCustomButton("Create state", null);
-        jbTransition = makeCustomButton("Transition cursor", null);
-        jbAction = makeCustomButton("Add action", null);
+        jbState = makeCustomButton("Create state", STATE_ICON);
+        jbTransition = makeCustomButton("Transition cursor", TRANSITION_CURSOR);
+        jbAction = makeCustomButton("Add action", ACTION_CURSOR);
 
         jpButtons.add(jbState);
         jpButtons.add(jbTransition);
