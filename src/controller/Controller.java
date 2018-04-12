@@ -18,6 +18,24 @@ public class Controller extends MouseAdapter implements ActionListener {
     private Element clicked;
     private CursorState state;
 
+    /* Action commands */
+    public static final String NEW_FILE = "NEW_FILE";
+    public static final String OPEN_FILE = "OPEN_FILE";
+    public static final String SAVE_FILE = "SAVE_FILE";
+    public static final String PRINT_FILE = "PRINT_FILE";
+    public static final String CURSOR = "NORMAL_CURSOR";
+    public static final String UNDO = "UNDO";
+    public static final String DELETE = "DELETE";
+    public static final String TAD = "CREATE_TAD";
+    public static final String VAR = "CREATE_VAR";
+    public static final String PERIPHERAL = "CREATE_PERIPHERAL";
+    public static final String INTERFACE = "INTERFACE";
+    public static final String OPERATION = "OPERATION";
+    public static final String INTERRUPT = "INTERRUPT";
+    public static final String STATE = "STATE";
+    public static final String TRANSITION = "TRANSITION";
+    public static final String ACTION = "ACTION";
+
     public Controller(View view) {
         this.view = view;
         model = Graph.getInstance();
@@ -27,6 +45,39 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        System.out.println(e.getActionCommand());
+        switch(e.getActionCommand()) {
+            case NEW_FILE:
+                break;
+            case OPEN_FILE:
+                break;
+            case PRINT_FILE:
+                break;
+            case CURSOR:
+                break;
+            case UNDO:
+                break;
+            case DELETE:
+                break;
+            case TAD:
+                break;
+            case VAR:
+                break;
+            case PERIPHERAL:
+                break;
+            case INTERFACE:
+                break;
+            case OPERATION:
+                break;
+            case INTERRUPT:
+                break;
+            case STATE:
+                break;
+            case TRANSITION:
+                break;
+            case ACTION:
+                break;
+        }
 
     }
 

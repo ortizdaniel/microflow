@@ -10,17 +10,15 @@ public class Main {
     /*
         TODO
         Pintar cada cosa
-        ToolBar
         Seleccionar objeto
         Mover objeto
         Mover pivote de flechas
-        Eliminar ???
         Controlador
         Exportar a PNG
         Generar código motores
         Guardar/cargar JSON
-        Iconos custom toolbar
-        DEFINIR COLORES!!!!
+        DEFINIR COLORES!!!! (para los botones tmb)
+        refactor constantes actioncommand en el enum
 
         Opcionales:
         Seleccion multiple
@@ -32,9 +30,8 @@ public class Main {
 
     public static void main(String[] args) {
         try {
-
             if (System.getProperty("os.name").startsWith("Mac")) {
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Ted" );
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "User" );
                 System.setProperty("com.apple.macos.useScreenMenuBar", "true" );
                 System.setProperty("apple.laf.useScreenMenuBar", "true" );
             }
@@ -47,6 +44,7 @@ public class Main {
             View view = new View();
             Controller controller = new Controller(view);
             view.registerController(controller);
+            view.addActionListener(controller);
         });
 
         Graph g = Graph.getInstance();
