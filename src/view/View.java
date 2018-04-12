@@ -1,9 +1,8 @@
 package view;
 
-import controller.Controller;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 
 public class View extends JFrame {
@@ -38,10 +37,8 @@ public class View extends JFrame {
         drawPanel.addMouseMotionListener(ma);
     }
 
-    public void addActionListener(Controller c) {
+    public void addActionListener(ActionListener c) {
         jpToolBar.addButtonListener(c);
         jmbMenuBar.addButtonListener(c);
     }
-
-
 }

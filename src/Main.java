@@ -58,7 +58,7 @@ public class Main {
         g.addNode(n3);
         g.addNode(n4);
         g.addNode(n5);
-        Edge e = new Edge(EdgeType.OPERATION, n2, n5);
+        Edge e = new Edge(EdgeType.INTERFACE, n2, n5);
         e.updatePivot(new Point(100, 300));
         e.setBidirectional(true);
         g.addEdge(e);

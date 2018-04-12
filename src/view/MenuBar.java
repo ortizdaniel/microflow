@@ -180,19 +180,16 @@ public class MenuBar extends JMenuBar {
 
     private void addHelpOptions() {
         JMenuItem jmiAbout = new JMenuItem("About");
-        jmiAbout.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //TODO: pasar el icono del bubblewizard
-                JOptionPane.showMessageDialog(null, ABOUT_MSG, "Credits", JOptionPane.INFORMATION_MESSAGE, null);
-            }
+        jmiAbout.addActionListener(e -> {
+            //TODO: pasar el icono del bubblewizard
+            JOptionPane.showMessageDialog(null, ABOUT_MSG, "Credits", JOptionPane.INFORMATION_MESSAGE, null);
         });
 
         jmHelp.add(jmiAbout);
     }
 
 
-    public void addButtonListener(Controller c) {
+    public void addButtonListener(ActionListener c) {
         jmiNewFile.addActionListener(c);
         jmiNewFile.setActionCommand(Controller.NEW_FILE);
         jmiOpenFile.addActionListener(c);
