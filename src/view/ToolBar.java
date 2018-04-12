@@ -61,7 +61,6 @@ public class ToolBar extends JPanel {
     private static final String ACTION_CURSOR = "res/img/toolbar/action.png";
 
 
-
     public ToolBar() {
 
         this.setLayout(new FlowLayout(FlowLayout.LEFT, 5, 0));
