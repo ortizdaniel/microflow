@@ -22,7 +22,10 @@ public class Controller extends MouseAdapter implements ActionListener {
     public static final String NEW_FILE = "NEW_FILE";
     public static final String OPEN_FILE = "OPEN_FILE";
     public static final String SAVE_FILE = "SAVE_FILE";
+    public static final String SAVE_FILE_PNG = "SAVE_FILE_PNG";
     public static final String PRINT_FILE = "PRINT_FILE";
+    public static final String GEN_FILES = "GENERATE_CODE";
+    public static final String GEN_MOTOR = "GENERATE_MOTOR";
     public static final String CURSOR = "NORMAL_CURSOR";
     public static final String UNDO = "UNDO";
     public static final String DELETE = "DELETE";
@@ -51,7 +54,15 @@ public class Controller extends MouseAdapter implements ActionListener {
                 break;
             case OPEN_FILE:
                 break;
+            case SAVE_FILE:
+                break;
+            case SAVE_FILE_PNG:
+                break;
             case PRINT_FILE:
+                break;
+            case GEN_FILES:
+                break;
+            case GEN_MOTOR:
                 break;
             case CURSOR:
                 break;

@@ -25,6 +25,23 @@ public class MenuBar extends JMenuBar {
     private JMenuItem jmiSave;
     private JMenuItem jmiSavePNG;
     private JMenuItem jmiPrint;
+    private JMenuItem jmiGenFiles;
+    private JMenuItem jmiGenMotor;
+
+    /* Tools Items */
+    private JMenuItem jmiCursor;
+    private JMenuItem jmiUndo;
+    private JMenuItem jmiDelete;
+    private JMenuItem jmiTAD;
+    private JMenuItem jmiVar;
+    private JMenuItem jmiPeri;
+    private JMenuItem jmiIfaceC;
+    private JMenuItem jmiOpC;
+    private JMenuItem jmiIntC;
+    private JMenuItem jmiState;
+    private JMenuItem jmiTransC;
+    private JMenuItem jmiAddAction;
+
 
     public MenuBar(View view, JPanel jpToolBar) {
         this.view = view;
@@ -76,8 +93,8 @@ public class MenuBar extends JMenuBar {
         jmFile.addSeparator();
 
         /* Generation options */
-        JMenuItem jmiGenFiles = new JMenuItem("Create .c .h files");
-        JMenuItem jmiGenMotor = new JMenuItem("Create motor");
+        jmiGenFiles = new JMenuItem("Create .c .h files");
+        jmiGenMotor = new JMenuItem("Create motor");
 
         jmFile.add(jmiGenFiles);
         jmFile.add(jmiGenMotor);
@@ -89,18 +106,22 @@ public class MenuBar extends JMenuBar {
 
     private void addToolsOptions() {
         /* Basic Options */
-        JMenuItem jmiUndo = new JMenuItem("Undo");
+        jmiCursor = new JMenuItem("Cursor");
+        jmiUndo = new JMenuItem("Undo");
+        jmiDelete = new JMenuItem("Delete");
 
+        jmTools.add(jmiCursor);
         jmTools.add(jmiUndo);
+        jmTools.add(jmiDelete);
         jmTools.addSeparator();
 
         /* TAD Tools */
-        JMenuItem jmiTAD = new JMenuItem("TAD");
-        JMenuItem jmiVar = new JMenuItem("Variable");
-        JMenuItem jmiPeri = new JMenuItem("Peripheral");
-        JMenuItem jmiIfaceC = new JMenuItem("Interface cursor");
-        JMenuItem jmiOpC = new JMenuItem("Operation cursor");
-        JMenuItem jmiIntC = new JMenuItem("Interrupt cursor");
+        jmiTAD = new JMenuItem("TAD");
+        jmiVar = new JMenuItem("Variable");
+        jmiPeri = new JMenuItem("Peripheral");
+        jmiIfaceC = new JMenuItem("Interface cursor");
+        jmiOpC = new JMenuItem("Operation cursor");
+        jmiIntC = new JMenuItem("Interrupt cursor");
 
         jmTools.add(jmiTAD);
         jmTools.add(jmiVar);
@@ -111,9 +132,9 @@ public class MenuBar extends JMenuBar {
         jmTools.addSeparator();
 
         /* States Tools */
-        JMenuItem jmiState = new JMenuItem("State");
-        JMenuItem jmiTransC = new JMenuItem("Transition cursor");
-        JMenuItem jmiAddAction = new JMenuItem("Add action");
+        jmiState = new JMenuItem("State");
+        jmiTransC = new JMenuItem("Transition cursor");
+        jmiAddAction = new JMenuItem("Add action");
 
         jmTools.add(jmiState);
         jmTools.add(jmiTransC);
@@ -172,6 +193,47 @@ public class MenuBar extends JMenuBar {
 
 
     public void addButtonListener(Controller c) {
+        jmiNewFile.addActionListener(c);
+        jmiNewFile.setActionCommand(Controller.NEW_FILE);
+        jmiOpenFile.addActionListener(c);
+        jmiOpenFile.setActionCommand(Controller.OPEN_FILE);
+        jmiSave.addActionListener(c);
+        jmiSave.setActionCommand(Controller.SAVE_FILE);
+        jmiSavePNG.addActionListener(c);
+        jmiSavePNG.setActionCommand(Controller.SAVE_FILE_PNG);
+        jmiPrint.addActionListener(c);
+        jmiPrint.setActionCommand(Controller.PRINT_FILE);
+        jmiGenFiles.addActionListener(c);
+        jmiGenFiles.setActionCommand(Controller.GEN_FILES);
+        jmiGenMotor.addActionListener(c);
+        jmiGenMotor.setActionCommand(Controller.GEN_MOTOR);
+
+        jmiCursor.addActionListener(c);
+        jmiCursor.setActionCommand(Controller.CURSOR);
+        jmiUndo.addActionListener(c);
+        jmiUndo.setActionCommand(Controller.UNDO);
+        jmiDelete.addActionListener(c);
+        jmiDelete.setActionCommand(Controller.DELETE);
+
+        jmiTAD.addActionListener(c);
+        jmiTAD.setActionCommand(Controller.TAD);
+        jmiVar.addActionListener(c);
+        jmiVar.setActionCommand(Controller.VAR);
+        jmiPeri.addActionListener(c);
+        jmiPeri.setActionCommand(Controller.PERIPHERAL);
+        jmiIfaceC.addActionListener(c);
+        jmiIfaceC.setActionCommand(Controller.INTERFACE);
+        jmiOpC.addActionListener(c);
+        jmiOpC.setActionCommand(Controller.OPERATION);
+        jmiIntC.addActionListener(c);
+        jmiIntC.setActionCommand(Controller.INTERRUPT);
+
+        jmiState.addActionListener(c);
+        jmiState.setActionCommand(Controller.STATE);
+        jmiTransC.addActionListener(c);
+        jmiTransC.setActionCommand(Controller.TRANSITION);
+        jmiAddAction.addActionListener(c);
+        jmiAddAction.setActionCommand(Controller.ACTION);
 
     }
 
