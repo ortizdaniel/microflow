@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
 import java.awt.geom.QuadCurve2D;
 
 public class Edge extends Element {
@@ -10,11 +11,15 @@ public class Edge extends Element {
     private Node n2;
 
     private Point pivotPoint;
-    private Rectangle pivot; //TODO pivot
+    private Rectangle pivot;
     private QuadCurve2D.Float curve;
     private boolean bidir;
     private Polygon arrow;
     private Polygon arrowBidir;
+    private String extra;
+
+    private Point namePoint;
+    private Ellipse2D.Float nameBounds;
 
     private static int interfaceCount = 0;
 
@@ -29,13 +34,8 @@ public class Edge extends Element {
         bidir = false;
         setPivot(n1.getCenter(), n2.getCenter());
         setBounds();
-        arrow = new Polygon();
-        arrow.addPoint(5, 0);
-        arrow.addPoint(0, 12);
-        arrow.addPoint(5, 12);
-        arrow.addPoint(10, 12);
-
-        arrow.translate(50, 50);
+        nameBounds = new Ellipse2D.Float();
+        setName(name);
     }
 
     private void setPivot(Point n1, Point n2) {
@@ -94,7 +94,6 @@ public class Edge extends Element {
     }
 
     private Polygon makeArrow(double distance, Point p0, Point p1, Point p2, Node dest) {
-        Point last = p0;
         NodeType destType = dest.getType();
         double initial = distance > 30 ? 0.60 : 0.49;
         for (double t = initial; t <= 1; t += 0.005) {
@@ -103,9 +102,7 @@ public class Edge extends Element {
             if ((destType.equals(NodeType.TAD) || destType.equals(NodeType.STATE)) ?
                     dest.circleContains(actual) :
                     dest.contains(actual)) {
-                return getArrowFor(last, actual);
-            } else {
-                last = actual;
+                return getArrowFor(pivotPoint, actual);
             }
         }
         return new Polygon(); //no puedo encontrar el punto, -->>nunca se da este caso
@@ -166,16 +163,22 @@ public class Edge extends Element {
         g.setColor(type.getColor());
         Point p1 = n1.getCenter();
         Point p2 = n2.getCenter();
-        switch (type) {
-            case TRANSITION:
-            case INTERRUPT:
-            case INTERFACE:
-                g.draw(curve);
-                break;
-            case OPERATION:
-                g.drawLine(p1.x, p1.y, pivotPoint.x, pivotPoint.y);
-                g.drawLine(pivotPoint.x, pivotPoint.y, p2.x, p2.y);
-                break;
+
+        if (type.equals(EdgeType.OPERATION)) {
+            g.drawLine(p1.x, p1.y, pivotPoint.x, pivotPoint.y);
+            g.drawLine(pivotPoint.x, pivotPoint.y, p2.x, p2.y);
+        } else if (namePoint != null) {
+            if (type.equals(EdgeType.TRANSITION)) {
+
+            } else if (type.equals(EdgeType.INTERRUPT)) {
+
+            } else if (type.equals(EdgeType.INTERFACE)) {
+                g.setStroke(STROKE_SMALL);
+                g.draw(nameBounds);
+                g.setFont(FONT_MED);
+                g.drawLine(namePoint.x, namePoint.y, namePoint.x, namePoint.y);
+            }
+            g.draw(curve);
         }
 
         g.setStroke(medium);
@@ -186,5 +189,25 @@ public class Edge extends Element {
     public void setBidirectional(boolean bidir) {
         this.bidir = bidir;
         setBounds();
+    }
+
+    public void setExtra(String extra) {
+        this.extra = extra;
+
+    }
+
+    @Override
+    public void setName(String name) {
+        Canvas c = new Canvas();
+        if (type.equals(EdgeType.INTERRUPT) || type.equals(EdgeType.INTERFACE) || type.equals(EdgeType.TRANSITION)) {
+            int width = c.getFontMetrics(FONT_MED).stringWidth(name);
+            if (namePoint == null) {
+                //namePoint = new Point(pivotPoint.x - (width / 2) - 5, pivotPoint.y - (width / 2));
+            }
+            /*nameBounds.setFrame(
+                    namePoint.x, namePoint.y,
+                    width + 10, width + 10
+            );*/
+        }
     }
 }

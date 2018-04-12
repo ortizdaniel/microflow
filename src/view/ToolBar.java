@@ -1,12 +1,12 @@
 package view;
 
 import controller.Controller;
-import controller.CursorState;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -185,7 +185,7 @@ public class ToolBar extends JPanel {
         return jb;
     }
 
-    public void addButtonListener(Controller c) {
+    public void addButtonListener(ActionListener c) {
         jbNewFile.addActionListener(c);
         jbNewFile.setActionCommand(Controller.NEW_FILE);
         jbOpenFile.addActionListener(c);

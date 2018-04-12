@@ -11,9 +11,6 @@ public class Node extends Element {
     private static int stateCount = 0;
 
     private static final String TAD = "TAD";
-    private static final Font small = new Font("Calibri", Font.PLAIN,14);
-    private static final Font medium = new Font("Calibri", Font.PLAIN, 18);
-    private static final Font large = new Font("Calibri", Font.PLAIN, 24);
 
     public Node(NodeType type, String name, Point center) {
         super(name);
@@ -64,7 +61,7 @@ public class Node extends Element {
     public void setName(String name) {
         Canvas c = new Canvas();
         if (type.equals(NodeType.VARIABLE) || type.equals(NodeType.PERIPHERAL)) {
-            int width = c.getFontMetrics(medium).stringWidth(name);
+            int width = c.getFontMetrics(FONT_MED).stringWidth(name);
             bounds.setBounds(
                     center.x - (width / 2) - 5, center.y - (type.getHeight() / 2),
                     width + 10, type.getHeight()
@@ -101,7 +98,7 @@ public class Node extends Element {
                             x + width, y + height / 2
                     ));
 
-                    g.setFont(small);
+                    g.setFont(FONT_SMALL);
                     g.drawString(TAD, center.x - 20, center.y - 10);
                 }
 
@@ -131,11 +128,11 @@ public class Node extends Element {
                 break;*/
         }
 
-        g.setFont(type.equals(NodeType.STATE) ? large : medium);
+        g.setFont(type.equals(NodeType.STATE) ? FONT_LARGE : FONT_MED);
         g.setColor(Color.BLACK);
         int nameWidth = g.getFontMetrics().stringWidth(name);
         g.drawString(name, center.x - nameWidth / 2,
-                center.y + (type.equals(NodeType.STATE) ? large.getSize() / 3 : medium.getSize() / 3));
+                center.y + (type.equals(NodeType.STATE) ? FONT_LARGE.getSize() / 3 : FONT_MED.getSize() / 3));
 
         //g.drawLine(center.x, center.y, center.x, center.y);
     }

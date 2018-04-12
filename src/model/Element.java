@@ -10,10 +10,11 @@ public abstract class Element implements Drawable {
     protected boolean selected;
     protected Rectangle bounds;
 
-    protected static final Stroke DASH_SMALL = new BasicStroke(1, BasicStroke.CAP_BUTT,
-            BasicStroke.JOIN_BEVEL, 0, new float[]{9}, 0);
+    protected static final Stroke STROKE_SMALL = new BasicStroke(1);
 
-    protected static final Stroke SMALL = new BasicStroke(1);
+    protected static final Font FONT_SMALL = new Font("Calibri", Font.PLAIN, 14);
+    protected static final Font FONT_MED = new Font("Calibri", Font.PLAIN, 18);
+    protected static final Font FONT_LARGE = new Font("Calibri", Font.PLAIN, 24);
 
     public Element(String name) {
         this.name = name;
@@ -43,7 +44,7 @@ public abstract class Element implements Drawable {
     }
 
     protected void drawOutline(Graphics2D g) {
-        g.setStroke(SMALL);
+        g.setStroke(STROKE_SMALL);
         g.setColor(Color.GRAY);
         g.draw(bounds);
     }
