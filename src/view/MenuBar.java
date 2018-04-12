@@ -90,7 +90,6 @@ public class MenuBar extends JMenuBar {
         JMenuItem jmiVar = new JMenuItem("Variable");
         JMenuItem jmiPeri = new JMenuItem("Peripheral");
         JMenuItem jmiIfaceC = new JMenuItem("Interface cursor");
-        JMenuItem jmiCallC = new JMenuItem("Call cursor");
         JMenuItem jmiOpC = new JMenuItem("Operation cursor");
         JMenuItem jmiIntC = new JMenuItem("Interrupt cursor");
 
@@ -98,7 +97,6 @@ public class MenuBar extends JMenuBar {
         jmTools.add(jmiVar);
         jmTools.add(jmiPeri);
         jmTools.add(jmiIfaceC);
-        jmTools.add(jmiCallC);
         jmTools.add(jmiOpC);
         jmTools.add(jmiIntC);
         jmTools.addSeparator();
