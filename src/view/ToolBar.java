@@ -1,5 +1,8 @@
 package view;
 
+import controller.Controller;
+import controller.CursorState;
+
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
@@ -59,7 +62,6 @@ public class ToolBar extends JPanel {
     private static final String STATE_ICON = "res/img/toolbar/state.png";
     private static final String TRANSITION_CURSOR = "res/img/toolbar/transition.png";
     private static final String ACTION_CURSOR = "res/img/toolbar/action.png";
-
 
     public ToolBar() {
 
@@ -183,4 +185,42 @@ public class ToolBar extends JPanel {
         return jb;
     }
 
+    public void addButtonListener(Controller c) {
+        jbNewFile.addActionListener(c);
+        jbNewFile.setActionCommand(Controller.NEW_FILE);
+        jbOpenFile.addActionListener(c);
+        jbOpenFile.setActionCommand(Controller.OPEN_FILE);
+        jbSaveFile.addActionListener(c);
+        jbSaveFile.setActionCommand(Controller.SAVE_FILE);
+        jbPrint.addActionListener(c);
+        jbPrint.setActionCommand(Controller.PRINT_FILE);
+
+        jbCursor.addActionListener(c);
+        jbCursor.setActionCommand(Controller.CURSOR);
+        jbBack.addActionListener(c);
+        jbBack.setActionCommand(Controller.UNDO);
+        jbDelete.addActionListener(c);
+        jbDelete.setActionCommand(Controller.DELETE);
+
+        jbTAD.addActionListener(c);
+        jbTAD.setActionCommand(Controller.TAD);
+        jbVariable.addActionListener(c);
+        jbVariable.setActionCommand(Controller.VAR);
+        jbPeripheral.addActionListener(c);
+        jbPeripheral.setActionCommand(Controller.PERIPHERAL);
+        jbIface.addActionListener(c);
+        jbIface.setActionCommand(Controller.INTERFACE);
+        jbOperation.addActionListener(c);
+        jbOperation.setActionCommand(Controller.OPERATION);
+        jbInterrupt.addActionListener(c);
+        jbInterrupt.setActionCommand(Controller.INTERRUPT);
+
+        jbState.addActionListener(c);
+        jbState.setActionCommand(Controller.STATE);
+        jbTransition.addActionListener(c);
+        jbTransition.setActionCommand(Controller.TRANSITION);
+        jbAction.addActionListener(c);
+        jbAction.setActionCommand(Controller.ACTION);
+
+    }
 }

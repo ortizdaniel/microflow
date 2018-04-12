@@ -1,5 +1,7 @@
 package view;
 
+import controller.Controller;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -10,6 +12,8 @@ public class View extends JFrame {
     private static final int MIN_WIDTH = 640;
     private static final int MIN_HEIGHT = 480;
     private final DrawPanel drawPanel;
+    private final ToolBar jpToolBar;
+    private final MenuBar jmbMenuBar;
 
     public View() {
         setTitle(TITLE);
@@ -20,10 +24,11 @@ public class View extends JFrame {
         JPanel content = (JPanel) getContentPane();
         drawPanel = new DrawPanel();
         content.add(drawPanel, BorderLayout.CENTER);
-        ToolBar jpToolBar = new ToolBar();
+        jpToolBar = new ToolBar();
         content.add(jpToolBar, BorderLayout.NORTH);
 
-        this.setJMenuBar(new MenuBar(this, jpToolBar));
+        jmbMenuBar = new MenuBar(this, jpToolBar);
+        this.setJMenuBar(jmbMenuBar);
 
         this.setVisible(true);
     }
@@ -32,4 +37,11 @@ public class View extends JFrame {
         drawPanel.addMouseListener(ma);
         drawPanel.addMouseMotionListener(ma);
     }
+
+    public void addActionListener(Controller c) {
+        jpToolBar.addButtonListener(c);
+        jmbMenuBar.addButtonListener(c);
+    }
+
+
 }

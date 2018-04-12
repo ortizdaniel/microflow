@@ -1,5 +1,7 @@
 package view;
 
+import controller.Controller;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -16,6 +18,13 @@ public class MenuBar extends JMenuBar {
 
     private static final String ABOUT_MSG = "BubbleWizard\nDaniel Ortiz & Joan Gómez\n" +
             "Inspired by the original of F. Escudero\nCopyright (C) 2018";
+
+    /* Menu File Items */
+    private JMenuItem jmiNewFile;
+    private JMenuItem jmiOpenFile;
+    private JMenuItem jmiSave;
+    private JMenuItem jmiSavePNG;
+    private JMenuItem jmiPrint;
 
     public MenuBar(View view, JPanel jpToolBar) {
         this.view = view;
@@ -44,11 +53,11 @@ public class MenuBar extends JMenuBar {
     private void addFileOptions() {
 
         /* File related options */
-        JMenuItem jmiNewFile = new JMenuItem("New file");
-        JMenuItem jmiOpenFile = new JMenuItem("Open file");
-        JMenuItem jmiSave = new JMenuItem("Save");
-        JMenuItem jmiSavePNG = new JMenuItem("Save as PNG");
-        JMenuItem jmiPrint = new JMenuItem("Print");
+        jmiNewFile = new JMenuItem("New file");
+        jmiOpenFile = new JMenuItem("Open file");
+        jmiSave = new JMenuItem("Save");
+        jmiSavePNG = new JMenuItem("Save as PNG");
+        jmiPrint = new JMenuItem("Print");
 
 
         JMenuItem jmiExit = new JMenuItem("Exit");
@@ -162,7 +171,9 @@ public class MenuBar extends JMenuBar {
     }
 
 
-    //TODO: listener de menu bar
+    public void addButtonListener(Controller c) {
+
+    }
 
 }
 
