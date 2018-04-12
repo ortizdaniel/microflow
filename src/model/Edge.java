@@ -93,16 +93,21 @@ public class Edge extends Element {
         Point last = p0;
         double initial = distance > 30 ? 0.85 : 0.70;
         for (double t = initial; t <= 1; t += 0.005) {
-            Point actual = new Point(
-                    (int) ((1 - t) * ((1 - t) * p0.x + t * p1.x) + t * ((1 - t) * p1.x + t * p2.x)),
-                    (int) ((1 - t) * ((1 - t) * p0.y + t * p1.y) + t * ((1 - t) * p1.y + t * p2.y)));
+            Point actual = bezierQuadratic(t, p0, p1, p2);
             if (destination.contains(actual)) {
                 return getArrowFor(last, actual);
             } else {
                 last = actual;
             }
         }
-        return new Polygon();
+        return new Polygon(); //no puedo encontrar el punto
+    }
+
+    private Point bezierQuadratic(double t, Point p0, Point p1, Point p2) {
+        return new Point(
+                (int) ((1 - t) * ((1 - t) * p0.x + t * p1.x) + t * ((1 - t) * p1.x + t * p2.x)),
+                (int) ((1 - t) * ((1 - t) * p0.y + t * p1.y) + t * ((1 - t) * p1.y + t * p2.y))
+        );
     }
 
     /**
