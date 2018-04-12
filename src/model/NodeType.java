@@ -4,10 +4,10 @@ import java.awt.*;
 
 public enum NodeType {
 
-    TAD(90, 90, new BasicStroke(3), Color.BLACK, Color.decode("#fcd0a1")),
+    TAD(90, 90, new BasicStroke(3), Color.BLACK, Color.decode("#FCD0A1")),
     VARIABLE(80, 30, new BasicStroke(3), Color.BLACK, Color.WHITE),
-    PERIPHERAL(80, 30, new BasicStroke(3), Color.BLACK, Color.decode("#cedada")),
-    STATE(45, 45, new BasicStroke(3), Color.BLACK, Color.decode("#c8ead3")),
+    PERIPHERAL(80, 30, new BasicStroke(3), Color.BLACK, Color.decode("#CEDADA")),
+    STATE(45, 45, new BasicStroke(3), Color.BLACK, Color.decode("#C8EAD3")),
     /*INTERFACE(40, 40, new BasicStroke(1), Color.BLACK, Color.WHITE)*/;
 
     private int width;

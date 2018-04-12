@@ -17,6 +17,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     private final View view;
     private final Graph model;
     private Edge lastSelected;
+    private Point mousePt = new Point();
 
     public Controller(View view) {
         this.view = view;
@@ -55,6 +56,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 Node node = (Node) element;
                 Point delta = new Point(e.getX() - node.getCenter().x, e.getY() - node.getCenter().y); //TODO hacer mover bonito
                 node.setCenter(new Point(node.getCenter().x + delta.x, node.getCenter().y + delta.y));
+
             } else if (element.isSelected() && element instanceof Edge) {
                 Edge edge = (Edge) element;
                 if (edge.pivotContains(e.getPoint())) {

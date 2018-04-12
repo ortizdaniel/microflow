@@ -109,9 +109,13 @@ public class Node extends Element {
             case PERIPHERAL:
                 g.fill(bounds);
 
-                setStrokeAndColor(g);
+                if (selected) {
+                    g.setStroke(type.getOuter());
+                    g.setColor(Color.LIGHT_GRAY);
+                } else {
+                    setStrokeAndColor(g);
+                }
                 g.draw(bounds);
-                //TODO nombre
                 break;
             /*case STATE:
                 g.fill();
@@ -121,6 +125,7 @@ public class Node extends Element {
         }
 
         g.setFont(type.equals(NodeType.STATE) ? large : medium);
+        g.setColor(Color.BLACK);
         int nameWidth = g.getFontMetrics().stringWidth(name);
         g.drawString(name, center.x - nameWidth / 2,
                 center.y + (type.equals(NodeType.STATE) ? large.getSize() / 3 : medium.getSize() / 3));

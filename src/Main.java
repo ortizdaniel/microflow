@@ -49,8 +49,6 @@ public class Main {
             view.registerController(controller);
         });
 
-        System.out.println(System.getProperty("user.dir"));
-
         Graph g = Graph.getInstance();
         Node n = new Node(NodeType.TAD, new Point(0, 0));
         Node n2 = new Node(NodeType.VARIABLE, "char cua[MAX_CUA][MAX_LEGNTH]", new Point(100, 100));
@@ -64,9 +62,15 @@ public class Main {
         g.addNode(n5);
         Edge e = new Edge(EdgeType.INTERRUPT, n2, n3);
         e.updatePivot(new Point(100, 300));
+        e.setBidirectional(true);
         g.addEdge(e);
         //g.addEdge(new Edge(EdgeType.TRANSITION, n4, n5));
 
+        Point p0 = new Point(100, 100);
+        Point p1 = new Point(100, 300);
+        Point p2 = new Point(200, 200);
 
     }
+
+
 }
