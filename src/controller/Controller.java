@@ -55,6 +55,7 @@ public class Controller extends MouseAdapter implements ActionListener {
         System.out.println(e.getActionCommand());
         //TODO: cambiar tipo de cursor segun el state
         //TODO: meter todo lo de cambio de cursor en una clase para precargar las imagenes
+        //TODO: si cambia el tipo de cursor se tiene qe deseleccionar qualquier cosa seleccionada
         switch(e.getActionCommand()) {
             case NEW_FILE:
                 break;
@@ -101,7 +102,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 view.changeCursor(c);
                 break;
             case INTERFACE:
-                state = CursorState.ADD_PERIPHERAL;
+                state = CursorState.ADD_INTERFACE;
                 cursorImage = toolkit.getImage(ToolBar.INTERFACE_ICON);
                 c = toolkit.createCustomCursor(cursorImage, new Point(0,0), "Cursor");
                 view.changeCursor(c);
@@ -142,22 +143,36 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-
+        Node n;
         switch (state) {
             case SELECTING:
                 selecting(e);
                 break;
             case DELETING:
+                clicked = model.getElementAt(e.getPoint());
+                if (clicked != null && clicked instanceof Node) {
+                    model.deleteNode((Node)clicked);
+                    //TODO: borrar tambien los edge asociados a los nodos
+                    clicked = null;
+                } else if (clicked != null) {
+                    model.deleteEdge((Edge) clicked);
+                }
                 break;
             case ADD_TAD:
-                Node n = new Node(NodeType.TAD, e.getPoint());
+                n = new Node(NodeType.TAD, "TAD_name", e.getPoint());
                 model.addNode(n);
                 break;
             case ADD_VARIABLE:
+                n = new Node(NodeType.VARIABLE, "var var_name", e.getPoint());
+                model.addNode(n);
                 break;
             case ADD_PERIPHERAL:
+                n = new Node(NodeType.PERIPHERAL, "peripheral_name", e.getPoint());
+                model.addNode(n);
                 break;
             case ADD_STATE:
+                n = new Node(NodeType.STATE, e.getPoint());
+                model.addNode(n);
                 break;
             case ADD_TRANSITION:
                 break;

@@ -31,13 +31,15 @@ public class Main {
 
      */
 
+    private static final String LOGO_PATH = "res/img/logo.png";
+
     public static void main(String[] args) {
         try {
             if (System.getProperty("os.name").startsWith("Mac")) {
                 System.setProperty("apple.laf.useScreenMenuBar", "true" );
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "User" );
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "BubbleWizard");
                 Application application = Application.getApplication();
-                Image image = Toolkit.getDefaultToolkit().getImage(TAD_ICON);
+                Image image = Toolkit.getDefaultToolkit().getImage(LOGO_PATH);
                 application.setDockIconImage(image);
             }
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -52,6 +54,7 @@ public class Main {
             view.addActionListener(controller);
         });
 
+        /*
         Graph g = Graph.getInstance();
         Node n = new Node(NodeType.TAD, new Point(0, 0));
         Node n2 = new Node(NodeType.VARIABLE, "char cua[MAX_CUA][MAX_LEGNTH]", new Point(100, 100));
@@ -72,6 +75,7 @@ public class Main {
         Point p0 = new Point(100, 100);
         Point p1 = new Point(100, 300);
         Point p2 = new Point(200, 200);
+        */
 
     }
 
