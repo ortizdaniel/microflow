@@ -4,6 +4,7 @@ import model.*;
 import view.ToolBar;
 import view.View;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,6 +59,9 @@ public class Controller extends MouseAdapter implements ActionListener {
         //TODO: si cambia el tipo de cursor se tiene qe deseleccionar qualquier cosa seleccionada
         switch(e.getActionCommand()) {
             case NEW_FILE:
+                if (JOptionPane.showConfirmDialog(view, "Are you sure you want to make a new file?") == JOptionPane.OK_OPTION) {
+                    model.deleteAll();
+                }
                 break;
             case OPEN_FILE:
                 break;
@@ -138,7 +142,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 view.changeCursor(c);
                 break;
         }
-
+        view.repaint();
     }
 
     @Override
@@ -159,7 +163,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 }
                 break;
             case ADD_TAD:
-                n = new Node(NodeType.TAD, "TAD_name", e.getPoint());
+                n = new Node(NodeType.TAD, "Name", e.getPoint());
                 model.addNode(n);
                 break;
             case ADD_VARIABLE:

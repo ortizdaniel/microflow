@@ -123,7 +123,7 @@ public class Edge extends Element {
     }
 
     /**
-     * https://stackoverflow.com/questions/2027613/how-to-draw-a-directed-arrow-line-in-java
+     * Tomado de https://stackoverflow.com/questions/2027613/how-to-draw-a-directed-arrow-line-in-java
      */
     private Polygon getArrowFor(Point p1, Point p2) {
         int dx = p2.x - p1.x, dy = p2.y - p1.y;

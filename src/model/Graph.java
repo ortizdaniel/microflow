@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.*;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,8 +9,8 @@ public class Graph {
 
     private static Graph instance;
 
-    private List<Node> nodes;
-    private List<Edge> edges;
+    private LinkedList<Node> nodes;
+    private LinkedList<Edge> edges;
 
     public static Graph getInstance() {
         if (instance == null) instance = new Graph();
@@ -22,10 +23,12 @@ public class Graph {
     }
 
     public Element getElementAt(Point p) {
-        for (Node n : nodes) {
+        for (Iterator<Node> i = nodes.descendingIterator(); i.hasNext(); ) {
+            Node n = i.next();
             if (n.contains(p)) return n;
         }
-        for (Edge e : edges) {
+        for (Iterator<Edge> i = edges.descendingIterator(); i.hasNext(); ) {
+            Edge e = i.next();
             if (e.contains(p)) return e;
         }
         return null;
@@ -78,5 +81,10 @@ public class Graph {
             }
             Edge.decrementInterfaceCount();
         }
+    }
+
+    public void deleteAll() {
+        nodes.clear();
+        edges.clear();
     }
 }
