@@ -6,8 +6,6 @@ import view.View;
 import javax.swing.*;
 import java.awt.*;
 
-import static view.ToolBar.TAD_ICON;
-
 public class Main {
 
     /*
@@ -31,13 +29,14 @@ public class Main {
 
      */
 
+    public static final Toolkit tk = Toolkit.getDefaultToolkit();
     private static final String LOGO_PATH = "res/img/logo.png";
 
     public static void main(String[] args) {
         try {
             if (System.getProperty("os.name").startsWith("Mac")) {
                 System.setProperty("apple.laf.useScreenMenuBar", "true" );
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "BubbleWizard");
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Main");
                 Application application = Application.getApplication();
                 Image image = Toolkit.getDefaultToolkit().getImage(LOGO_PATH);
                 application.setDockIconImage(image);
@@ -47,14 +46,14 @@ public class Main {
             e.printStackTrace();
         }
 
-        SwingUtilities.invokeLater(() -> {
+        //SwingUtilities.invokeLater(() -> {
             View view = new View();
             Controller controller = new Controller(view);
             view.registerController(controller);
             view.addActionListener(controller);
-        });
+        //});
 
-        /*
+
         Graph g = Graph.getInstance();
         Node n = new Node(NodeType.TAD, new Point(0, 0));
         Node n2 = new Node(NodeType.VARIABLE, "char cua[MAX_CUA][MAX_LEGNTH]", new Point(100, 100));
@@ -75,9 +74,5 @@ public class Main {
         Point p0 = new Point(100, 100);
         Point p1 = new Point(100, 300);
         Point p2 = new Point(200, 200);
-        */
-
     }
-
-
 }
