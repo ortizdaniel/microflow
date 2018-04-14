@@ -156,6 +156,7 @@ public class ToolBar extends JPanel {
         jb.setPreferredSize(jbDimension);
         jb.setToolTipText(tipText);
         jb.setBorder(BorderFactory.createEmptyBorder());
+        jb.setContentAreaFilled(false);                     //For Windows
         jb.addMouseListener(new MouseAdapter() {
 
             private final Border hovered = BorderFactory.createBevelBorder(BevelBorder.RAISED);

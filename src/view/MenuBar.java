@@ -3,8 +3,10 @@ package view;
 import controller.Controller;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 
 public class MenuBar extends JMenuBar {
 
@@ -71,11 +73,18 @@ public class MenuBar extends JMenuBar {
 
         /* File related options */
         jmiNewFile = new JMenuItem("New file");
+        jmiNewFile.setAccelerator(
+                KeyStroke.getKeyStroke(KeyEvent.VK_N, (Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())));
         jmiOpenFile = new JMenuItem("Open file");
+        jmiOpenFile.setAccelerator(
+                KeyStroke.getKeyStroke(KeyEvent.VK_O, (Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())));
         jmiSave = new JMenuItem("Save");
+        jmiSave.setAccelerator(
+                KeyStroke.getKeyStroke(KeyEvent.VK_S, (Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())));
         jmiSavePNG = new JMenuItem("Save as PNG");
         jmiPrint = new JMenuItem("Print");
-
+        jmiPrint.setAccelerator(
+                KeyStroke.getKeyStroke(KeyEvent.VK_P, (Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())));
 
         JMenuItem jmiExit = new JMenuItem("Exit");
         jmiExit.addActionListener(new ActionListener(){
@@ -108,6 +117,8 @@ public class MenuBar extends JMenuBar {
         /* Basic Options */
         jmiCursor = new JMenuItem("Cursor");
         jmiUndo = new JMenuItem("Undo");
+        jmiUndo.setAccelerator(
+                KeyStroke.getKeyStroke(KeyEvent.VK_Z, (Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())));
         jmiDelete = new JMenuItem("Delete");
 
         jmTools.add(jmiCursor);
