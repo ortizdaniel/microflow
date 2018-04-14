@@ -1,6 +1,6 @@
 package view;
 
-import controller.Controller;
+import controller.CursorDetail;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
@@ -188,40 +188,40 @@ public class ToolBar extends JPanel {
 
     public void addButtonListener(ActionListener c) {
         jbNewFile.addActionListener(c);
-        jbNewFile.setActionCommand(Controller.NEW_FILE);
+        jbNewFile.setActionCommand(CursorDetail.NEW_FILE.name());
         jbOpenFile.addActionListener(c);
-        jbOpenFile.setActionCommand(Controller.OPEN_FILE);
+        jbOpenFile.setActionCommand(CursorDetail.OPEN_FILE.name());
         jbSaveFile.addActionListener(c);
-        jbSaveFile.setActionCommand(Controller.SAVE_FILE);
+        jbSaveFile.setActionCommand(CursorDetail.SAVE_FILE.name());
         jbPrint.addActionListener(c);
-        jbPrint.setActionCommand(Controller.PRINT_FILE);
+        jbPrint.setActionCommand(CursorDetail.PRINT_FILE.name());
 
         jbCursor.addActionListener(c);
-        jbCursor.setActionCommand(Controller.CURSOR);
+        jbCursor.setActionCommand(CursorDetail.SELECTING.name());
         jbBack.addActionListener(c);
-        jbBack.setActionCommand(Controller.UNDO);
+        jbBack.setActionCommand(CursorDetail.UNDO.name());
         jbDelete.addActionListener(c);
-        jbDelete.setActionCommand(Controller.DELETE);
+        jbDelete.setActionCommand(CursorDetail.DELETING.name());
 
         jbTAD.addActionListener(c);
-        jbTAD.setActionCommand(Controller.TAD);
+        jbTAD.setActionCommand(CursorDetail.ADD_TAD.name());
         jbVariable.addActionListener(c);
-        jbVariable.setActionCommand(Controller.VAR);
+        jbVariable.setActionCommand(CursorDetail.ADD_VARIABLE.name());
         jbPeripheral.addActionListener(c);
-        jbPeripheral.setActionCommand(Controller.PERIPHERAL);
+        jbPeripheral.setActionCommand(CursorDetail.ADD_PERIPHERAL.name());
         jbIface.addActionListener(c);
-        jbIface.setActionCommand(Controller.INTERFACE);
+        jbIface.setActionCommand(CursorDetail.ADD_INTERFACE.name());
         jbOperation.addActionListener(c);
-        jbOperation.setActionCommand(Controller.OPERATION);
+        jbOperation.setActionCommand(CursorDetail.ADD_OPERATION.name());
         jbInterrupt.addActionListener(c);
-        jbInterrupt.setActionCommand(Controller.INTERRUPT);
+        jbInterrupt.setActionCommand(CursorDetail.ADD_INTERRUPT.name());
 
         jbState.addActionListener(c);
-        jbState.setActionCommand(Controller.STATE);
+        jbState.setActionCommand(CursorDetail.ADD_STATE.name());
         jbTransition.addActionListener(c);
-        jbTransition.setActionCommand(Controller.TRANSITION);
+        jbTransition.setActionCommand(CursorDetail.ADD_TRANSITION.name());
         jbAction.addActionListener(c);
-        jbAction.setActionCommand(Controller.ACTION);
+        jbAction.setActionCommand(CursorDetail.ADD_ACTION.name());
 
     }
 }

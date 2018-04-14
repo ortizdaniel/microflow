@@ -1,17 +1,13 @@
 package view;
 
-import controller.Controller;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 
-import static view.ToolBar.TAD_ICON;
-
 public class View extends JFrame {
 
-    private static final String TITLE = "BubbleWizard";
+    private static final String TITLE = "Main";
     private static final int MIN_WIDTH = 640;
     private static final int MIN_HEIGHT = 480;
     private final DrawPanel drawPanel;
@@ -52,5 +48,7 @@ public class View extends JFrame {
         drawPanel.setCursor(cursor);
     }
 
-
+    public DrawPanel getDrawPanel() {
+        return drawPanel;
+    }
 }

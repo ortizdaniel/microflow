@@ -1,6 +1,6 @@
 package view;
 
-import controller.Controller;
+import controller.CursorDetail;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class MenuBar extends JMenuBar {
     private View view;
     private JPanel jpToolBar;
 
-    private static final String ABOUT_MSG = "BubbleWizard\nDaniel Ortiz & Joan Gómez\n" +
+    private static final String ABOUT_MSG = "Main\nDaniel Ortiz & Joan Gómez\n" +
             "Inspired by the original of F. Escudero\nCopyright (C) 2018";
 
     /* Menu File Items */
@@ -202,46 +202,46 @@ public class MenuBar extends JMenuBar {
 
     public void addButtonListener(ActionListener c) {
         jmiNewFile.addActionListener(c);
-        jmiNewFile.setActionCommand(Controller.NEW_FILE);
+        jmiNewFile.setActionCommand(CursorDetail.NEW_FILE.name());
         jmiOpenFile.addActionListener(c);
-        jmiOpenFile.setActionCommand(Controller.OPEN_FILE);
+        jmiOpenFile.setActionCommand(CursorDetail.OPEN_FILE.name());
         jmiSave.addActionListener(c);
-        jmiSave.setActionCommand(Controller.SAVE_FILE);
+        jmiSave.setActionCommand(CursorDetail.SAVE_FILE.name());
         jmiSavePNG.addActionListener(c);
-        jmiSavePNG.setActionCommand(Controller.SAVE_FILE_PNG);
+        jmiSavePNG.setActionCommand(CursorDetail.SAVE_FILE_PNG.name());
         jmiPrint.addActionListener(c);
-        jmiPrint.setActionCommand(Controller.PRINT_FILE);
+        jmiPrint.setActionCommand(CursorDetail.PRINT_FILE.name());
         jmiGenFiles.addActionListener(c);
-        jmiGenFiles.setActionCommand(Controller.GEN_FILES);
+        jmiGenFiles.setActionCommand(CursorDetail.GEN_FILES.name());
         jmiGenMotor.addActionListener(c);
-        jmiGenMotor.setActionCommand(Controller.GEN_MOTOR);
+        jmiGenMotor.setActionCommand(CursorDetail.GEN_MOTOR.name());
 
         jmiCursor.addActionListener(c);
-        jmiCursor.setActionCommand(Controller.CURSOR);
+        jmiCursor.setActionCommand(CursorDetail.SELECTING.name());
         jmiUndo.addActionListener(c);
-        jmiUndo.setActionCommand(Controller.UNDO);
+        jmiUndo.setActionCommand(CursorDetail.UNDO.name());
         jmiDelete.addActionListener(c);
-        jmiDelete.setActionCommand(Controller.DELETE);
+        jmiDelete.setActionCommand(CursorDetail.DELETING.name());
 
         jmiTAD.addActionListener(c);
-        jmiTAD.setActionCommand(Controller.TAD);
+        jmiTAD.setActionCommand(CursorDetail.ADD_TAD.name());
         jmiVar.addActionListener(c);
-        jmiVar.setActionCommand(Controller.VAR);
+        jmiVar.setActionCommand(CursorDetail.ADD_VARIABLE.name());
         jmiPeri.addActionListener(c);
-        jmiPeri.setActionCommand(Controller.PERIPHERAL);
+        jmiPeri.setActionCommand(CursorDetail.ADD_PERIPHERAL.name());
         jmiIfaceC.addActionListener(c);
-        jmiIfaceC.setActionCommand(Controller.INTERFACE);
+        jmiIfaceC.setActionCommand(CursorDetail.ADD_INTERFACE.name());
         jmiOpC.addActionListener(c);
-        jmiOpC.setActionCommand(Controller.OPERATION);
+        jmiOpC.setActionCommand(CursorDetail.ADD_OPERATION.name());
         jmiIntC.addActionListener(c);
-        jmiIntC.setActionCommand(Controller.INTERRUPT);
+        jmiIntC.setActionCommand(CursorDetail.ADD_INTERRUPT.name());
 
         jmiState.addActionListener(c);
-        jmiState.setActionCommand(Controller.STATE);
+        jmiState.setActionCommand(CursorDetail.ADD_STATE.name());
         jmiTransC.addActionListener(c);
-        jmiTransC.setActionCommand(Controller.TRANSITION);
+        jmiTransC.setActionCommand(CursorDetail.ADD_TRANSITION.name());
         jmiAddAction.addActionListener(c);
-        jmiAddAction.setActionCommand(Controller.ACTION);
+        jmiAddAction.setActionCommand(CursorDetail.ADD_ACTION.name());
 
     }
 
