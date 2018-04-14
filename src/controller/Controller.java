@@ -160,10 +160,9 @@ public class Controller extends MouseAdapter implements ActionListener {
                 } else {
                     model.addEdge(new Edge(edgeType, "condition", addingEdgeFrom, (Node) element));
                 }
-                view.getDrawPanel().setDrawingLine(false);
-                view.getDrawPanel().setLineStart(addingEdgeFrom.getCenter());
-                addingEdgeFrom = null;
             }
+            view.getDrawPanel().setDrawingLine(false);
+            addingEdgeFrom = null;
         }
 
         e.getComponent().repaint();
