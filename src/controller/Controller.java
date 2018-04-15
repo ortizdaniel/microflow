@@ -1,6 +1,8 @@
 package controller;
 
 import model.*;
+import view.ContextMenu;
+import view.DrawPanel;
 import view.View;
 
 import javax.swing.*;
