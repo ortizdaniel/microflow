@@ -207,4 +207,10 @@ public class Edge extends Element {
             );*/
         }
     }
+
+    @Override
+    public Point getLocation() {
+        return pivotPoint;
+    }
+
 }

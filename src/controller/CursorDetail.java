@@ -11,6 +11,9 @@ public enum CursorDetail {
     SELECTING(Cursor.getDefaultCursor(), null, null), //normal cursor
     UNDO(Cursor.getDefaultCursor(), null, null), //no es necesario TODO borrar
     DELETING(createCursor(ToolBar.DELETE_ICON), null, null),
+    DELETE_POPUP(Cursor.getDefaultCursor(), null, null),
+    EDIT(Cursor.getDefaultCursor(), null, null),
+
 
     ADD_TAD(createCursor(ToolBar.TAD_ICON), NodeType.TAD, "Name"),
     ADD_VARIABLE(createCursor(ToolBar.VAR_ICON), NodeType.VARIABLE, "variable"),

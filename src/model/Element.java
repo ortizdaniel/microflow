@@ -48,4 +48,9 @@ public abstract class Element implements Drawable {
         g.setColor(Color.GRAY);
         g.draw(bounds);
     }
+
+    public Point getLocation() {
+        return bounds.getLocation();
+    }
+
 }

@@ -1,8 +1,11 @@
 package controller;
 
 import model.*;
+import view.ContextMenu;
 import view.View;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -15,6 +18,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     private Element clicked;
     private CursorDetail state;
     private Node addingEdgeFrom;
+    private ContextMenu contextMenu;
 
     public Controller(View view) {
         this.view = view;
@@ -22,14 +26,14 @@ public class Controller extends MouseAdapter implements ActionListener {
         clicked = null;
         state = CursorDetail.SELECTING;
         addingEdgeFrom = null;
+        contextMenu = new ContextMenu();
+        contextMenu.addListener(this);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         state = CursorDetail.valueOf(e.getActionCommand());
-        clearAllSelected();
-        clicked = null;
-        view.changeCursor(state.getCursor());
 
         switch (state) {
             case UNDO:
@@ -48,12 +52,38 @@ public class Controller extends MouseAdapter implements ActionListener {
                 break;
             case GEN_MOTOR:
                 break;
+            case DELETE_POPUP:
+                if (clicked != null) {
+                    if (clicked instanceof  Node) {
+                        this.deleteFromPoint(clicked.getLocation());
+                    } else {
+                        this.deleteFromPoint(((Edge)clicked).getLocation());
+                    }
+                    state = CursorDetail.SELECTING;
+                }
+                break;
+            case EDIT:
+                if (clicked != null) {
+                    if (clicked instanceof  Node) {
+                        this.changeClickedName(clicked.getLocation());
+                    } else {
+                        this.changeClickedName(((Edge)clicked).getLocation());
+                    }
+                    state = CursorDetail.SELECTING;
+                }
+                break;
         }
+
+        contextMenu.hideContextMenu();
+        clearAllSelected();
+        clicked = null;
+        view.changeCursor(state.getCursor());
         view.repaint();
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        contextMenu.hideContextMenu();
         switch (state) {
             case SELECTING:
                 selecting(e);
@@ -71,7 +101,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             state = CursorDetail.SELECTING;
             view.changeCursor(CursorDetail.SELECTING.getCursor());
             if (clicked != null && clicked.contains(e.getPoint())) {
-                //TODO mostrar menu
+                contextMenu.show(view.getDrawPanel(), e.getX(), e.getY());
             }
         }
 
@@ -101,13 +131,60 @@ public class Controller extends MouseAdapter implements ActionListener {
     }
 
     private void delete(MouseEvent e) {
-        clicked = model.getElementAt(e.getPoint());
+        deleteFromPoint(e.getPoint());
+    }
+
+    private void deleteFromPoint(Point p) {
+        clicked = model.getElementAt(p);
         if (clicked instanceof Node) {
             model.deleteNode((Node) clicked);
             clicked = null;
         } else if (clicked != null) {
             model.deleteEdge((Edge) clicked);
         }
+    }
+
+    private void changeClickedName(Point p) {
+        String name;
+        if (clicked instanceof Node) {
+            if (!((Node) clicked).getType().equals(NodeType.STATE)) {
+                name = askForString("Enter a name:", clicked.getName());
+                if (name != null) {
+                    model.getElementAt(p).setName(name);
+                }
+            }
+        } else if (clicked != null) {
+            switch(((Edge)clicked).getType()) {
+                case TRANSITION:
+                    //TODO: condicio transicio
+                    break;
+                case INTERRUPT:
+                    name = askForString("Enter interrupt name:",  clicked.getName());
+                    if (name != null) {
+                        model.getElementAt(p).setName(name);
+                    }
+                    break;
+                case OPERATION:
+                    //TODO: set bidireccional
+                    break;
+                case INTERFACE:
+                    //do nothing
+                    break;
+                case ACTION:
+                    //TODO: codi que es fa en el salt
+                    break;
+            }
+        }
+    }
+
+    private String askForString(String msg, String hint) {
+        String s = "";
+        while (s.isEmpty()) {
+            s = JOptionPane.showInputDialog(msg, hint);
+            if (s == null) break;
+            if (s.trim().length() == 0) s = "";
+        }
+        return s;
     }
 
     private void possibleAdd(MouseEvent e) {
