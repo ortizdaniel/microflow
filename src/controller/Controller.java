@@ -54,24 +54,10 @@ public class Controller extends MouseAdapter implements ActionListener {
             case GEN_MOTOR:
                 break;
             case DELETE_POPUP:
-                if (clicked != null) {
-                    if (clicked instanceof  Node) {
-                        this.deleteFromPoint(clicked.getLocation());
-                    } else {
-                        this.deleteFromPoint(((Edge)clicked).getLocation());
-                    }
-                    state = CursorDetail.SELECTING;
-                }
+                deletePopup();
                 break;
             case EDIT:
-                if (clicked != null) {
-                    if (clicked instanceof  Node) {
-                        this.changeClickedName(clicked.getLocation());
-                    } else {
-                        this.changeClickedName(((Edge)clicked).getLocation());
-                    }
-                    state = CursorDetail.SELECTING;
-                }
+                changeClickedName();
                 break;
         }
 
@@ -109,6 +95,17 @@ public class Controller extends MouseAdapter implements ActionListener {
         e.getComponent().repaint();
     }
 
+    private void deletePopup() {
+        if (clicked != null) {
+            if (clicked instanceof Node) {
+                model.deleteNode((Node) clicked);
+            } else if (clicked instanceof Edge) {
+                model.deleteEdge((Edge) clicked);
+            }
+            state = CursorDetail.SELECTING;
+        }
+    }
+
     private void newFile() {
         int result = JOptionPane.showConfirmDialog(view, "Are you sure you want to create a new file?",
                 "Create new diagram", JOptionPane.YES_NO_OPTION);
@@ -144,33 +141,37 @@ public class Controller extends MouseAdapter implements ActionListener {
     }
 
     private void deleteFromPoint(Point p) {
-        clicked = model.getElementAt(p);
-        if (clicked instanceof Node) {
-            model.deleteNode((Node) clicked);
-            clicked = null;
-        } else if (clicked != null) {
-            model.deleteEdge((Edge) clicked);
+        if (clicked == null) {
+            clicked = model.getElementAt(p);
+        }
+        if (clicked != null) {
+            if (clicked instanceof Node) {
+                model.deleteNode((Node) clicked);
+                clicked = null;
+            } else if (clicked instanceof Edge) {
+                model.deleteEdge((Edge) clicked);
+            }
         }
     }
 
-    private void changeClickedName(Point p) {
+    private void changeClickedName() {
         String name;
         if (clicked instanceof Node) {
             if (!((Node) clicked).getType().equals(NodeType.STATE)) {
                 name = askForString("Enter a name:", clicked.getName());
                 if (name != null) {
-                    model.getElementAt(p).setName(name);
+                    clicked.setName(name);
                 }
             }
         } else if (clicked != null) {
-            switch(((Edge)clicked).getType()) {
+            switch (((Edge) clicked).getType()) {
                 case TRANSITION:
                     //TODO: condicio transicio
                     break;
                 case INTERRUPT:
                     name = askForString("Enter interrupt name:",  clicked.getName());
                     if (name != null) {
-                        model.getElementAt(p).setName(name);
+                        clicked.setName(name);
                     }
                     break;
                 case OPERATION:
@@ -184,6 +185,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                     break;
             }
         }
+        state = CursorDetail.SELECTING;
     }
 
     private String askForString(String msg, String hint) {
