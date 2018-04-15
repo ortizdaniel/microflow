@@ -4,18 +4,24 @@ import model.Graph;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Line2D;
+import java.awt.geom.QuadCurve2D;
 
 public class DrawPanel extends JPanel {
 
-    private Line2D tempLine;
-    private boolean drawingLine;
+    public static final int CURVE = 0;
+    public static final int RECT = 1;
+    public static final int NONE = 2;
+
+    private Point start;
+    private Point pivot;
+    private Point end;
+    private int type;
     private final Stroke lineStroke = new BasicStroke(1.5f);
 
     public DrawPanel() {
         super();
         setBackground(Color.decode("#FEFEFE"));
-        tempLine = new Line2D.Double();
+        type = NONE;
     }
 
     @Override
@@ -24,10 +30,13 @@ public class DrawPanel extends JPanel {
         Graphics2D g = (Graphics2D) g0;
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        if (drawingLine) {
-            g.setStroke(lineStroke);
-            g.setColor(Color.GRAY);
-            g.draw(tempLine);
+        g.setStroke(lineStroke);
+        g.setColor(Color.GRAY);
+        if (type == CURVE) {
+            g.draw(new QuadCurve2D.Float(start.x, start.y, pivot.x, pivot.y, end.x, end.y));
+        } else if (type == RECT) {
+            g.drawLine(start.x, start.y, pivot.x, pivot.y);
+            g.drawLine(pivot.x, pivot.y, end.x, end.y);
         }
 
         for (Drawable d : Graph.getInstance().getEdges()) {
@@ -39,14 +48,18 @@ public class DrawPanel extends JPanel {
     }
 
     public void setLineStart(Point p) {
-        tempLine.setLine(p, tempLine.getP2());
+        start = p;
     }
 
     public void setLineEnd(Point p) {
-        tempLine.setLine(tempLine.getP1(), p);
+        end = p;
     }
 
-    public void setDrawingLine(boolean drawingLine) {
-        this.drawingLine = drawingLine;
+    public void setLinePivot(Point p) {
+        pivot = p;
+    }
+
+    public void setLineStyle(int type) {
+        this.type = type;
     }
 }
