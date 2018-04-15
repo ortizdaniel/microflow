@@ -20,6 +20,7 @@ public class MenuBar extends JMenuBar {
 
     private static final String ABOUT_MSG = "Main\nDaniel Ortiz & Joan Gómez\n" +
             "Inspired by the original of F. Escudero\nCopyright (C) 2018";
+    private static final String LOGO_PATH = "res/img/logo.png";
 
     /* Menu File Items */
     private JMenuItem jmiNewFile;
@@ -192,8 +193,10 @@ public class MenuBar extends JMenuBar {
     private void addHelpOptions() {
         JMenuItem jmiAbout = new JMenuItem("About");
         jmiAbout.addActionListener(e -> {
-            //TODO: pasar el icono del bubblewizard
-            JOptionPane.showMessageDialog(null, ABOUT_MSG, "Credits", JOptionPane.INFORMATION_MESSAGE, null);
+            Image image = new ImageIcon(LOGO_PATH).getImage();
+            image = image.getScaledInstance(80, 80,  java.awt.Image.SCALE_SMOOTH);
+            Icon icon = new ImageIcon(image);
+            JOptionPane.showMessageDialog(null, ABOUT_MSG, "Credits", JOptionPane.INFORMATION_MESSAGE, icon);
         });
 
         jmHelp.add(jmiAbout);

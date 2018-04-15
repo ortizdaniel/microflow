@@ -39,7 +39,7 @@ public class Edge extends Element {
     }
 
     private void setPivot(Point n1, Point n2) {
-        pivotPoint = new Point((n1.x + n2.x) / 2, (n1.y + n2.y) / 2);
+        pivotPoint = new Point(((n1.x + n2.x) / 2), ((n1.y + n2.y) / 2));
         updatePivot(pivotPoint);
     }
 

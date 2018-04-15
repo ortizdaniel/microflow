@@ -179,7 +179,6 @@ public class ToolBar extends JPanel {
             ImageIcon icon = new ImageIcon(iconPath);
             jb.setIcon(icon);
         } catch (Exception e) {
-            //TODO default image
             e.printStackTrace();
         }
 
