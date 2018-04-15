@@ -11,6 +11,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+import java.awt.print.PrinterJob;
 
 public class Controller extends MouseAdapter implements ActionListener {
 
@@ -22,6 +26,9 @@ public class Controller extends MouseAdapter implements ActionListener {
     private ContextMenu contextMenu;
     private final static String OPTIONS[] = {"Read/Write", "Write", "Read"};
 
+    //TODO: cuando haya gestos de archivos cambiarlo
+    private static String fileName;
+
     public Controller(View view) {
         this.view = view;
         model = Graph.getInstance();
@@ -30,6 +37,8 @@ public class Controller extends MouseAdapter implements ActionListener {
         addingEdgeFrom = null;
         contextMenu = new ContextMenu();
         contextMenu.addListener(this);
+
+        fileName = "Diagram 1";
     }
 
     @Override
@@ -49,6 +58,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             case SAVE_FILE_PNG:
                 break;
             case PRINT_FILE:
+                printFile();
                 break;
             case GEN_FILES:
                 break;
@@ -214,6 +224,56 @@ public class Controller extends MouseAdapter implements ActionListener {
             }
         }
         state = CursorDetail.SELECTING;
+    }
+
+    private void printFile() {
+        PrinterJob pj = PrinterJob.getPrinterJob();
+        pj.setJobName("Print " + fileName);
+
+        pj.setPrintable (new Printable() {
+            public int print(Graphics pg, PageFormat pf, int pageNum){
+
+                if (pageNum > 0) {
+                    return Printable.NO_SUCH_PAGE;
+                }
+
+                Graphics2D g2 = (Graphics2D) pg;
+                pf.setOrientation(PageFormat.LANDSCAPE);
+                g2.translate(pf.getImageableX(), pf.getImageableY());
+
+                double dw = pf.getImageableWidth();
+                double dh = pf.getImageableHeight();
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+                double xScale = dw / screenSize.width;
+                double yScale = dh / screenSize.height;
+                double scale = Math.min(xScale,yScale);
+
+                double tx = 0.0;
+                double ty = 0.0;
+                if (xScale > scale) {
+                    tx = 0.5 * (xScale-scale) * screenSize.width;
+                } else {
+                    ty = 0.5 * (yScale-scale) * screenSize.height;
+                }
+
+                g2.translate(tx, ty);
+                g2.scale(scale, scale);
+                view.getDrawPanel().setBackground(Color.white);                 //Save ink
+                view.getDrawPanel().paint(g2);
+                view.getDrawPanel().setBackground(Color.decode("#FEFEFE"));
+
+                return Printable.PAGE_EXISTS;
+            }
+        });
+
+        try {
+            pj.printDialog();
+            pj.print();
+        } catch (PrinterException ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     private String askForString(String msg, String hint) {

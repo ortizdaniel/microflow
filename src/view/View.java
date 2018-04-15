@@ -55,4 +55,5 @@ public class View extends JFrame {
     public DrawPanel getDrawPanel() {
         return drawPanel;
     }
+
 }
