@@ -1,7 +1,6 @@
 package controller;
 
 import model.*;
-import view.ContextMenu;
 import view.View;
 
 import javax.swing.*;
@@ -32,7 +31,6 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
         state = CursorDetail.valueOf(e.getActionCommand());
 
         switch (state) {
@@ -200,8 +198,9 @@ public class Controller extends MouseAdapter implements ActionListener {
             Element element = model.getElementAt(e.getPoint());
             if (element instanceof Node) {
                 addingEdgeFrom = (Node) element;
-                view.getDrawPanel().setDrawingLine(true);
+                view.getDrawPanel().setLineStyle(obj.equals(EdgeType.OPERATION) ? DrawPanel.RECT : DrawPanel.CURVE);
                 view.getDrawPanel().setLineStart(addingEdgeFrom.getCenter());
+                view.getDrawPanel().setLinePivot(Graph.getThirdPoint(addingEdgeFrom.getCenter(), e.getPoint()));
                 view.getDrawPanel().setLineEnd(addingEdgeFrom.getCenter());
             }
         }
@@ -220,6 +219,7 @@ public class Controller extends MouseAdapter implements ActionListener {
         }
 
         if (addingEdgeFrom != null) {
+            view.getDrawPanel().setLinePivot(Graph.getThirdPoint(addingEdgeFrom.getCenter(), e.getPoint()));
             view.getDrawPanel().setLineEnd(e.getPoint());
         }
 
@@ -238,7 +238,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                     model.addEdge(new Edge(edgeType, "condition", addingEdgeFrom, (Node) element));
                 }
             }
-            view.getDrawPanel().setDrawingLine(false);
+            view.getDrawPanel().setLineStyle(DrawPanel.NONE);
             addingEdgeFrom = null;
         }
 

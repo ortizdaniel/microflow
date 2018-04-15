@@ -7,6 +7,9 @@ import java.util.List;
 
 public class Graph {
 
+    private static final double S60 = Math.sin(60 * Math.PI / 180.0);
+    private static final double C60 = Math.cos(60 * Math.PI / 180.0);
+
     private static Graph instance;
 
     private LinkedList<Node> nodes;
@@ -86,5 +89,12 @@ public class Graph {
     public void deleteAll() {
         nodes.clear();
         edges.clear();
+    }
+
+    public static Point getThirdPoint(Point p1, Point p2) {
+        return new Point(
+                (int) (C60 * (p1.x - p2.x) - S60 * (p1.y - p2.y) + p2.x),
+                (int) (S60 * (p1.x - p2.x) + C60 * (p1.y - p2.y) + p2.y)
+        );
     }
 }

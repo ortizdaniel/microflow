@@ -32,14 +32,14 @@ public class Edge extends Element {
         this.n1 = n1;
         this.n2 = n2;
         bidir = false;
-        setPivot(n1.getCenter(), n2.getCenter());
+        setDefaultPivot(n1.getCenter(), n2.getCenter());
         setBounds();
         nameBounds = new Ellipse2D.Float();
         setName(name);
     }
 
-    private void setPivot(Point n1, Point n2) {
-        pivotPoint = new Point(((n1.x + n2.x) / 2), ((n1.y + n2.y) / 2));
+    private void setDefaultPivot(Point p1, Point p2) {
+        pivotPoint = Graph.getThirdPoint(p1, p2);
         updatePivot(pivotPoint);
     }
 
