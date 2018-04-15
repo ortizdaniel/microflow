@@ -9,6 +9,8 @@ public class Edge extends Element {
     private EdgeType type;
     private Node n1;
     private Node n2;
+    private final Node originalN1;
+    private final Node originalN2;
 
     private Point pivotPoint;
     private Rectangle pivot;
@@ -31,6 +33,8 @@ public class Edge extends Element {
         this.type = type;
         this.n1 = n1;
         this.n2 = n2;
+        originalN1 = n1;
+        originalN2 = n2;
         bidir = false;
         setDefaultPivot(n1.getCenter(), n2.getCenter());
         setBounds();
@@ -213,4 +217,22 @@ public class Edge extends Element {
         return pivotPoint;
     }
 
+    public void setAsRead() {
+        if (originalN1 != n1 && originalN2 != n2) {
+            swapNodes();
+        }
+    }
+
+    public void setAsWrite() {
+        if (originalN1 == n1 && originalN2 == n2) {
+            swapNodes();
+        }
+    }
+
+    private void swapNodes() {
+        Node temp = n2;
+        n2 = n1;
+        n1 = temp;
+        setBounds();
+    }
 }

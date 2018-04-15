@@ -1,7 +1,6 @@
 package view;
 
 
-import controller.Controller;
 import controller.CursorDetail;
 
 import javax.swing.*;
@@ -24,11 +23,14 @@ public class ContextMenu extends JPopupMenu {
         this.setVisible(false);
     }
 
+    public void showEditButton(boolean b) {
+        jmiEdit.setVisible(b);
+    }
+
     public void hideContextMenu() {
         this.setSelected(null);
         this.setVisible(false);
     }
-
 
     public void addListener(ActionListener l) {
         jmiEdit.addActionListener(l);

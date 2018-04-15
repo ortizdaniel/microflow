@@ -9,6 +9,8 @@ public class Graph {
 
     private static final double S60 = Math.sin(60 * Math.PI / 180.0);
     private static final double C60 = Math.cos(60 * Math.PI / 180.0);
+    private static final double S45 = Math.sin(30 * Math.PI / 180.0);
+    private static final double C45 = Math.cos(30 * Math.PI / 180.0);
 
     private static Graph instance;
 

@@ -20,6 +20,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     private CursorDetail state;
     private Node addingEdgeFrom;
     private ContextMenu contextMenu;
+    private final static String OPTIONS[] = {"Read/Write", "Write", "Read"};
 
     public Controller(View view) {
         this.view = view;
@@ -88,11 +89,28 @@ public class Controller extends MouseAdapter implements ActionListener {
             state = CursorDetail.SELECTING;
             view.changeCursor(CursorDetail.SELECTING.getCursor());
             if (clicked != null && clicked.contains(e.getPoint())) {
+                contextMenuHideEditButton();
                 contextMenu.show(view.getDrawPanel(), e.getX(), e.getY());
             }
         }
 
         e.getComponent().repaint();
+    }
+
+    private void contextMenuHideEditButton() {
+        if (clicked instanceof Node) {
+            if (((Node) clicked).getType().equals(NodeType.STATE)) {
+                contextMenu.showEditButton(false);
+            } else {
+                contextMenu.showEditButton(true);
+            }
+        } else if (clicked instanceof Edge) {
+            if (((Edge) clicked).getType().equals(EdgeType.INTERFACE)) {
+                contextMenu.showEditButton(false);
+            } else {
+                contextMenu.showEditButton(true);
+            }
+        }
     }
 
     private void deletePopup() {
@@ -159,12 +177,14 @@ public class Controller extends MouseAdapter implements ActionListener {
         if (clicked instanceof Node) {
             if (!((Node) clicked).getType().equals(NodeType.STATE)) {
                 name = askForString("Enter a name:", clicked.getName());
+                contextMenu.showEditButton(true);
                 if (name != null) {
                     clicked.setName(name);
                 }
             }
-        } else if (clicked != null) {
-            switch (((Edge) clicked).getType()) {
+        } else if (clicked instanceof Edge) {
+            Edge e = (Edge) clicked;
+            switch (e.getType()) {
                 case TRANSITION:
                     //TODO: condicio transicio
                     break;
@@ -175,10 +195,18 @@ public class Controller extends MouseAdapter implements ActionListener {
                     }
                     break;
                 case OPERATION:
-                    //TODO: set bidireccional
-                    break;
-                case INTERFACE:
-                    //do nothing
+                    int res = JOptionPane.showOptionDialog(view, "What would you like this operation to be?",
+                            "Operation settings", 0, JOptionPane.QUESTION_MESSAGE, null, OPTIONS,
+                            null);
+                    if (res == 2) { //read
+                        e.setBidirectional(false);
+                        e.setAsRead();
+                    } else if (res == 1) { //write
+                        e.setBidirectional(false);
+                        e.setAsWrite();
+                    } else if (res == 0) {//read/write
+                        e.setBidirectional(true);
+                    }
                     break;
                 case ACTION:
                     //TODO: codi que es fa en el salt
