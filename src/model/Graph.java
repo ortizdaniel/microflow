@@ -91,6 +91,9 @@ public class Graph {
         edges.clear();
     }
 
+    /**
+     * https://stackoverflow.com/questions/2861904/how-to-find-coordinates-of-a-2d-equilateral-triangle-in-c
+     */
     public static Point getThirdPoint(Point p1, Point p2) {
         return new Point(
                 (int) (C60 * (p1.x - p2.x) - S60 * (p1.y - p2.y) + p2.x),

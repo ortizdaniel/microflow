@@ -20,16 +20,20 @@ public class View extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-
-
         JPanel content = (JPanel) getContentPane();
         drawPanel = new DrawPanel();
-        content.add(drawPanel, BorderLayout.CENTER);
+        //content.add(drawPanel, BorderLayout.CENTER);
         jpToolBar = new ToolBar();
         content.add(jpToolBar, BorderLayout.NORTH);
 
+        JScrollPane scrollPane = new JScrollPane(drawPanel);
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        content.add(scrollPane, BorderLayout.CENTER);
+
         jmbMenuBar = new MenuBar(this, jpToolBar);
         this.setJMenuBar(jmbMenuBar);
+
 
         this.setVisible(true);
     }

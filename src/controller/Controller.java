@@ -4,6 +4,8 @@ import model.*;
 import view.DrawPanel;
 import view.View;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -36,6 +38,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             case UNDO:
                 break;
             case NEW_FILE:
+                newFile();
                 break;
             case OPEN_FILE:
                 break;
@@ -79,6 +82,14 @@ public class Controller extends MouseAdapter implements ActionListener {
         e.getComponent().repaint();
     }
 
+    private void newFile() {
+        int result = JOptionPane.showConfirmDialog(view, "Are you sure you want to create a new file?",
+                "Create new diagram", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            model.deleteAll();
+        }
+    }
+
     private void selecting(MouseEvent e) {
         if (clicked == null) {
             clicked = model.getElementAt(e.getPoint());
@@ -119,6 +130,11 @@ public class Controller extends MouseAdapter implements ActionListener {
                 model.addNode(new Node(nt, e.getPoint()));
             } else {
                 model.addNode(new Node(nt, state.getNameToAdd(), e.getPoint()));
+            }
+            Component c = e.getComponent(); //DrawPanel instance
+            System.out.println(c.contains(e.getPoint()));
+            if (!c.contains(e.getPoint())) {
+                //TODO scrollear
             }
         } else if (obj instanceof EdgeType) {
             Element element = model.getElementAt(e.getPoint());

@@ -4,6 +4,8 @@ import model.Graph;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.geom.QuadCurve2D;
 
 public class DrawPanel extends JPanel {
@@ -16,12 +18,22 @@ public class DrawPanel extends JPanel {
     private Point pivot;
     private Point end;
     private int type;
+    private Rectangle bounds;
     private final Stroke lineStroke = new BasicStroke(1.5f);
 
     public DrawPanel() {
         super();
         setBackground(Color.decode("#FEFEFE"));
         type = NONE;
+        bounds = new Rectangle(0, 0, getWidth() - 30, getHeight() - 30);
+
+        addComponentListener(new ComponentAdapter() {
+
+            @Override
+            public void componentResized(ComponentEvent e) {
+                bounds.setBounds(0, 0, getWidth() - 30, getHeight() - 30);
+            }
+        });
     }
 
     @Override
@@ -45,6 +57,11 @@ public class DrawPanel extends JPanel {
         for (Drawable d : Graph.getInstance().getNodes()) {
             d.draw(g);
         }
+    }
+
+    @Override
+    public boolean contains(Point p) {
+        return bounds.contains(p);
     }
 
     public void setLineStart(Point p) {
