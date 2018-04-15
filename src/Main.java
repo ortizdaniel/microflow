@@ -46,14 +46,14 @@ public class Main {
             e.printStackTrace();
         }
 
-        //SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() -> {
             View view = new View();
             Controller controller = new Controller(view);
             view.registerController(controller);
             view.addActionListener(controller);
-        //});
+        });
 
-        /*
+
         Graph g = Graph.getInstance();
         Node n = new Node(NodeType.TAD, new Point(0, 0));
         Node n2 = new Node(NodeType.VARIABLE, "char cua[MAX_CUA][MAX_LEGNTH]", new Point(100, 100));
@@ -70,7 +70,7 @@ public class Main {
         e.setBidirectional(true);
         g.addEdge(e);
         //g.addEdge(new Edge(EdgeType.TRANSITION, n4, n5));
-        */
+
 
 
         Point p0 = new Point(100, 100);
