@@ -31,6 +31,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     private ContextMenu contextMenu;
     private final static String OPTIONS[] = {"Read/Write", "Write", "Read"};
     private final JFileChooser chooser;
+    private boolean draggingName;
 
     private static String fileName;
 
@@ -44,6 +45,7 @@ public class Controller extends MouseAdapter implements ActionListener {
         contextMenu.addListener(this);
         chooser = new JFileChooser();
         chooser.setFileFilter(new FileNameExtensionFilter("BubbleWizard file", "bwz"));
+        draggingName = false;
 
         fileName = "Diagram 1";
     }
@@ -228,9 +230,15 @@ public class Controller extends MouseAdapter implements ActionListener {
                 //no hacer nada, puede que ahora se vaya a mover
             } else {
                 //se ha clickado fuera de un elemento, posiblemente
+                if (clicked instanceof Edge && ((Edge) clicked).nameBoundsContains(e.getPoint())) {
+                    draggingName = true;
+                    return;
+                }
                 if (clicked instanceof Node || clicked instanceof Edge && !((Edge) clicked).pivotContains(e.getPoint())) {
+
                     //si se clicó fuera del nodo, deseleccionarlo
                     //si se clicó fuera PERO era un edge y NO se clicó en el pivot del edge, deseleccionarlo
+                    //si se clicó fuera PERO era un edge y NO se clicó en el nombre del edge, deseleccionarlo
                     clicked.setSelected(false);
                     clicked = null;
                     mousePressed(e);
@@ -271,10 +279,8 @@ public class Controller extends MouseAdapter implements ActionListener {
             Edge e = (Edge) clicked;
             switch (e.getType()) {
                 case TRANSITION:
-                    //TODO: condicio transicio
-                    break;
                 case INTERRUPT:
-                    name = askForString("Enter interrupt name:",  clicked.getName());
+                    name = askForString("Enter " + e.getType().name().toLowerCase() + " name:", clicked.getName());
                     if (name != null) {
                         clicked.setName(name);
                     }
@@ -368,7 +374,6 @@ public class Controller extends MouseAdapter implements ActionListener {
                 model.addNode(new Node(nt, state.getNameToAdd(), e.getPoint()));
             }
             Component c = e.getComponent(); //DrawPanel instance
-            System.out.println(c.contains(e.getPoint()));
             if (!c.contains(e.getPoint())) {
                 //TODO scrollear
             }
@@ -413,13 +418,14 @@ public class Controller extends MouseAdapter implements ActionListener {
                 if (edgeType.equals(EdgeType.INTERFACE)) {
                     model.addEdge(new Edge(edgeType, addingEdgeFrom, (Node) element));
                 } else {
-                    model.addEdge(new Edge(edgeType, "condition", addingEdgeFrom, (Node) element));
+                    model.addEdge(new Edge(edgeType, state.getNameToAdd(), addingEdgeFrom, (Node) element));
                 }
             }
             view.getDrawPanel().setLineStyle(DrawPanel.NONE);
             addingEdgeFrom = null;
         }
 
+        draggingName = false;
         e.getComponent().repaint();
     }
 
@@ -443,7 +449,11 @@ public class Controller extends MouseAdapter implements ActionListener {
     private void draggedEdge(Edge edge, MouseEvent event) {
         //lo mismo de arriba
         //if (edge.pivotContains(event.getPoint())) {
-        edge.updatePivot(event.getPoint());
-        //}
+        if (draggingName) {
+            edge.setNamePoint(event.getPoint());
+        } else {
+            edge.updatePivot(event.getPoint());
+            //}
+        }
     }
 }

@@ -10,8 +10,8 @@ import java.awt.event.WindowEvent;
 public class View extends JFrame {
 
     private static final String TITLE = "Diagram 1";
-    private static final int MIN_WIDTH = 640;
-    private static final int MIN_HEIGHT = 480;
+    private static final int MIN_WIDTH = 800;
+    private static final int MIN_HEIGHT = 600;
     private final DrawPanel drawPanel;
     private final ToolBar jpToolBar;
     private final MenuBar jmbMenuBar;

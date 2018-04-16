@@ -3,6 +3,7 @@ package model;
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.QuadCurve2D;
+import java.awt.geom.Rectangle2D;
 
 public class Edge extends Element {
 
@@ -167,17 +168,22 @@ public class Edge extends Element {
             g.drawLine(p1.x, p1.y, pivotPoint.x, pivotPoint.y);
             g.drawLine(pivotPoint.x, pivotPoint.y, p2.x, p2.y);
         } else {
-            if (type.equals(EdgeType.TRANSITION)) {
-
-            } else if (type.equals(EdgeType.INTERRUPT)) {
-
-            } else if (type.equals(EdgeType.INTERFACE)) {
-
-            }
             g.draw(curve);
+            g.setColor(Color.BLACK);
+            if (type.equals(EdgeType.TRANSITION) || type.equals(EdgeType.INTERRUPT)) {
+                g.setColor(selected ? Color.GRAY : Color.BLACK);
+                drawCenteredText(g, namePoint.x, namePoint.y, name);
+            } else if (type.equals(EdgeType.INTERFACE)) {
+                g.setColor(Color.WHITE);
+                g.fill(nameBounds);
+                g.setColor(selected ? Color.GRAY : Color.BLACK);
+                g.draw(nameBounds);
+                drawCenteredText(g, namePoint.x, namePoint.y, name);
+            }
         }
 
         g.setStroke(medium);
+        g.setColor(selected ? Color.GRAY : type.getColor());
         g.fill(arrow);
         if (bidir) g.fill(arrowBidir);
 
@@ -200,17 +206,22 @@ public class Edge extends Element {
 
     @Override
     public void setName(String name) {
-        Canvas c = new Canvas();
         if (type.equals(EdgeType.INTERRUPT) || type.equals(EdgeType.INTERFACE) || type.equals(EdgeType.TRANSITION)) {
-            int width = c.getFontMetrics(FONT_MED).stringWidth(name);
             if (namePoint == null) {
-                //namePoint = new Point(pivotPoint.x - (width / 2) - 5, pivotPoint.y - (width / 2));
+                namePoint = bezierQuadratic(0.5, n1.getCenter(), pivotPoint, n2.getCenter());
             }
-            /*nameBounds.setFrame(
-                    namePoint.x, namePoint.y,
-                    width + 10, width + 10
-            );*/
+            nameBounds = new Ellipse2D.Float(namePoint.x - 20, namePoint.y - 20, 40, 40);
         }
+        this.name = name;
+    }
+
+    public void setNamePoint(Point p) {
+        namePoint = p;
+        setName(name);
+    }
+
+    public boolean nameBoundsContains(Point p) {
+        return nameBounds.contains(p);
     }
 
     @Override
@@ -221,9 +232,17 @@ public class Edge extends Element {
     @Override
     public boolean contains(Point p) {
         for (double t = 0; t <= 1; t += 0.005) {
-            Point cur = bezierQuadratic(t, n1.getCenter(), pivotPoint, n2.getCenter());
-            if (Math.hypot(p.x - cur.x, p.y - cur.y) <= 15) {
-                return true;
+            if (type.equals(EdgeType.OPERATION)) {
+                Point cur = bezierLinear(t, n1.getCenter(), pivotPoint);
+                Point cur2 = bezierLinear(t, pivotPoint, n2.getCenter());
+                if (Math.hypot(p.x - cur.x, p.y - cur.y) <= 15 || Math.hypot(p.x - cur2.x, p.y - cur2.y) <= 15) {
+                    return true;
+                }
+            } else {
+                Point cur = bezierQuadratic(t, n1.getCenter(), pivotPoint, n2.getCenter());
+                if (Math.hypot(p.x - cur.x, p.y - cur.y) <= 15) {
+                    return true;
+                }
             }
         }
         return false;
@@ -254,5 +273,22 @@ public class Edge extends Element {
 
     public void setN2(Node n2) {
         this.n2 = n2;
+    }
+
+    /**
+     * https://stackoverflow.com/questions/21267412/drawing-strings-inscribed-in-a-circle
+     */
+    private void drawCenteredText(Graphics g, int x, int y, String text) {
+        g.setFont(FONT_LARGE);
+        FontMetrics fm = g.getFontMetrics();
+        Rectangle2D rect = fm.getStringBounds(text, g);
+
+        int textHeight = (int) (rect.getHeight());
+        int textWidth = (int) (rect.getWidth());
+
+        int cornerX = x - (textWidth / 2);
+        int cornerY = y - (textHeight / 2) + fm.getAscent();
+
+        g.drawString(text, cornerX, cornerY);
     }
 }

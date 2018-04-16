@@ -16,10 +16,6 @@ public class Graph {
 
     private static final double S60 = Math.sin(60 * Math.PI / 180.0);
     private static final double C60 = Math.cos(60 * Math.PI / 180.0);
-    private static final double S15 = Math.sin(15 * Math.PI / 180.0);
-    private static final double C15 = Math.cos(15 * Math.PI / 180.0);
-    private static final double S165 = Math.sin(165 * Math.PI / 180.0);
-    private static final double C165 = Math.cos(165 * Math.PI / 180.0);
 
     private static Graph instance;
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
@@ -112,19 +108,15 @@ public class Graph {
      * https://stackoverflow.com/questions/2861904/how-to-find-coordinates-of-a-2d-equilateral-triangle-in-c
      */
     public static Point getThirdPoint(Point p1, Point p2) {
-        double d = Math.hypot(p1.x - p2.x, p1.y - p2.y);
-        if (d > 30) {
-            return new Point(
-                    //TODO hacerlo menos curvado
-                    (int) (C15 * (p1.x - p2.x) - S15 * (p1.y - p2.y) + p2.x),
-                    (int) (S15 * (p1.x - p2.x) + C15 * (p1.y - p2.y) + p2.y)
-            );
-        } else {
-            return new Point(
-                    (int) (C60 * (p1.x - p2.x) - S60 * (p1.y - p2.y) + p2.x),
-                    (int) (S60 * (p1.x - p2.x) + C60 * (p1.y - p2.y) + p2.y)
-            );
-        }
+        /*return new Point(
+                //TODO menos curvado
+                (int) (C60 * (p1.x - p2.x) - S60 * (p1.y - p2.y) + p2.x),
+                (int) (S60 * (p1.x - p2.x) + C60 * (p1.y - p2.y) + p2.y)
+        );*/
+        return new Point(
+                (p1.x + p2.x) / 2 + (p2.y - p1.y) / 2,
+                (p1.y + p2.y) / 2 + (p2.x - p1.x) / 2
+        );
     }
 
     public boolean loadFromFile(String path) {

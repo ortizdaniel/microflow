@@ -16,12 +16,12 @@ public enum CursorDetail {
 
 
     ADD_TAD(createCursor(ToolBar.TAD_ICON), NodeType.TAD, "Name"),
-    ADD_VARIABLE(createCursor(ToolBar.VAR_ICON), NodeType.VARIABLE, "variable"),
-    ADD_PERIPHERAL(createCursor(ToolBar.PERIPHERAL_ICON), NodeType.PERIPHERAL, "peripheral"),
+    ADD_VARIABLE(createCursor(ToolBar.VAR_ICON), NodeType.VARIABLE, "Variable"),
+    ADD_PERIPHERAL(createCursor(ToolBar.PERIPHERAL_ICON), NodeType.PERIPHERAL, "Peripheral"),
     ADD_STATE(createCursor(ToolBar.STATE_ICON), NodeType.STATE, null),
 
-    ADD_TRANSITION(createCursor(ToolBar.TRANSITION_CURSOR), EdgeType.TRANSITION, null),
-    ADD_INTERRUPT(createCursor(ToolBar.INTERRUPT_ICON), EdgeType.INTERRUPT, null),
+    ADD_TRANSITION(createCursor(ToolBar.TRANSITION_CURSOR), EdgeType.TRANSITION, "Condition"),
+    ADD_INTERRUPT(createCursor(ToolBar.INTERRUPT_ICON), EdgeType.INTERRUPT, "IRQ"),
     ADD_OPERATION(createCursor(ToolBar.OPERATION_ICON), EdgeType.OPERATION, null),
     ADD_INTERFACE(createCursor(ToolBar.INTERFACE_ICON), EdgeType.INTERFACE, null),
     ADD_ACTION(createCursor(ToolBar.ACTION_CURSOR), EdgeType.ACTION, null),
