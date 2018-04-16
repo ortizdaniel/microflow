@@ -22,7 +22,7 @@ public class Edge extends Element {
     private String extra;
 
     private Point namePoint;
-    private Ellipse2D.Float nameBounds;
+    private Shape nameBounds;
 
     private static int interfaceCount = 0;
 
@@ -210,7 +210,9 @@ public class Edge extends Element {
             if (namePoint == null) {
                 namePoint = bezierQuadratic(0.5, n1.getCenter(), pivotPoint, n2.getCenter());
             }
-            nameBounds = new Ellipse2D.Float(namePoint.x - 20, namePoint.y - 20, 40, 40);
+            if (type.equals(EdgeType.INTERFACE)) {
+                nameBounds = new Ellipse2D.Float(namePoint.x - 20, namePoint.y - 20, 40, 40);
+            }
         }
         this.name = name;
     }
@@ -288,6 +290,11 @@ public class Edge extends Element {
 
         int cornerX = x - (textWidth / 2);
         int cornerY = y - (textHeight / 2) + fm.getAscent();
+
+        //la porquería más grande, pero es lo más sencillo
+        if (!type.equals(EdgeType.INTERFACE)) {
+            nameBounds = new Rectangle(cornerX, y - textHeight / 2, textWidth, textHeight);
+        }
 
         g.drawString(text, cornerX, cornerY);
     }
