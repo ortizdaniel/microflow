@@ -141,4 +141,15 @@ public class Node extends Element {
         g.setStroke(type.getOuter());
         g.setColor(type.getOutline());
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Node)) return false;
+
+        Node other = (Node) o;
+        if (!other.center.equals(center)) return false;
+        if (!other.type.equals(type)) return false;
+        if (!other.name.equals(name)) return false;
+        return other.bounds.equals(bounds);
+    }
 }

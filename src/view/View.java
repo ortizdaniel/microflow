@@ -4,10 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class View extends JFrame {
 
-    private static final String TITLE = "Main";
+    private static final String TITLE = "Diagram 1";
     private static final int MIN_WIDTH = 640;
     private static final int MIN_HEIGHT = 480;
     private final DrawPanel drawPanel;
@@ -17,7 +19,7 @@ public class View extends JFrame {
     public View() {
         setTitle(TITLE);
         setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         setLocationRelativeTo(null);
 
         JPanel content = (JPanel) getContentPane();
@@ -34,6 +36,15 @@ public class View extends JFrame {
         jmbMenuBar = new MenuBar(this, jpToolBar);
         this.setJMenuBar(jmbMenuBar);
 
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                if (JOptionPane.showConfirmDialog(View.this, "Are you sure you want to quit?",
+                        "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
+                    System.exit(0);
+                }
+            }
+        });
 
         this.setVisible(true);
     }
@@ -56,4 +67,8 @@ public class View extends JFrame {
         return drawPanel;
     }
 
+    @Override
+    public void setTitle(String title) {
+        super.setTitle("BubbleWizard - " + title);
+    }
 }

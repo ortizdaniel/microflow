@@ -5,16 +5,21 @@ import view.ContextMenu;
 import view.DrawPanel;
 import view.View;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.File;
+import java.io.IOException;
 
 public class Controller extends MouseAdapter implements ActionListener {
 
@@ -25,8 +30,8 @@ public class Controller extends MouseAdapter implements ActionListener {
     private Node addingEdgeFrom;
     private ContextMenu contextMenu;
     private final static String OPTIONS[] = {"Read/Write", "Write", "Read"};
+    private final JFileChooser chooser;
 
-    //TODO: cuando haya gestos de archivos cambiarlo
     private static String fileName;
 
     public Controller(View view) {
@@ -37,6 +42,8 @@ public class Controller extends MouseAdapter implements ActionListener {
         addingEdgeFrom = null;
         contextMenu = new ContextMenu();
         contextMenu.addListener(this);
+        chooser = new JFileChooser();
+        chooser.setFileFilter(new FileNameExtensionFilter("BubbleWizard file", "bwz"));
 
         fileName = "Diagram 1";
     }
@@ -44,6 +51,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         state = CursorDetail.valueOf(e.getActionCommand());
+        view.changeCursor(state.getCursor());
 
         switch (state) {
             case UNDO:
@@ -52,10 +60,13 @@ public class Controller extends MouseAdapter implements ActionListener {
                 newFile();
                 break;
             case OPEN_FILE:
+                openFile();
                 break;
             case SAVE_FILE:
+                saveFile();
                 break;
             case SAVE_FILE_PNG:
+                saveFilePng();
                 break;
             case PRINT_FILE:
                 printFile();
@@ -72,10 +83,12 @@ public class Controller extends MouseAdapter implements ActionListener {
                 break;
         }
 
+        if (state.getCursor().equals(Cursor.getDefaultCursor())) {
+            state = CursorDetail.SELECTING;
+        }
         contextMenu.hideContextMenu();
         clearAllSelected();
         clicked = null;
-        view.changeCursor(state.getCursor());
         view.repaint();
     }
 
@@ -107,6 +120,65 @@ public class Controller extends MouseAdapter implements ActionListener {
         e.getComponent().repaint();
     }
 
+    /**
+     * https://stackoverflow.com/questions/5655908/export-jpanel-graphics-to-png-or-gif-or-jpg
+     */
+    private void saveFilePng() {
+        JFileChooser c = new JFileChooser();
+        c.setFileFilter(new FileNameExtensionFilter("PNG", "png"));
+        if (c.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
+            Dimension d = view.getDrawPanel().getSize();
+            BufferedImage img = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
+            Graphics2D g = img.createGraphics();
+            view.getDrawPanel().paint(g);
+            g.dispose();
+            try {
+                ImageIO.write(img, "png", new File(c.getSelectedFile().getAbsolutePath() + ".png"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void openFile() {
+        if (chooser.showOpenDialog(view) == JFileChooser.APPROVE_OPTION) {
+            String name = chooser.getSelectedFile().getAbsolutePath();
+            if (model.loadFromFile(name)) {
+                fileName = chooser.getSelectedFile().getName();
+                view.setTitle(fileName.substring(0, fileName.length() - 4));
+            } else {
+                JOptionPane.showMessageDialog(view, "Error loading file.");
+            }
+        }
+    }
+
+    private void saveFile() {
+        if (fileName.equals("Diagram 1")) {
+            if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
+                fileName = chooser.getSelectedFile().getName();
+            } else {
+                return;
+            }
+        }
+
+        String extension = "";
+        String path = chooser.getSelectedFile().getAbsolutePath();
+        int i = path.lastIndexOf('.');
+        if (i > 0) {
+            extension = path.substring(i);
+        }
+
+        if (!extension.equalsIgnoreCase(".bwz")) {
+            path += ".bwz";
+        }
+        if (model.saveToFile(path)) {
+            view.setTitle(fileName.replace(extension, ""));
+        } else {
+            JOptionPane.showMessageDialog(view, "Error saving file.");
+        }
+
+    }
+
     private void contextMenuHideEditButton() {
         if (clicked instanceof Node) {
             if (((Node) clicked).getType().equals(NodeType.STATE)) {
@@ -128,7 +200,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             if (clicked instanceof Node) {
                 model.deleteNode((Node) clicked);
             } else if (clicked instanceof Edge) {
-                model.deleteEdge((Edge) clicked);
+                model.decrementEdgesCount((Edge) clicked);
             }
             state = CursorDetail.SELECTING;
         }
@@ -139,6 +211,8 @@ public class Controller extends MouseAdapter implements ActionListener {
                 "Create new diagram", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.OK_OPTION) {
             model.deleteAll();
+            fileName = "Diagram 1";
+            view.setTitle(fileName);
         }
     }
 
@@ -177,7 +251,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 model.deleteNode((Node) clicked);
                 clicked = null;
             } else if (clicked instanceof Edge) {
-                model.deleteEdge((Edge) clicked);
+                model.decrementEdgesCount((Edge) clicked);
             }
         }
     }
@@ -230,41 +304,38 @@ public class Controller extends MouseAdapter implements ActionListener {
         PrinterJob pj = PrinterJob.getPrinterJob();
         pj.setJobName("Print " + fileName);
 
-        pj.setPrintable (new Printable() {
-            public int print(Graphics pg, PageFormat pf, int pageNum){
-
-                if (pageNum > 0) {
-                    return Printable.NO_SUCH_PAGE;
-                }
-
-                Graphics2D g2 = (Graphics2D) pg;
-                pf.setOrientation(PageFormat.LANDSCAPE);
-                g2.translate(pf.getImageableX(), pf.getImageableY());
-
-                double dw = pf.getImageableWidth();
-                double dh = pf.getImageableHeight();
-                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-
-                double xScale = dw / screenSize.width;
-                double yScale = dh / screenSize.height;
-                double scale = Math.min(xScale,yScale);
-
-                double tx = 0.0;
-                double ty = 0.0;
-                if (xScale > scale) {
-                    tx = 0.5 * (xScale-scale) * screenSize.width;
-                } else {
-                    ty = 0.5 * (yScale-scale) * screenSize.height;
-                }
-
-                g2.translate(tx, ty);
-                g2.scale(scale, scale);
-                view.getDrawPanel().setBackground(Color.white);                 //Save ink
-                view.getDrawPanel().paint(g2);
-                view.getDrawPanel().setBackground(Color.decode("#FEFEFE"));
-
-                return Printable.PAGE_EXISTS;
+        pj.setPrintable((pg, pf, pageNum) -> {
+            if (pageNum > 0) {
+                return Printable.NO_SUCH_PAGE;
             }
+
+            Graphics2D g2 = (Graphics2D) pg;
+            pf.setOrientation(PageFormat.LANDSCAPE);
+            g2.translate(pf.getImageableX(), pf.getImageableY());
+
+            double dw = pf.getImageableWidth();
+            double dh = pf.getImageableHeight();
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+            double xScale = dw / screenSize.width;
+            double yScale = dh / screenSize.height;
+            double scale = Math.min(xScale, yScale);
+
+            double tx = 0.0;
+            double ty = 0.0;
+            if (xScale > scale) {
+                tx = 0.5 * (xScale - scale) * screenSize.width;
+            } else {
+                ty = 0.5 * (yScale - scale) * screenSize.height;
+            }
+
+            g2.translate(tx, ty);
+            g2.scale(scale, scale);
+            view.getDrawPanel().setBackground(Color.white);                 //Save ink
+            view.getDrawPanel().paint(g2);
+            view.getDrawPanel().setBackground(Color.decode("#FEFEFE"));
+
+            return Printable.PAGE_EXISTS;
         });
 
         try {

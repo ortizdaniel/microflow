@@ -235,4 +235,12 @@ public class Edge extends Element {
         n1 = temp;
         setBounds();
     }
+
+    public void setN1(Node n1) {
+        this.n1 = n1;
+    }
+
+    public void setN2(Node n2) {
+        this.n2 = n2;
+    }
 }
