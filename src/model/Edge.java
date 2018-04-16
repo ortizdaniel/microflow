@@ -1,7 +1,6 @@
 package model;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 
@@ -22,7 +21,7 @@ public class Edge extends Element {
     private String extra;
 
     private Point namePoint;
-    private Shape nameBounds;
+    private Rectangle nameBounds;
 
     private static int interfaceCount = 0;
 
@@ -39,7 +38,7 @@ public class Edge extends Element {
         bidir = false;
         setDefaultPivot(n1.getCenter(), n2.getCenter());
         setBounds();
-        nameBounds = new Ellipse2D.Float();
+        nameBounds = new Rectangle();
         setName(name);
     }
 
@@ -175,9 +174,9 @@ public class Edge extends Element {
                 drawCenteredText(g, namePoint.x, namePoint.y, name);
             } else if (type.equals(EdgeType.INTERFACE)) {
                 g.setColor(Color.WHITE);
-                g.fill(nameBounds);
+                g.fillOval(nameBounds.x, nameBounds.y, nameBounds.width, nameBounds.height);
                 g.setColor(selected ? Color.GRAY : Color.BLACK);
-                g.draw(nameBounds);
+                g.drawOval(nameBounds.x, nameBounds.y, nameBounds.width, nameBounds.height);
                 drawCenteredText(g, namePoint.x, namePoint.y, name);
             }
         }
@@ -211,7 +210,7 @@ public class Edge extends Element {
                 namePoint = bezierQuadratic(0.5, n1.getCenter(), pivotPoint, n2.getCenter());
             }
             if (type.equals(EdgeType.INTERFACE)) {
-                nameBounds = new Ellipse2D.Float(namePoint.x - 20, namePoint.y - 20, 40, 40);
+                nameBounds = new Rectangle(namePoint.x - 20, namePoint.y - 20, 40, 40);
             }
         }
         this.name = name;

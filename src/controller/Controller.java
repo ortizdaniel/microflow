@@ -31,6 +31,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     private ContextMenu contextMenu;
     private final static String OPTIONS[] = {"Read/Write", "Write", "Read"};
     private final JFileChooser chooser;
+    private boolean draggingPivot;
     private boolean draggingName;
 
     private static String fileName;
@@ -45,6 +46,7 @@ public class Controller extends MouseAdapter implements ActionListener {
         contextMenu.addListener(this);
         chooser = new JFileChooser();
         chooser.setFileFilter(new FileNameExtensionFilter("BubbleWizard file", "bwz"));
+        draggingPivot = false;
         draggingName = false;
 
         fileName = "Diagram 1";
@@ -113,7 +115,9 @@ public class Controller extends MouseAdapter implements ActionListener {
         if (e.getButton() == MouseEvent.BUTTON3) {
             state = CursorDetail.SELECTING;
             view.changeCursor(CursorDetail.SELECTING.getCursor());
-            if (clicked != null && clicked.contains(e.getPoint())) {
+            if (clicked != null && clicked.contains(e.getPoint()) ||
+                    clicked instanceof Edge && ((Edge) clicked).nameBoundsContains(e.getPoint()) ||
+                    clicked instanceof Edge && ((Edge) clicked).pivotContains(e.getPoint())) {
                 contextMenuHideEditButton();
                 contextMenu.show(view.getDrawPanel(), e.getX(), e.getY());
             }
@@ -230,6 +234,10 @@ public class Controller extends MouseAdapter implements ActionListener {
                 //no hacer nada, puede que ahora se vaya a mover
             } else {
                 //se ha clickado fuera de un elemento, posiblemente
+                if (clicked instanceof Edge && ((Edge) clicked).pivotContains(e.getPoint())) {
+                    draggingPivot = true;
+                    return;
+                }
                 if (clicked instanceof Edge && ((Edge) clicked).nameBoundsContains(e.getPoint())) {
                     draggingName = true;
                     return;
@@ -425,6 +433,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             addingEdgeFrom = null;
         }
 
+        draggingPivot = false;
         draggingName = false;
         e.getComponent().repaint();
     }
@@ -451,7 +460,7 @@ public class Controller extends MouseAdapter implements ActionListener {
         //if (edge.pivotContains(event.getPoint())) {
         if (draggingName) {
             edge.setNamePoint(event.getPoint());
-        } else {
+        } else if (draggingPivot) {
             edge.updatePivot(event.getPoint());
             //}
         }
