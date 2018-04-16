@@ -1,6 +1,7 @@
 package model;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.awt.*;
 import java.io.FileNotFoundException;
@@ -15,11 +16,13 @@ public class Graph {
 
     private static final double S60 = Math.sin(60 * Math.PI / 180.0);
     private static final double C60 = Math.cos(60 * Math.PI / 180.0);
-    private static final double S120 = Math.sin(30 * Math.PI / 180.0);
-    private static final double C120 = Math.cos(30 * Math.PI / 180.0);
+    private static final double S15 = Math.sin(15 * Math.PI / 180.0);
+    private static final double C15 = Math.cos(15 * Math.PI / 180.0);
+    private static final double S165 = Math.sin(165 * Math.PI / 180.0);
+    private static final double C165 = Math.cos(165 * Math.PI / 180.0);
 
     private static Graph instance;
-    private static final Gson gson = new Gson();
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private LinkedList<Node> nodes;
     private LinkedList<Edge> edges;
@@ -65,8 +68,8 @@ public class Graph {
     public void deleteNode(Node n) {
         for (Iterator<Edge> i = edges.iterator(); i.hasNext(); ) {
             Edge e = i.next();
-            i.remove();
             if (e.getN1() == n || e.getN2() == n) {
+                i.remove();
                 decrementEdgesCount(e);
             }
         }
@@ -83,7 +86,12 @@ public class Graph {
         }
     }
 
-    public void decrementEdgesCount(Edge e) {
+    public void deleteEdge(Edge e) {
+        edges.remove(e);
+        decrementEdgesCount(e);
+    }
+
+    private void decrementEdgesCount(Edge e) {
         if (e.getType().equals(EdgeType.INTERFACE)) {
             int count = 0;
             for (Edge k : edges) {
@@ -108,8 +116,8 @@ public class Graph {
         if (d > 30) {
             return new Point(
                     //TODO hacerlo menos curvado
-                    (int) (C120 * (p1.x - p2.x) - S120 * (p1.y - p2.y) + p2.x),
-                    (int) (S120 * (p1.x - p2.x) + C120 * (p1.y - p2.y) + p2.y)
+                    (int) (C15 * (p1.x - p2.x) - S15 * (p1.y - p2.y) + p2.x),
+                    (int) (S15 * (p1.x - p2.x) + C15 * (p1.y - p2.y) + p2.y)
             );
         } else {
             return new Point(

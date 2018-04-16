@@ -158,13 +158,8 @@ public class Edge extends Element {
 
     @Override
     public void draw(Graphics2D g) {
-        if (selected) {
-            drawOutline(g);
-            g.fill(pivot);
-        }
-
         g.setStroke(type.getStroke());
-        g.setColor(type.getColor());
+        g.setColor(isSelected() ? Color.GRAY : type.getColor());
         Point p1 = n1.getCenter();
         Point p2 = n2.getCenter();
 
@@ -185,6 +180,12 @@ public class Edge extends Element {
         g.setStroke(medium);
         g.fill(arrow);
         if (bidir) g.fill(arrowBidir);
+
+        if (isSelected()) {
+            g.setStroke(STROKE_SMALL);
+            g.setColor(Color.GRAY);
+            g.fill(pivot);
+        }
     }
 
     public void setBidirectional(boolean bidir) {
@@ -215,6 +216,17 @@ public class Edge extends Element {
     @Override
     public Point getLocation() {
         return pivotPoint;
+    }
+
+    @Override
+    public boolean contains(Point p) {
+        for (double t = 0; t <= 1; t += 0.005) {
+            Point cur = bezierQuadratic(t, n1.getCenter(), pivotPoint, n2.getCenter());
+            if (Math.hypot(p.x - cur.x, p.y - cur.y) <= 15) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setAsRead() {

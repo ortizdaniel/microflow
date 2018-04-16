@@ -200,8 +200,9 @@ public class Controller extends MouseAdapter implements ActionListener {
             if (clicked instanceof Node) {
                 model.deleteNode((Node) clicked);
             } else if (clicked instanceof Edge) {
-                model.decrementEdgesCount((Edge) clicked);
+                model.deleteEdge((Edge) clicked);
             }
+            clicked = null;
             state = CursorDetail.SELECTING;
         }
     }
@@ -249,10 +250,10 @@ public class Controller extends MouseAdapter implements ActionListener {
         if (clicked != null) {
             if (clicked instanceof Node) {
                 model.deleteNode((Node) clicked);
-                clicked = null;
             } else if (clicked instanceof Edge) {
-                model.decrementEdgesCount((Edge) clicked);
+                model.deleteEdge((Edge) clicked);
             }
+            clicked = null;
         }
     }
 
