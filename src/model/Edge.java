@@ -232,6 +232,7 @@ public class Edge extends Element {
 
     @Override
     public boolean contains(Point p) {
+        //if (nameBoundsContains(p)) return true; //TODO arreglar que se mueva el nombre
         for (double t = 0; t <= 1; t += 0.005) {
             if (type.equals(EdgeType.OPERATION)) {
                 Point cur = bezierLinear(t, n1.getCenter(), pivotPoint);
@@ -296,5 +297,9 @@ public class Edge extends Element {
         }
 
         g.drawString(text, cornerX, cornerY);
+    }
+
+    public Point getNamePoint() {
+        return namePoint;
     }
 }

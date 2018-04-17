@@ -33,6 +33,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     private final JFileChooser chooser;
     private boolean draggingPivot;
     private boolean draggingName;
+    private Point mousePoint, delta;
 
     private static String fileName;
 
@@ -48,6 +49,8 @@ public class Controller extends MouseAdapter implements ActionListener {
         chooser.setFileFilter(new FileNameExtensionFilter("BubbleWizard file", "bwz"));
         draggingPivot = false;
         draggingName = false;
+        mousePoint = new Point();
+        delta = new Point();
 
         fileName = "Diagram 1";
     }
@@ -98,6 +101,7 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
+        mousePoint = e.getPoint();
         contextMenu.hideContextMenu();
         switch (state) {
             case SELECTING:
@@ -401,11 +405,13 @@ public class Controller extends MouseAdapter implements ActionListener {
     public void mouseDragged(MouseEvent e) {
         if (state.equals(CursorDetail.SELECTING)) {
             if (clicked != null) {
+                delta.setLocation(e.getX() - mousePoint.x, e.getY() - mousePoint.y);
                 if (clicked instanceof Node) {
-                    draggedNode((Node) clicked, e);
+                    draggedNode((Node) clicked, delta);
                 } else if (clicked instanceof Edge) {
-                    draggedEdge((Edge) clicked, e);
+                    draggedEdge((Edge) clicked, delta);
                 }
+                mousePoint = e.getPoint();
             }
         }
 
@@ -443,10 +449,12 @@ public class Controller extends MouseAdapter implements ActionListener {
         model.getEdges().forEach(n -> n.setSelected(false));
     }
 
-    private void draggedNode(Node node, MouseEvent event) {
+    private void draggedNode(Node node, Point p) {
         //se se quita este if, las cosas se mueven mejor - no poner el if
         //if (node.contains(event.getPoint())) {
-        node.setCenter(event.getPoint());
+        Point npt = new Point();
+        npt.setLocation(node.getCenter().x + p.x, node.getCenter().y + p.y);
+        node.setCenter(npt);
         for (Edge e : model.getEdges()) {
             if (e.getN1() == node || e.getN2() == node) {
                 e.update();
@@ -455,13 +463,16 @@ public class Controller extends MouseAdapter implements ActionListener {
         //}
     }
 
-    private void draggedEdge(Edge edge, MouseEvent event) {
+    private void draggedEdge(Edge edge, Point p) {
         //lo mismo de arriba
         //if (edge.pivotContains(event.getPoint())) {
+        Point npt = new Point();
         if (draggingName) {
-            edge.setNamePoint(event.getPoint());
+            npt.setLocation(edge.getNamePoint().x + p.x, edge.getNamePoint().y + p.y);
+            edge.setNamePoint(npt);
         } else if (draggingPivot) {
-            edge.updatePivot(event.getPoint());
+            npt.setLocation(edge.getLocation().x + p.x, edge.getLocation().y + p.y);
+            edge.updatePivot(npt);
             //}
         }
     }

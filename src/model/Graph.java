@@ -105,17 +105,23 @@ public class Graph {
     }
 
     /**
-     * https://stackoverflow.com/questions/2861904/how-to-find-coordinates-of-a-2d-equilateral-triangle-in-c
+     * Where the magic happens
      */
     public static Point getThirdPoint(Point p1, Point p2) {
-        /*return new Point(
-                //TODO menos curvado
-                (int) (C60 * (p1.x - p2.x) - S60 * (p1.y - p2.y) + p2.x),
-                (int) (S60 * (p1.x - p2.x) + C60 * (p1.y - p2.y) + p2.y)
-        );*/
+        Point tmp = p1;
+        p1 = p2;
+        p2 = tmp;
+        int dx = p2.x - p1.x, dy = p2.y - p1.y;
+        double angle = Math.atan2(dy, dx);
+        double x1 = Math.cos(angle + (30 * Math.PI / 180.0)), y1 = Math.sin(angle + (30 * Math.PI / 180.0));
+        double x2 = Math.cos(angle + (150 * Math.PI / 180.0)), y2 = Math.sin(angle + (150 * Math.PI / 180.0));
+        double g1 = y1 / x1;
+        double g2 = y2 / x2;
+
+        double x = (((p2.y - g2 * p2.x) - (p1.y - g1 * p1.x)) / (g1 - g2));
         return new Point(
-                (p1.x + p2.x) / 2 + (p2.y - p1.y) / 2,
-                (p1.y + p2.y) / 2 + (p2.x - p1.x) / 2
+                (int) x,
+                (int) (g1 * x + (p1.y - g1 * p1.x))
         );
     }
 
