@@ -170,7 +170,7 @@ public class Graph {
     }
 
 
-    public boolean canBeExported() {
+    public boolean canBeExported(int isTAD) {
         boolean tadFound = false;
         boolean stateFound = false;
 
@@ -186,7 +186,12 @@ public class Graph {
             }
         }
 
-       return tadFound;
+        if (isTAD == 1) {
+            return tadFound;
+        } else {
+            return stateFound;
+        }
+
 
     }
 

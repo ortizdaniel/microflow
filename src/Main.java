@@ -74,11 +74,6 @@ public class Main {
         */
 
 
-        Node n = new Node(NodeType.TAD, "Loco",new Point(400, 400));
-        g.addNode(n);
-
-
-
         Point p0 = new Point(100, 100);
         Point p1 = new Point(100, 300);
         Point p2 = new Point(200, 200);

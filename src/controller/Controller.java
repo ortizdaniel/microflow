@@ -103,6 +103,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 exportFile();
                 break;
             case GEN_MOTOR:
+                exportMotor();
                 break;
             case DELETE_POPUP:
                 deletePopup();
@@ -519,7 +520,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     }
 
     private void exportFile() {
-        if (model.canBeExported()) {
+        if (model.canBeExported(1)) {
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
             if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                 Date date = new Date();
@@ -588,12 +589,55 @@ public class Controller extends MouseAdapter implements ActionListener {
 
                     }
                 }
-
+                chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
             }
-            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
         } else {
             JOptionPane.showMessageDialog(null, "TAD diagram can't be empty or with States"
                     , "Error while exporting", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private void exportMotor() {
+        if (model.canBeExported(0)) {
+            if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
+                String filePath = chooser.getSelectedFile().getAbsolutePath() + ".c";
+                String name = chooser.getSelectedFile().getName();
+
+                try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
+                    writer.write("void " + name + "(void) {\n");
+                    writer.write("\tstatic char estat = 0;\n");
+                    writer.write("\n\tswitch(estat) {\n");
+                    for (Node n : model.getNodes()) {
+                        if (n.getType().equals(NodeType.STATE)) {
+                            boolean hasCondition = false;
+                            writer.write("\t\tcase " + n.getName() + ":\n");
+                            for (Edge e: model.getEdges()) {
+                                if (e.getN1().equals(n)) {
+                                    hasCondition = true;
+                                    writer.write("\t\t\tif (" + e.getName() + ") {\n");
+                                    if (e.getAction() != null) {
+                                        String[] actions = e.getAction().getName().split(";");
+                                        for (String a : actions) {
+                                            writer.write("\t\t\t\t" + a.trim() + ";\n");
+                                        }
+                                    } else {
+                                        writer.write("\n");
+                                    }
+                                    writer.write("\t\t\t}\n");
+                                }
+                            }
+                            if (!hasCondition) {
+                                writer.write("\t\t\t//TODO empty case\n");
+                            }
+                            writer.write("\t\tbreak;\n");
+                        }
+                    }
+                    writer.write("\t}\n");
+                    writer.write("}");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
