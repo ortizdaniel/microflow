@@ -1,5 +1,6 @@
 package controller;
 
+import model.Action;
 import model.*;
 import view.ContextMenu;
 import view.DrawPanel;
@@ -207,12 +208,7 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     private void deletePopup() {
         if (clicked != null) {
-            if (clicked instanceof Node) {
-                model.deleteNode((Node) clicked);
-            } else if (clicked instanceof Edge) {
-                model.deleteEdge((Edge) clicked);
-            }
-            clicked = null;
+            finalDelete();
             state = CursorDetail.SELECTING;
         }
     }
@@ -232,22 +228,29 @@ public class Controller extends MouseAdapter implements ActionListener {
             clicked = model.getElementAt(e.getPoint());
             if (clicked != null) {
                 clicked.setSelected(true);
+                selecting(e);
             }
         } else {
+            //verificar si es  un edge y se ha clickado su nombre o pivot
+            if (clicked instanceof Edge) {
+                Edge edge = (Edge) clicked;
+                System.out.println("CLICKADO");
+                if (edge.pivotContains(e.getPoint())) {
+                    draggingPivot = true;
+                    return;
+                } else if (edge.nameBoundsContains(e.getPoint())) {
+                    System.out.println("????");
+                    draggingName = true;
+                    return;
+                }
+            }
+
             if (clicked.contains(e.getPoint())) {
                 //no hacer nada, puede que ahora se vaya a mover
             } else {
                 //se ha clickado fuera de un elemento, posiblemente
-                if (clicked instanceof Edge && ((Edge) clicked).pivotContains(e.getPoint())) {
-                    draggingPivot = true;
-                    return;
-                }
-                if (clicked instanceof Edge && ((Edge) clicked).nameBoundsContains(e.getPoint())) {
-                    draggingName = true;
-                    return;
-                }
-                if (clicked instanceof Node || clicked instanceof Edge && !((Edge) clicked).pivotContains(e.getPoint())) {
-
+                if (clicked instanceof Node || clicked instanceof Edge && !((Edge) clicked).pivotContains(e.getPoint())
+                        || clicked instanceof Action && !clicked.contains(e.getPoint())) {
                     //si se clicó fuera del nodo, deseleccionarlo
                     //si se clicó fuera PERO era un edge y NO se clicó en el pivot del edge, deseleccionarlo
                     //si se clicó fuera PERO era un edge y NO se clicó en el nombre del edge, deseleccionarlo
@@ -268,13 +271,19 @@ public class Controller extends MouseAdapter implements ActionListener {
             clicked = model.getElementAt(p);
         }
         if (clicked != null) {
-            if (clicked instanceof Node) {
-                model.deleteNode((Node) clicked);
-            } else if (clicked instanceof Edge) {
-                model.deleteEdge((Edge) clicked);
-            }
-            clicked = null;
+            finalDelete();
         }
+    }
+
+    private void finalDelete() {
+        if (clicked instanceof Node) {
+            model.deleteNode((Node) clicked);
+        } else if (clicked instanceof Edge) {
+            model.deleteEdge((Edge) clicked);
+        } else if (clicked instanceof Action) {
+            model.deleteAction((Action) clicked);
+        }
+        clicked = null;
     }
 
     private void changeClickedName() {
@@ -315,6 +324,11 @@ public class Controller extends MouseAdapter implements ActionListener {
                     //TODO: codi que es fa en el salt
                     break;
             }
+        } else if (clicked instanceof Action) {
+            String content = view.multiLineInput("Enter the code to execute:", "Actions", clicked.getName());
+            if (content != null) clicked.setName(content);
+            clicked.setSelected(false);
+            clicked = null;
         }
         state = CursorDetail.SELECTING;
     }
@@ -397,6 +411,14 @@ public class Controller extends MouseAdapter implements ActionListener {
                 view.getDrawPanel().setLineStart(addingEdgeFrom.getCenter());
                 view.getDrawPanel().setLinePivot(Graph.getThirdPoint(addingEdgeFrom.getCenter(), e.getPoint()));
                 view.getDrawPanel().setLineEnd(addingEdgeFrom.getCenter());
+            }
+        } else if (obj.equals(Action.class)) {
+            Element element = model.getElementAt(e.getPoint());
+            if (element instanceof Edge) {
+                Edge edge = (Edge) element;
+                Action action = new Action(edge, state.getNameToAdd(), e.getPoint());
+                edge.setAction(action);
+                model.addAction(action);
             }
         }
     }

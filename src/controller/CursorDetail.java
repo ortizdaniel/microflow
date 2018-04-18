@@ -1,5 +1,6 @@
 package controller;
 
+import model.Action;
 import model.EdgeType;
 import model.NodeType;
 import view.ToolBar;
@@ -24,7 +25,8 @@ public enum CursorDetail {
     ADD_INTERRUPT(createCursor(ToolBar.INTERRUPT_ICON), EdgeType.INTERRUPT, "IRQ"),
     ADD_OPERATION(createCursor(ToolBar.OPERATION_ICON), EdgeType.OPERATION, null),
     ADD_INTERFACE(createCursor(ToolBar.INTERFACE_ICON), EdgeType.INTERFACE, null),
-    ADD_ACTION(createCursor(ToolBar.ACTION_CURSOR), EdgeType.ACTION, null),
+    //ADD_ACTION(createCursor(ToolBar.ACTION_CURSOR), EdgeType.ACTION, null), //deprecado
+    ADD_ACTION(createCursor(ToolBar.ACTION_CURSOR), Action.class, "action 1;\naction 2;"),
 
     NEW_FILE(Cursor.getDefaultCursor(), null, null),
     OPEN_FILE(Cursor.getDefaultCursor(), null, null),

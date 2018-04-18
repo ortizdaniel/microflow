@@ -22,6 +22,7 @@ public class Graph {
 
     private LinkedList<Node> nodes;
     private LinkedList<Edge> edges;
+    private LinkedList<Action> actions;
 
     public static Graph getInstance() {
         if (instance == null) instance = new Graph();
@@ -31,12 +32,17 @@ public class Graph {
     private Graph() {
         nodes = new LinkedList<>();
         edges = new LinkedList<>();
+        actions = new LinkedList<>();
     }
 
     public Element getElementAt(Point p) {
         for (Iterator<Node> i = nodes.descendingIterator(); i.hasNext(); ) {
             Node n = i.next();
             if (n.contains(p)) return n;
+        }
+        for (Iterator<Action> i = actions.descendingIterator(); i.hasNext(); ) {
+            Action a = i.next();
+            if (a.contains(p)) return a;
         }
         for (Iterator<Edge> i = edges.descendingIterator(); i.hasNext(); ) {
             Edge e = i.next();
@@ -51,6 +57,10 @@ public class Graph {
 
     public void addEdge(Edge e) {
         edges.add(e);
+    }
+
+    public void addAction(Action a) {
+        actions.add(a);
     }
 
     public List<Node> getNodes() {
@@ -85,6 +95,14 @@ public class Graph {
     public void deleteEdge(Edge e) {
         edges.remove(e);
         decrementEdgesCount(e);
+    }
+
+    public void deleteAction(Action a) {
+        for (Edge e : edges) {
+            if (e.getAction() == a) {
+                e.setAction(null);
+            }
+        }
     }
 
     private void decrementEdgesCount(Edge e) {

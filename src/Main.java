@@ -1,4 +1,4 @@
-import com.apple.eawt.Application;
+
 import controller.Controller;
 import model.*;
 import view.View;
@@ -11,25 +11,16 @@ public class Main {
     /*
         TODO
         Pintar cada cosa
-        Seleccionar objeto
-        Mover objeto
-        Mover pivote de flechas
         Controlador
-        Exportar a PNG
         Generar código motores
-        Guardar/cargar JSON
         DEFINIR COLORES!!!! (para los botones tmb)
-        refactor constantes actioncommand en el enum
 
         Opcionales:
         Seleccion multiple
-        Idiomas
-        No solapar
         Scroll en vista
 
      */
 
-    public static final Toolkit tk = Toolkit.getDefaultToolkit();
     private static final String LOGO_PATH = "res/img/logo.png";
 
     public static void main(String[] args) {
@@ -37,7 +28,7 @@ public class Main {
             if (System.getProperty("os.name").startsWith("Mac")) {
                 System.setProperty("apple.laf.useScreenMenuBar", "true" );
                 System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Main");
-                Application application = Application.getApplication();
+                com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
                 Image image = Toolkit.getDefaultToolkit().getImage(LOGO_PATH);
                 application.setDockIconImage(image);
             }
@@ -65,7 +56,7 @@ public class Main {
         g.addNode(n3);
         g.addNode(n4);
         g.addNode(n5);
-        Edge e = new Edge(EdgeType.INTERFACE, n2, n5);
+        Edge e = new Edge(EdgeType.OPERATION, n2, n5);
         e.updatePivot(new Point(100, 300));
         e.setBidirectional(true);
         g.addEdge(e);

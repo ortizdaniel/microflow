@@ -12,13 +12,14 @@ public class Edge extends Element {
     private final Node originalN1;
     private final Node originalN2;
 
+    private Action action;
+
     private Point pivotPoint;
     private Rectangle pivot;
     private QuadCurve2D.Float curve;
     private boolean bidir;
     private Polygon arrow;
     private Polygon arrowBidir;
-    private String extra;
 
     private Point namePoint;
     private Rectangle nameBounds;
@@ -73,16 +74,13 @@ public class Edge extends Element {
 
     public void update() {
         setBounds();
+        if (action != null) {
+            action.update();
+        }
     }
 
     @Override
     protected void setBounds() {
-        /*bounds.setBounds(
-                Math.min(n1.getCenter().x, n2.getCenter().x),
-                Math.min(n1.getCenter().y, n2.getCenter().y),
-                Math.abs(n2.getCenter().x - n1.getCenter().x),
-                Math.abs(n2.getCenter().y - n1.getCenter().y)
-        );*/
         Point p0 = n1.getCenter();
         Point p2 = n2.getCenter();
         curve = new QuadCurve2D.Float(p0.x, p0.y, pivotPoint.x, pivotPoint.y, p2.x, p2.y);
@@ -109,7 +107,7 @@ public class Edge extends Element {
                 return getArrowFor(pivotPoint, actual);
             }
         }
-        return new Polygon(); //no puedo encontrar el punto, -->>nunca se da este caso
+        return new Polygon(); //no se puede encontrar el punto, nunca se da este caso
     }
 
     private Point bezierLinear(double t, Point p0, Point p1) {
@@ -154,6 +152,7 @@ public class Edge extends Element {
         pivot = new Rectangle(p.x - PIVOT_WIDTH / 2, p.y - PIVOT_HEIGHT / 2,
                 PIVOT_WIDTH, PIVOT_HEIGHT);
         setBounds();
+        update();
     }
 
     @Override
@@ -171,13 +170,13 @@ public class Edge extends Element {
             g.setColor(Color.BLACK);
             if (type.equals(EdgeType.TRANSITION) || type.equals(EdgeType.INTERRUPT)) {
                 g.setColor(selected ? Color.GRAY : Color.BLACK);
-                drawCenteredText(g, namePoint.x, namePoint.y, name);
+                drawCenteredText(g, namePoint.x, namePoint.y, name, FONT_LARGE);
             } else if (type.equals(EdgeType.INTERFACE)) {
                 g.setColor(Color.WHITE);
                 g.fillOval(nameBounds.x, nameBounds.y, nameBounds.width, nameBounds.height);
                 g.setColor(selected ? Color.GRAY : Color.BLACK);
                 g.drawOval(nameBounds.x, nameBounds.y, nameBounds.width, nameBounds.height);
-                drawCenteredText(g, namePoint.x, namePoint.y, name);
+                drawCenteredText(g, namePoint.x, namePoint.y, name, FONT_LARGE);
             }
         }
 
@@ -191,16 +190,13 @@ public class Edge extends Element {
             g.setColor(Color.GRAY);
             g.fill(pivot);
         }
+
+        if (action != null) action.draw(g);
     }
 
     public void setBidirectional(boolean bidir) {
         this.bidir = bidir;
         setBounds();
-    }
-
-    public void setExtra(String extra) {
-        this.extra = extra;
-
     }
 
     @Override
@@ -232,7 +228,7 @@ public class Edge extends Element {
 
     @Override
     public boolean contains(Point p) {
-        //if (nameBoundsContains(p)) return true; //TODO arreglar que se mueva el nombre
+        if (nameBoundsContains(p)) return true;
         for (double t = 0; t <= 1; t += 0.005) {
             if (type.equals(EdgeType.OPERATION)) {
                 Point cur = bezierLinear(t, n1.getCenter(), pivotPoint);
@@ -280,8 +276,8 @@ public class Edge extends Element {
     /**
      * https://stackoverflow.com/questions/21267412/drawing-strings-inscribed-in-a-circle
      */
-    private void drawCenteredText(Graphics g, int x, int y, String text) {
-        g.setFont(FONT_LARGE);
+    protected void drawCenteredText(Graphics g, int x, int y, String text, Font f) {
+        g.setFont(f);
         FontMetrics fm = g.getFontMetrics();
         Rectangle2D rect = fm.getStringBounds(text, g);
 
@@ -301,5 +297,28 @@ public class Edge extends Element {
 
     public Point getNamePoint() {
         return namePoint;
+    }
+
+    public Action getAction() {
+        return action;
+    }
+
+    public void setAction(Action action) {
+        this.action = action;
+    }
+
+    //únicamente para las transiciones y usado por las acciones
+    public Point getNearestTo(Point p) {
+        Point nearest = new Point(0, 0);
+        double min = Double.MAX_VALUE;
+        for (double t = 0; t <= 1; t += 0.001) {
+            Point actual = bezierQuadratic(t, n1.getCenter(), pivotPoint, n2.getCenter());
+            double d = Math.hypot(p.x - actual.x, p.y - actual.y);
+            if (d < min) {
+                min = d;
+                nearest = actual;
+            }
+        }
+        return nearest;
     }
 }

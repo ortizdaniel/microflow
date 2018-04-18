@@ -71,4 +71,26 @@ public class View extends JFrame {
     public void setTitle(String title) {
         super.setTitle("BubbleWizard - " + title);
     }
+
+    public String multiLineInput(String message, String title, String initial) {
+        JPanel panel = new JPanel() {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(280, 120);
+            }
+        };
+        JTextArea text = new JTextArea(initial);
+        BorderLayout bl = new BorderLayout();
+        bl.setVgap(10);
+        panel.setLayout(bl);
+        JScrollPane scroll = new JScrollPane(text);
+        panel.add(new JLabel(message), BorderLayout.NORTH);
+        panel.add(scroll, BorderLayout.CENTER);
+
+        int res = JOptionPane.showConfirmDialog(this, panel, title, JOptionPane.OK_CANCEL_OPTION);
+        if (res == JOptionPane.OK_OPTION) {
+            return text.getText();
+        }
+        return null;
+    }
 }

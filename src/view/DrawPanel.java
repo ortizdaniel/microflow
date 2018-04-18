@@ -54,6 +54,7 @@ public class DrawPanel extends JPanel {
         for (Drawable d : Graph.getInstance().getEdges()) {
             d.draw(g);
         }
+
         for (Drawable d : Graph.getInstance().getNodes()) {
             d.draw(g);
         }
