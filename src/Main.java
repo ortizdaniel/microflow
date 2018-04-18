@@ -36,7 +36,7 @@ public class Main {
         try {
             if (System.getProperty("os.name").startsWith("Mac")) {
                 System.setProperty("apple.laf.useScreenMenuBar", "true" );
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Main");
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "BubbleWizard");
                 Application application = Application.getApplication();
                 Image image = Toolkit.getDefaultToolkit().getImage(LOGO_PATH);
                 application.setDockIconImage(image);
@@ -55,6 +55,7 @@ public class Main {
 
 
         Graph g = Graph.getInstance();
+        /*
         Node n = new Node(NodeType.TAD, new Point(0, 0));
         Node n2 = new Node(NodeType.VARIABLE, "char cua[MAX_CUA][MAX_LEGNTH]", new Point(100, 100));
         Node n3 = new Node(NodeType.PERIPHERAL, "Nombre largo",new Point(200, 200));
@@ -70,6 +71,11 @@ public class Main {
         e.setBidirectional(true);
         g.addEdge(e);
         //g.addEdge(new Edge(EdgeType.TRANSITION, n4, n5));
+        */
+
+
+        Node n = new Node(NodeType.TAD, "Loco",new Point(400, 400));
+        g.addNode(n);
 
 
 

@@ -18,8 +18,15 @@ import java.awt.print.PageFormat;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Controller extends MouseAdapter implements ActionListener {
 
@@ -36,6 +43,19 @@ public class Controller extends MouseAdapter implements ActionListener {
     private Point mousePoint, delta;
 
     private static String fileName;
+
+    private static final String COMMENT_HEADER = "//-----------------------------------------------------------------\n";
+    private static final String TAD_H = "//TAD: ";
+    private static final String DATA_H = "//DATA: ";
+    private static final String AUTHOR_H = "//AUTHOR: ";
+    private static final String DESCR_H = "//DESCRIPTION:\n";
+    private static final String INCLUD_H = "\n//------------------------ INCLUDES -----------------------\n";
+    private static final String VAR_CONST_H = "\n//------------------------ VARIABLES ----------------------";
+    private static final String FUNC_H = "//------------------------ FUNCTIONS ----------------------\n";
+    private static final String INIT_FUNC = "\nvoid init";
+    private static final String INIT_FUNC_2 = "(void) {\n\n}\n";
+    private static final String INIT_FUNC_3 = "(void);\n";
+    private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 
     public Controller(View view) {
         this.view = view;
@@ -79,6 +99,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 printFile();
                 break;
             case GEN_FILES:
+                exportFile();
                 break;
             case GEN_MOTOR:
                 break;
@@ -476,4 +497,84 @@ public class Controller extends MouseAdapter implements ActionListener {
             //}
         }
     }
+
+    private void exportFile() {
+        if (model.canBeExported()) {
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
+                Date date = new Date();
+                Path folder = chooser.getCurrentDirectory().toPath();
+
+                for (Node n : model.getNodes()) {
+                    if (n.getType().equals(NodeType.TAD)) {
+                        //.c
+                        String filePath = folder.toString() + "/T" + n.getName() + ".c";
+                        String name = "T" + n.getName();
+
+                        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
+                            writer.write(COMMENT_HEADER);
+                            writer.write(TAD_H);
+                            writer.write(name + "\n");
+                            writer.write(DESCR_H);
+                            writer.write(AUTHOR_H);
+                            writer.write(System.getProperty("user.name") + "\n");
+                            writer.write(DATA_H);
+                            writer.write(dateFormat.format(date) + "\n");
+                            writer.write(COMMENT_HEADER);
+                            writer.write(INCLUD_H);
+                            writer.write("#include \"" + name + ".h\"\n");
+                            writer.write(VAR_CONST_H);
+                            for (Edge e: model.getEdges()) {
+                                if (e.getN1().equals(n)) {
+                                    if (e.getN2().getType().equals(NodeType.VARIABLE)) {
+                                        writer.write("\n" + e.getN2().getName() + ";");
+                                    }
+                                } else if (e.getN2().equals(n)) {
+                                    if (e.getN1().getType().equals(NodeType.VARIABLE)) {
+                                        writer.write("\n" + e.getN1().getName() + ";");
+                                    }
+                                }
+                            }
+                            writer.write("\n\n");
+                            writer.write(FUNC_H);
+                            writer.write(INIT_FUNC + name + INIT_FUNC_2);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                        //.h
+                        filePath = folder.toString() + "/T" + n.getName() + ".h";
+                        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
+                            writer.write(COMMENT_HEADER);
+                            writer.write(TAD_H);
+                            writer.write(name + "\n");
+                            writer.write(DESCR_H);
+                            writer.write(AUTHOR_H);
+                            writer.write(System.getProperty("user.name") + "\n");
+                            writer.write(DATA_H);
+                            writer.write(dateFormat.format(date) + "\n");
+                            writer.write(COMMENT_HEADER);
+                            writer.write(INCLUD_H);
+                            for (Edge e: model.getEdges()) {
+                                if (e.getN1().equals(n) && e.getN2().getType() == NodeType.TAD) {
+                                    writer.write("\n#include \"T" + e.getN2().getName() + ".h\"");
+                                }
+                            }
+                            writer.write("\n");
+                            writer.write(INIT_FUNC + name + INIT_FUNC_3);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+
+            }
+            chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+        } else {
+            JOptionPane.showMessageDialog(null, "TAD diagram can't be empty or with States"
+                    , "Error while exporting", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }
