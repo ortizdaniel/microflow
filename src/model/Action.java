@@ -34,7 +34,7 @@ public class Action extends Element {
         g.fillOval(start.x - 4, start.y - 4, 8, 8);
         int x = (int) bounds.getBounds2D().getCenterX();
         int y = (int) bounds.getBounds2D().getCenterY();
-        parent.drawCenteredText(g, x, y, name, Element.FONT_MED);
+        parent.drawCenteredText(g, x, y, name, Element.FONT_MED, null);
     }
 
     public void setParent(Edge parent) {

@@ -170,13 +170,13 @@ public class Edge extends Element {
             g.setColor(Color.BLACK);
             if (type.equals(EdgeType.TRANSITION) || type.equals(EdgeType.INTERRUPT)) {
                 g.setColor(selected ? Color.GRAY : Color.BLACK);
-                drawCenteredText(g, namePoint.x, namePoint.y, name, FONT_LARGE);
+                drawCenteredText(g, namePoint.x, namePoint.y, name, FONT_LARGE, this);
             } else if (type.equals(EdgeType.INTERFACE)) {
                 g.setColor(Color.WHITE);
                 g.fillOval(nameBounds.x, nameBounds.y, nameBounds.width, nameBounds.height);
                 g.setColor(selected ? Color.GRAY : Color.BLACK);
                 g.drawOval(nameBounds.x, nameBounds.y, nameBounds.width, nameBounds.height);
-                drawCenteredText(g, namePoint.x, namePoint.y, name, FONT_LARGE);
+                drawCenteredText(g, namePoint.x, namePoint.y, name, FONT_LARGE, this);
             }
         }
 
@@ -276,7 +276,7 @@ public class Edge extends Element {
     /**
      * https://stackoverflow.com/questions/21267412/drawing-strings-inscribed-in-a-circle
      */
-    protected void drawCenteredText(Graphics g, int x, int y, String text, Font f) {
+    protected void drawCenteredText(Graphics2D g, int x, int y, String text, Font f, Object caller) {
         g.setFont(f);
         FontMetrics fm = g.getFontMetrics();
         Rectangle2D rect = fm.getStringBounds(text, g);
@@ -288,7 +288,7 @@ public class Edge extends Element {
         int cornerY = y - (textHeight / 2) + fm.getAscent();
 
         //la porquería más grande, pero es lo más sencillo
-        if (!type.equals(EdgeType.INTERFACE)) {
+        if (caller == this && !type.equals(EdgeType.INTERFACE)) {
             nameBounds = new Rectangle(cornerX, y - textHeight / 2, textWidth, textHeight);
         }
 

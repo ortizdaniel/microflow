@@ -255,12 +255,10 @@ public class Controller extends MouseAdapter implements ActionListener {
             //verificar si es  un edge y se ha clickado su nombre o pivot
             if (clicked instanceof Edge) {
                 Edge edge = (Edge) clicked;
-                System.out.println("CLICKADO");
                 if (edge.pivotContains(e.getPoint())) {
                     draggingPivot = true;
                     return;
                 } else if (edge.nameBoundsContains(e.getPoint())) {
-                    System.out.println("????");
                     draggingName = true;
                     return;
                 }
@@ -270,8 +268,8 @@ public class Controller extends MouseAdapter implements ActionListener {
                 //no hacer nada, puede que ahora se vaya a mover
             } else {
                 //se ha clickado fuera de un elemento, posiblemente
-                if (clicked instanceof Node || clicked instanceof Edge && !((Edge) clicked).pivotContains(e.getPoint())
-                        || clicked instanceof Action && !clicked.contains(e.getPoint())) {
+                if (clicked instanceof Node || clicked instanceof Action || clicked instanceof Edge && !((Edge) clicked).pivotContains(e.getPoint())
+                        ) {
                     //si se clicó fuera del nodo, deseleccionarlo
                     //si se clicó fuera PERO era un edge y NO se clicó en el pivot del edge, deseleccionarlo
                     //si se clicó fuera PERO era un edge y NO se clicó en el nombre del edge, deseleccionarlo
