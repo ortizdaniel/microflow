@@ -168,4 +168,26 @@ public class Graph {
             return false;
         }
     }
+
+
+    public boolean canBeExported() {
+        boolean tadFound = false;
+        boolean stateFound = false;
+
+        for (Node n : nodes) {
+            if (n.getType().equals(NodeType.TAD)) {
+                tadFound = true;
+            } else if (n.getType().equals(NodeType.STATE)) {
+                stateFound = true;
+            }
+
+            if (tadFound && stateFound) {
+                return false;
+            }
+        }
+
+       return tadFound;
+
+    }
+
 }
