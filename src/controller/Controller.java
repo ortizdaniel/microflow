@@ -230,7 +230,7 @@ public class Controller extends MouseAdapter implements ActionListener {
         } else if (clicked instanceof Edge) {
             EdgeType e = ((Edge) clicked).getType();
             if (e.equals(EdgeType.INTERFACE)) {
-                contextMenu.showEditButton(false);
+                contextMenu.setEditString("interface number");
             } else if (e.equals(EdgeType.TRANSITION)) {
                 contextMenu.setEditString("condition");
             } else if (e.equals(EdgeType.OPERATION)) {
@@ -336,6 +336,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 contextMenu.showEditButton(true);
                 if (name != null) {
                     clicked.setName(name);
+                    clicked.holdName(true);
                 }
             //}
         } else if (clicked instanceof Edge) {
@@ -343,9 +344,11 @@ public class Controller extends MouseAdapter implements ActionListener {
             switch (e.getType()) {
                 case TRANSITION:
                 case INTERRUPT:
+                case INTERFACE:
                     name = askForString("Enter " + e.getType().name().toLowerCase() + ":", clicked.getName());
                     if (name != null) {
                         clicked.setName(name);
+                        clicked.holdName(true);
                     }
                     break;
                 case OPERATION:
@@ -403,7 +406,7 @@ public class Controller extends MouseAdapter implements ActionListener {
 
             g2.translate(tx, ty);
             g2.scale(scale, scale);
-            view.getDrawPanel().setBackground(Color.white);                 //Save ink
+            view.getDrawPanel().setBackground(Color.WHITE);                 //Save ink
             view.getDrawPanel().paint(g2);
             view.getDrawPanel().setBackground(Color.decode("#FEFEFE"));
 
@@ -441,6 +444,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             Component c = e.getComponent(); //DrawPanel instance
             if (!c.contains(e.getPoint())) {
                 //TODO scrollear
+                System.out.println("fuera");
             }
         } else if (obj instanceof EdgeType) {
             Element element = model.getElementAt(e.getPoint());

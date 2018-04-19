@@ -20,7 +20,7 @@ public class MenuBar extends JMenuBar {
 
     private static final String ABOUT_MSG = "Microflow\nDaniel Ortiz & Joan Gómez\n" +
             "Inspired by the original BubbleWizard of F. Escudero\nCopyright (C) 2018";
-    private static final String LOGO_PATH = "res/img/logo.png";
+    private static final String LOGO_PATH = "/res/img/logo.png";
 
     /* Menu File Items */
     private JMenuItem jmiNewFile;
@@ -193,7 +193,7 @@ public class MenuBar extends JMenuBar {
     private void addHelpOptions() {
         JMenuItem jmiAbout = new JMenuItem("About");
         jmiAbout.addActionListener(e -> {
-            Image image = new ImageIcon(LOGO_PATH).getImage();
+            Image image = new ImageIcon(getClass().getResource(LOGO_PATH)).getImage();
             image = image.getScaledInstance(80, 80,  java.awt.Image.SCALE_SMOOTH);
             Icon icon = new ImageIcon(image);
             JOptionPane.showMessageDialog(null, ABOUT_MSG, "Credits", JOptionPane.INFORMATION_MESSAGE, icon);

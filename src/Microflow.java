@@ -25,7 +25,7 @@ public class Microflow {
 
      */
 
-    private static final String LOGO_PATH = "res/img/logo.png";
+    private static final String LOGO_PATH = "/res/img/logo.png";
 
     public static void main(String[] args) {
         try {
@@ -33,8 +33,7 @@ public class Microflow {
                 System.setProperty("apple.laf.useScreenMenuBar", "true" );
                 System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Microflow");
                 com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
-                Image image = Toolkit.getDefaultToolkit().getImage(LOGO_PATH);
-                application.setDockIconImage(image);
+                application.setDockIconImage(Toolkit.getDefaultToolkit().createImage(Microflow.class.getResource(LOGO_PATH)));
             }
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {

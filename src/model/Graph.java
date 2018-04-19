@@ -81,7 +81,7 @@ public class Graph {
         if (n.getType().equals(NodeType.STATE)) {
             int count = 0;
             for (Node k : nodes) {
-                if (k.getType().equals(NodeType.STATE)) {
+                if (k.getType().equals(NodeType.STATE) && !k.nameHold()) {
                     k.setName(String.valueOf(count++));
                 }
             }
@@ -106,7 +106,7 @@ public class Graph {
         if (e.getType().equals(EdgeType.INTERFACE)) {
             int count = 0;
             for (Edge k : edges) {
-                if (k.getType().equals(EdgeType.INTERFACE)) {
+                if (k.getType().equals(EdgeType.INTERFACE) && !k.nameHold()) {
                     k.setName(String.valueOf(count++));
                 }
             }

@@ -28,7 +28,6 @@ public class DrawPanel extends JPanel {
         bounds = new Rectangle(0, 0, getWidth() - 30, getHeight() - 30);
 
         addComponentListener(new ComponentAdapter() {
-
             @Override
             public void componentResized(ComponentEvent e) {
                 bounds.setBounds(0, 0, getWidth() - 30, getHeight() - 30);

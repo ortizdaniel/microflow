@@ -9,6 +9,7 @@ public abstract class Element implements Drawable {
     protected String name;
     protected boolean selected;
     protected Rectangle bounds;
+    private boolean holdName;
 
     protected static final Stroke STROKE_SMALL = new BasicStroke(1);
 
@@ -19,6 +20,7 @@ public abstract class Element implements Drawable {
     public Element(String name) {
         this.name = name;
         bounds = new Rectangle();
+        holdName = false;
     }
 
     protected abstract void setBounds();
@@ -53,4 +55,11 @@ public abstract class Element implements Drawable {
         return bounds.getLocation();
     }
 
+    public boolean nameHold() {
+        return holdName;
+    }
+
+    public void holdName(boolean holdName) {
+        this.holdName = holdName;
+    }
 }

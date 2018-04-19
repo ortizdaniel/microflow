@@ -60,7 +60,7 @@ public enum CursorDetail {
     private static Cursor createCursor(String path) {
         Toolkit tk = Toolkit.getDefaultToolkit();
         if (path != null)
-            return tk.createCustomCursor(tk.getImage(path), new Point(0, 0), "");
+            return tk.createCustomCursor(tk.createImage(CursorDetail.class.getResource(path)), new Point(0, 0), "");
         else
             return Cursor.getDefaultCursor();
     }

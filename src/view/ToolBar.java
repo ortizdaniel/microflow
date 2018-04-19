@@ -46,22 +46,22 @@ public class ToolBar extends JPanel {
     private static final Dimension jbDimension = new Dimension(BUTTON_SIZE, BUTTON_SIZE);
 
     /* Icon paths */
-    private static final String NEW_FILE_ICON = "res/img/toolbar/new_file.png";
-    private static final String OPEN_FILE_ICON = "res/img/toolbar/open_file.png";
-    private static final String SAVE_FILE_ICON = "res/img/toolbar/save_file.png";
-    private static final String PRINT_FILE_ICON = "res/img/toolbar/print_file.png";
-    private static final String CURSOR_ICON = "res/img/toolbar/cursor.png";
-    private static final String UNDO_ICON = "res/img/toolbar/undo.png";
-    public static final String DELETE_ICON = "res/img/toolbar/delete.png";
-    public static final String TAD_ICON = "res/img/toolbar/TAD.png";
-    public static final String VAR_ICON = "res/img/toolbar/var.png";
-    public static final String PERIPHERAL_ICON = "res/img/toolbar/peripheral.png";
-    public static final String INTERFACE_ICON = "res/img/toolbar/interface.png";
-    public static final String OPERATION_ICON = "res/img/toolbar/operation.png";
-    public static final String INTERRUPT_ICON = "res/img/toolbar/interrupt.png";
-    public static final String STATE_ICON = "res/img/toolbar/state.png";
-    public static final String TRANSITION_CURSOR = "res/img/toolbar/transition.png";
-    public static final String ACTION_CURSOR = "res/img/toolbar/action.png";
+    private static final String NEW_FILE_ICON = "/res/img/toolbar/new_file.png";
+    private static final String OPEN_FILE_ICON = "/res/img/toolbar/open_file.png";
+    private static final String SAVE_FILE_ICON = "/res/img/toolbar/save_file.png";
+    private static final String PRINT_FILE_ICON = "/res/img/toolbar/print_file.png";
+    private static final String CURSOR_ICON = "/res/img/toolbar/cursor.png";
+    private static final String UNDO_ICON = "/res/img/toolbar/undo.png";
+    public static final String DELETE_ICON = "/res/img/toolbar/delete.png";
+    public static final String TAD_ICON = "/res/img/toolbar/TAD.png";
+    public static final String VAR_ICON = "/res/img/toolbar/var.png";
+    public static final String PERIPHERAL_ICON = "/res/img/toolbar/peripheral.png";
+    public static final String INTERFACE_ICON = "/res/img/toolbar/interface.png";
+    public static final String OPERATION_ICON = "/res/img/toolbar/operation.png";
+    public static final String INTERRUPT_ICON = "/res/img/toolbar/interrupt.png";
+    public static final String STATE_ICON = "/res/img/toolbar/state.png";
+    public static final String TRANSITION_CURSOR = "/res/img/toolbar/transition.png";
+    public static final String ACTION_CURSOR = "/res/img/toolbar/action.png";
 
     public ToolBar() {
 
@@ -176,7 +176,7 @@ public class ToolBar extends JPanel {
 
         try {
             //Icons must be the same size as the button
-            ImageIcon icon = new ImageIcon(iconPath);
+            ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
             jb.setIcon(icon);
         } catch (Exception e) {
             e.printStackTrace();
