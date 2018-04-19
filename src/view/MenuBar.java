@@ -18,8 +18,8 @@ public class MenuBar extends JMenuBar {
     private View view;
     private JPanel jpToolBar;
 
-    private static final String ABOUT_MSG = "Main\nDaniel Ortiz & Joan Gómez\n" +
-            "Inspired by the original of F. Escudero\nCopyright (C) 2018";
+    private static final String ABOUT_MSG = "Microflow\nDaniel Ortiz & Joan Gómez\n" +
+            "Inspired by the original BubbleWizard of F. Escudero\nCopyright (C) 2018";
     private static final String LOGO_PATH = "res/img/logo.png";
 
     /* Menu File Items */

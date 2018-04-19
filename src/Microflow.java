@@ -6,7 +6,7 @@ import view.View;
 import javax.swing.*;
 import java.awt.*;
 
-public class Main {
+public class Microflow {
 
     /*
         TODO
@@ -14,7 +14,8 @@ public class Main {
 
     resize iconos
     arreglar input
-    cambiar \n por System.lineSeparator()
+    cambiar \n por System.lineSeparator() al exportar
+    añadir el link al github en el about
 
         Controlador
         Exportar a PNG
@@ -29,14 +30,13 @@ public class Main {
 
      */
 
-    public static final Toolkit tk = Toolkit.getDefaultToolkit();
     private static final String LOGO_PATH = "res/img/logo.png";
 
     public static void main(String[] args) {
         try {
             if (System.getProperty("os.name").startsWith("Mac")) {
                 System.setProperty("apple.laf.useScreenMenuBar", "true" );
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "BubbleWizard");
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Microflow");
                 com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
                 Image image = Toolkit.getDefaultToolkit().getImage(LOGO_PATH);
                 application.setDockIconImage(image);
@@ -55,14 +55,13 @@ public class Main {
 
 
         Graph g = Graph.getInstance();
-
         Node n = new Node(NodeType.STATE, new Point(400, 100));
         Node n2 = new Node(NodeType.STATE, new Point(400, 400));
         g.addNode(n);
         g.addNode(n2);
         Edge e = new Edge(EdgeType.TRANSITION, n, n2);
         g.addEdge(e);
-        Action a = new Action(e, "LOCO", e.getLocation());
+        Action a = new Action(e, "LOCO\ttet\ndigues\naaaa", e.getLocation());
         g.addAction(a);
         e.setAction(a);
     }

@@ -15,7 +15,6 @@ public enum CursorDetail {
     DELETE_POPUP(Cursor.getDefaultCursor(), null, null),
     EDIT(Cursor.getDefaultCursor(), null, null),
 
-
     ADD_TAD(createCursor(ToolBar.TAD_ICON), NodeType.TAD, "Name"),
     ADD_VARIABLE(createCursor(ToolBar.VAR_ICON), NodeType.VARIABLE, "Variable"),
     ADD_PERIPHERAL(createCursor(ToolBar.PERIPHERAL_ICON), NodeType.PERIPHERAL, "Peripheral"),

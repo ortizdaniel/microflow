@@ -69,7 +69,7 @@ public class View extends JFrame {
 
     @Override
     public void setTitle(String title) {
-        super.setTitle("BubbleWizard - " + title);
+        super.setTitle("Microflow - " + title);
     }
 
     public String multiLineInput(String message, String title, String initial) {
@@ -80,6 +80,7 @@ public class View extends JFrame {
             }
         };
         JTextArea text = new JTextArea(initial);
+        text.setTabSize(2);
         BorderLayout bl = new BorderLayout();
         bl.setVgap(10);
         panel.setLayout(bl);

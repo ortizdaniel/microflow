@@ -175,7 +175,6 @@ public class Edge extends Element {
             g.drawLine(pivotPoint.x, pivotPoint.y, p2.x, p2.y);
         } else {
             g.draw(curve);
-            g.setColor(Color.BLACK);
             if (type.equals(EdgeType.TRANSITION) || type.equals(EdgeType.INTERRUPT)) {
                 g.setColor(selected ? Color.GRAY : Color.BLACK);
                 drawCenteredText(g, namePoint.x, namePoint.y, name, FONT_LARGE, this);
@@ -285,7 +284,7 @@ public class Edge extends Element {
      * https://stackoverflow.com/questions/21267412/drawing-strings-inscribed-in-a-circle
      */
     protected void drawCenteredText(Graphics2D g, int x, int y, String text, Font f, Object caller) {
-        g.setFont(f);
+        g.setFont(text.length() >= 20 ? FONT_MED : f); //bueeeno...
         FontMetrics fm = g.getFontMetrics();
         Rectangle2D rect = fm.getStringBounds(text, g);
 

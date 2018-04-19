@@ -1,15 +1,14 @@
 package model;
 
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.util.Objects;
 
 public class Action extends Element {
 
-    private transient Edge parent; //dependencia circular. Produce stack overflow si no es transient
+    private transient Edge parent; //dependencia circular. Produce stack overflow cuando se guarda si no es transient
     private Point start;
     private Point end;
-    private Ellipse2D pivot;
+    private Rectangle pivot;
 
     public Action(Edge parent, String name, Point initialPoint) {
         super(name);
@@ -21,15 +20,14 @@ public class Action extends Element {
 
     @Override
     protected void setBounds() {
-        bounds.setBounds(
-                Math.min(start.x, end.x), start.y, length(), 15
-        );
+        //inutil, guarro, se calcula cuando se pinta
     }
 
     @Override
     public void draw(Graphics2D g) {
         g.setStroke(STROKE_SMALL);
         g.setColor(isSelected() ? Color.GRAY : Color.BLACK);
+        boolean endGstart = end.x > start.x;
         if (end.x > start.x) {
             g.drawLine(start.x, start.y, start.x + 15, start.y + 15);
             g.drawLine(start.x + 15, start.y + 15, end.x, end.y + 15);
@@ -39,10 +37,31 @@ public class Action extends Element {
         }
         g.fillOval(start.x - 4, start.y - 4, 8, 8);
         if (selected) g.fill(pivot);
-        int x = (int) bounds.getBounds2D().getCenterX();
-        int y = (int) bounds.getBounds2D().getCenterY();
-        parent.drawCenteredText(g, x, y, name, Element.FONT_MED, null);
-        g.draw(bounds);
+
+        g.setFont(FONT_MED);
+        String[] lines = name.replace("\t", "    ").split("\n");
+        if (lines.length > 1) {
+            int linesAbove = (int) Math.ceil(lines.length / 2.0);
+            FontMetrics metrics = g.getFontMetrics();
+            int height = metrics.getAscent();
+            Point p = endGstart ? start : end;
+            Point p2 = endGstart ? end : start;
+
+            int y1 = p.y - (height * linesAbove) + 11;
+            int y2 = p.y + (height * (lines.length - linesAbove)) + 11;
+
+            bounds.setBounds(p.x, y1, p2.x - p.x, y2 - y1); //porquería
+            for (int i = 0; i < lines.length; i++) {
+                g.setColor(Color.BLACK);
+                String line = lines[i];
+                g.drawString(line, p.x + 20, p.y - (height * (linesAbove - i - 1)) + 11);
+            }
+        } else {
+            if (endGstart)
+                g.drawString(name, start.x + 20, start.y + 13);
+            else
+                g.drawString(name, end.x + 10, start.y + 13);
+        }
     }
 
     public void setParent(Edge parent) {
@@ -71,7 +90,7 @@ public class Action extends Element {
     }
 
     private void updatePivot() {
-        pivot = new Ellipse2D.Float(end.x - 5, end.y + 10, 10, 10); //magic constants
+        pivot = new Rectangle(end.x - 5, end.y + 10, 10, 10); //magic constants
     }
 
     public boolean pivotContains(Point p) {
@@ -83,7 +102,7 @@ public class Action extends Element {
     }
 
     private int length() {
-        return (int) Math.hypot(this.start.x - end.x, this.start.y - end.y);
+        return (int) Math.hypot(start.x - end.x, start.y - end.y);
     }
 
     public void update() {

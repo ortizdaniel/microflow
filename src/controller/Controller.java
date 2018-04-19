@@ -8,6 +8,7 @@ import view.View;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -57,7 +58,8 @@ public class Controller extends MouseAdapter implements ActionListener {
     private static final String INIT_FUNC = "\nvoid init";
     private static final String INIT_FUNC_2 = "(void) {\n\n}\n";
     private static final String INIT_FUNC_3 = "(void);\n";
-    private final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+    private static final FileFilter FILTER = new FileNameExtensionFilter("Microflow file", "mcf");
 
     public Controller(View view) {
         this.view = view;
@@ -68,7 +70,7 @@ public class Controller extends MouseAdapter implements ActionListener {
         contextMenu = new ContextMenu();
         contextMenu.addListener(this);
         chooser = new JFileChooser();
-        chooser.setFileFilter(new FileNameExtensionFilter("BubbleWizard file", "bwz"));
+        chooser.setFileFilter(FILTER);
         draggingPivot = false;
         draggingName = false;
         mousePoint = new Point();
@@ -202,8 +204,8 @@ public class Controller extends MouseAdapter implements ActionListener {
             extension = path.substring(i);
         }
 
-        if (!extension.equalsIgnoreCase(".bwz")) {
-            path += ".bwz";
+        if (!extension.equalsIgnoreCase(".mcf")) {
+            path += ".mcf";
         }
         if (model.saveToFile(path)) {
             view.setTitle(fileName.replace(extension, ""));
@@ -547,6 +549,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     private void exportFile() {
         if (model.canBeExported(1)) {
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            chooser.setFileFilter(null);
             if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                 Date date = new Date();
                 Path folder = chooser.getCurrentDirectory().toPath();
@@ -615,6 +618,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                     }
                 }
                 chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                chooser.setFileFilter(FILTER);
             }
         } else {
             JOptionPane.showMessageDialog(null, "TAD diagram can't be empty or with States"
@@ -624,6 +628,7 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     private void exportMotor() {
         if (model.canBeExported(0)) {
+            chooser.setFileFilter(new FileNameExtensionFilter("C source", "c"));
             if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                 String filePath = chooser.getSelectedFile().getAbsolutePath() + ".c";
                 String name = chooser.getSelectedFile().getName();
@@ -663,6 +668,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                     e.printStackTrace();
                 }
             }
+            chooser.setFileFilter(FILTER);
         }
     }
 
