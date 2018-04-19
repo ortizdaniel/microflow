@@ -38,4 +38,8 @@ public class ContextMenu extends JPopupMenu {
         jmiDelete.addActionListener(l);
         jmiDelete.setActionCommand(CursorDetail.DELETE_POPUP.name());
     }
+
+    public void setEditString(String s) {
+        jmiEdit.setText("Edit " + s);
+    }
 }

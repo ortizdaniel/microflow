@@ -1,5 +1,5 @@
-import com.apple.eawt.Application;
 import controller.Controller;
+import model.Action;
 import model.*;
 import view.View;
 
@@ -11,20 +11,20 @@ public class Main {
     /*
         TODO
         Pintar cada cosa
-        Seleccionar objeto
-        Mover objeto
-        Mover pivote de flechas
+
+    resize iconos
+    arreglar input
+    cambiar \n por System.lineSeparator()
+
         Controlador
         Exportar a PNG
         Generar código motores
-        Guardar/cargar JSON
         DEFINIR COLORES!!!! (para los botones tmb)
         refactor constantes actioncommand en el enum
 
         Opcionales:
-        Seleccion multiple
-        Idiomas
         No solapar
+        "Hold" nombres de estados cambiados
         Scroll en vista
 
      */
@@ -55,27 +55,15 @@ public class Main {
 
 
         Graph g = Graph.getInstance();
-        /*
-        Node n = new Node(NodeType.TAD, new Point(0, 0));
-        Node n2 = new Node(NodeType.VARIABLE, "char cua[MAX_CUA][MAX_LEGNTH]", new Point(100, 100));
-        Node n3 = new Node(NodeType.PERIPHERAL, "Nombre largo",new Point(200, 200));
-        Node n4 = new Node(NodeType.STATE, "55", new Point(300, 300));
-        Node n5 = new Node(NodeType.TAD, "Loco",new Point(400, 400));
+
+        Node n = new Node(NodeType.STATE, new Point(400, 100));
+        Node n2 = new Node(NodeType.STATE, new Point(400, 400));
         g.addNode(n);
         g.addNode(n2);
-        g.addNode(n3);
-        g.addNode(n4);
-        g.addNode(n5);
-        Edge e = new Edge(EdgeType.INTERFACE, n2, n5);
-        e.updatePivot(new Point(100, 300));
-        e.setBidirectional(true);
+        Edge e = new Edge(EdgeType.TRANSITION, n, n2);
         g.addEdge(e);
-        //g.addEdge(new Edge(EdgeType.TRANSITION, n4, n5));
-        */
-
-
-        Point p0 = new Point(100, 100);
-        Point p1 = new Point(100, 300);
-        Point p2 = new Point(200, 200);
+        Action a = new Action(e, "LOCO", e.getLocation());
+        g.addAction(a);
+        e.setAction(a);
     }
 }

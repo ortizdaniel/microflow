@@ -41,6 +41,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     private final JFileChooser chooser;
     private boolean draggingPivot;
     private boolean draggingName;
+    private boolean draggingActionPivot;
     private Point mousePoint, delta;
 
     private static String fileName;
@@ -213,18 +214,30 @@ public class Controller extends MouseAdapter implements ActionListener {
     }
 
     private void contextMenuHideEditButton() {
+        contextMenu.showEditButton(true);
         if (clicked instanceof Node) {
-            if (((Node) clicked).getType().equals(NodeType.STATE)) {
-                contextMenu.showEditButton(false);
+            NodeType n = ((Node) clicked).getType();
+            if (n.equals(NodeType.STATE)) {
+                contextMenu.setEditString("state number");
+            } else if (n.equals(NodeType.TAD)) {
+                contextMenu.setEditString("TAD name");
             } else {
-                contextMenu.showEditButton(true);
+                contextMenu.setEditString(n.name().toLowerCase() + " name");
             }
+            contextMenu.showEditButton(true);
         } else if (clicked instanceof Edge) {
-            if (((Edge) clicked).getType().equals(EdgeType.INTERFACE)) {
+            EdgeType e = ((Edge) clicked).getType();
+            if (e.equals(EdgeType.INTERFACE)) {
                 contextMenu.showEditButton(false);
-            } else {
-                contextMenu.showEditButton(true);
+            } else if (e.equals(EdgeType.TRANSITION)) {
+                contextMenu.setEditString("condition");
+            } else if (e.equals(EdgeType.OPERATION)) {
+                contextMenu.setEditString("operation type");
+            } else if (e.equals(EdgeType.INTERRUPT)) {
+                contextMenu.setEditString("interrupt request");
             }
+        } else if (clicked instanceof Action) {
+            contextMenu.setEditString("code");
         }
     }
 
@@ -263,6 +276,9 @@ public class Controller extends MouseAdapter implements ActionListener {
                     draggingName = true;
                     return;
                 }
+            } else if (clicked instanceof Action && ((Action) clicked).pivotContains(e.getPoint())) {
+                draggingActionPivot = true;
+                return;
             }
 
             if (clicked.contains(e.getPoint())) {
@@ -309,19 +325,23 @@ public class Controller extends MouseAdapter implements ActionListener {
     private void changeClickedName() {
         String name;
         if (clicked instanceof Node) {
-            if (!((Node) clicked).getType().equals(NodeType.STATE)) {
-                name = askForString("Enter a name:", clicked.getName());
+            //se quita para hacer cosas de este estilo
+            //if (!((Node) clicked).getType().equals(NodeType.STATE)) {
+            Node n = (Node) clicked;
+            name = askForString("Enter a " + (n.getType().equals(NodeType.STATE) ? "number:" :
+                            (n.getType().equals(NodeType.TAD) ? "TAD name" : n.getType().name().toLowerCase()) + ":"),
+                    clicked.getName());
                 contextMenu.showEditButton(true);
                 if (name != null) {
                     clicked.setName(name);
                 }
-            }
+            //}
         } else if (clicked instanceof Edge) {
             Edge e = (Edge) clicked;
             switch (e.getType()) {
                 case TRANSITION:
                 case INTERRUPT:
-                    name = askForString("Enter " + e.getType().name().toLowerCase() + " name:", clicked.getName());
+                    name = askForString("Enter " + e.getType().name().toLowerCase() + ":", clicked.getName());
                     if (name != null) {
                         clicked.setName(name);
                     }
@@ -339,9 +359,6 @@ public class Controller extends MouseAdapter implements ActionListener {
                     } else if (res == 0) {//read/write
                         e.setBidirectional(true);
                     }
-                    break;
-                case ACTION:
-                    //TODO: codi que es fa en el salt
                     break;
             }
         } else if (clicked instanceof Action) {
@@ -452,6 +469,8 @@ public class Controller extends MouseAdapter implements ActionListener {
                     draggedNode((Node) clicked, delta);
                 } else if (clicked instanceof Edge) {
                     draggedEdge((Edge) clicked, delta);
+                } else if (clicked instanceof Action) {
+                    draggedAction((Action) clicked, e, delta);
                 }
                 mousePoint = e.getPoint();
             }
@@ -483,6 +502,7 @@ public class Controller extends MouseAdapter implements ActionListener {
 
         draggingPivot = false;
         draggingName = false;
+        draggingActionPivot = false;
         e.getComponent().repaint();
     }
 
@@ -492,8 +512,6 @@ public class Controller extends MouseAdapter implements ActionListener {
     }
 
     private void draggedNode(Node node, Point p) {
-        //se se quita este if, las cosas se mueven mejor - no poner el if
-        //if (node.contains(event.getPoint())) {
         Point npt = new Point();
         npt.setLocation(node.getCenter().x + p.x, node.getCenter().y + p.y);
         node.setCenter(npt);
@@ -502,12 +520,9 @@ public class Controller extends MouseAdapter implements ActionListener {
                 e.update();
             }
         }
-        //}
     }
 
     private void draggedEdge(Edge edge, Point p) {
-        //lo mismo de arriba
-        //if (edge.pivotContains(event.getPoint())) {
         Point npt = new Point();
         if (draggingName) {
             npt.setLocation(edge.getNamePoint().x + p.x, edge.getNamePoint().y + p.y);
@@ -515,7 +530,17 @@ public class Controller extends MouseAdapter implements ActionListener {
         } else if (draggingPivot) {
             npt.setLocation(edge.getLocation().x + p.x, edge.getLocation().y + p.y);
             edge.updatePivot(npt);
-            //}
+        }
+    }
+
+    private void draggedAction(Action action, MouseEvent e, Point p) {
+        Point npt = new Point();
+        npt.setLocation(action.getStart().x + p.x, action.getStart().y + p.y);
+        if (draggingActionPivot) {
+            action.setPivot(e.getPoint());
+        } else {
+            action.setStart(npt);
+            action.update();
         }
     }
 

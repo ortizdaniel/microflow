@@ -14,9 +14,6 @@ import java.util.List;
 
 public class Graph {
 
-    private static final double S60 = Math.sin(60 * Math.PI / 180.0);
-    private static final double C60 = Math.cos(60 * Math.PI / 180.0);
-
     private static Graph instance;
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
@@ -118,8 +115,11 @@ public class Graph {
     }
 
     public void deleteAll() {
+        Edge.setInterfaceCount(0);
+        Node.setStateCount(0);
         nodes.clear();
         edges.clear();
+        actions.clear();
     }
 
     /**
@@ -148,10 +148,21 @@ public class Graph {
             Graph g = gson.fromJson(new FileReader(path), Graph.class);
             edges = g.edges;
             nodes = g.nodes;
+            actions = g.actions;
             for (Edge e : edges) {
                 for (Node n : nodes) {
                     if (e.getN1().equals(n)) e.setN1(n);
                     if (e.getN2().equals(n)) e.setN2(n);
+                }
+                if (e.getAction() != null) {
+                    int size = actions.size();
+                    for (int i = 0; i < size; i++) {
+                        Action a = actions.get(i);
+                        if (a.equals(e.getAction())) {
+                            actions.set(i, e.getAction());
+                            e.getAction().setParent(e);
+                        }
+                    }
                 }
             }
             return true;

@@ -50,6 +50,14 @@ public class Node extends Element {
         stateCount--;
     }
 
+    public static void setStateCount(int count) {
+        stateCount = count;
+    }
+
+    public static int getStateCount() {
+        return stateCount;
+    }
+
     public boolean circleContains(Point p) {
         //radio^2 -> 45^2 = 2025 para un TAD
         //           22.5^2 = 506.25 para un estado

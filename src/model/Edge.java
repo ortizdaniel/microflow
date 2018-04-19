@@ -72,6 +72,14 @@ public class Edge extends Element {
         interfaceCount--;
     }
 
+    public static void setInterfaceCount(int count) {
+        interfaceCount = count;
+    }
+
+    public static int getInterfaceCount() {
+        return interfaceCount;
+    }
+
     public void update() {
         setBounds();
         if (action != null) {
