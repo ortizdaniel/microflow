@@ -1,6 +1,4 @@
 import controller.Controller;
-import model.Action;
-import model.*;
 import view.View;
 
 import javax.swing.*;
@@ -10,21 +8,18 @@ public class Microflow {
 
     /*
         TODO
-        Pintar cada cosa
 
     resize iconos
     arreglar input
     cambiar \n por System.lineSeparator() al exportar
     añadir el link al github en el about
+    añadir estat = X en la generación
 
-        Controlador
-        Exportar a PNG
-        Generar código motores
+
         DEFINIR COLORES!!!! (para los botones tmb)
-        refactor constantes actioncommand en el enum
 
         Opcionales:
-        No solapar
+
         "Hold" nombres de estados cambiados
         Scroll en vista
 
@@ -53,16 +48,5 @@ public class Microflow {
             view.addActionListener(controller);
         });
 
-
-        Graph g = Graph.getInstance();
-        Node n = new Node(NodeType.STATE, new Point(400, 100));
-        Node n2 = new Node(NodeType.STATE, new Point(400, 400));
-        g.addNode(n);
-        g.addNode(n2);
-        Edge e = new Edge(EdgeType.TRANSITION, n, n2);
-        g.addEdge(e);
-        Action a = new Action(e, "LOCO\ttet\ndigues\naaaa", e.getLocation());
-        g.addAction(a);
-        e.setAction(a);
     }
 }
