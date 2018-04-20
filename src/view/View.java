@@ -21,7 +21,6 @@ public class View extends JFrame {
         setTitle(TITLE);
         setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        setLocationRelativeTo(null);
 
         JPanel content = (JPanel) getContentPane();
         drawPanel = new DrawPanel() {
@@ -51,6 +50,8 @@ public class View extends JFrame {
             }
         });
 
+        pack();
+        setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
@@ -109,8 +110,8 @@ public class View extends JFrame {
         north.add(new JLabel("Enter the desired size"));
         panel.add(north, BorderLayout.NORTH);
         JPanel grid = new JPanel(new GridLayout(2, 2));
-        JTextField width = new JTextField(String.valueOf(getPreferredSize().width));
-        JTextField height = new JTextField(String.valueOf(getPreferredSize().height));
+        JTextField width = new JTextField(String.valueOf(drawPanel.getPreferredSize().width));
+        JTextField height = new JTextField(String.valueOf(drawPanel.getPreferredSize().height));
         width.setColumns(10);
         height.setColumns(10);
         grid.add(new JLabel("Width:"));
