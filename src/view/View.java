@@ -15,6 +15,7 @@ public class View extends JFrame {
     private final DrawPanel drawPanel;
     private final ToolBar jpToolBar;
     private final MenuBar jmbMenuBar;
+    private Dimension dimension = new Dimension(MIN_WIDTH, MIN_HEIGHT);
 
     public View() {
         setTitle(TITLE);
@@ -23,8 +24,12 @@ public class View extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel content = (JPanel) getContentPane();
-        drawPanel = new DrawPanel();
-        //content.add(drawPanel, BorderLayout.CENTER);
+        drawPanel = new DrawPanel() {
+            @Override
+            public Dimension getPreferredSize() {
+                return dimension;
+            }
+        };
         jpToolBar = new ToolBar();
         content.add(jpToolBar, BorderLayout.NORTH);
 
@@ -93,5 +98,30 @@ public class View extends JFrame {
             return text.getText();
         }
         return null;
+    }
+
+    public void changeDimension() {
+        BorderLayout border = new BorderLayout();
+        border.setVgap(10);
+        border.setHgap(10);
+        JPanel panel = new JPanel(border);
+        JPanel north = new JPanel();
+        north.add(new JLabel("Enter the desired size"));
+        panel.add(north, BorderLayout.NORTH);
+        JPanel grid = new JPanel(new GridLayout(2, 2));
+        JTextField width = new JTextField(String.valueOf(getPreferredSize().width));
+        JTextField height = new JTextField(String.valueOf(getPreferredSize().height));
+        width.setColumns(10);
+        height.setColumns(10);
+        grid.add(new JLabel("Width:"));
+        grid.add(width);
+        grid.add(new JLabel("Height:"));
+        grid.add(height);
+        panel.add(grid, BorderLayout.CENTER);
+        int res = JOptionPane.showConfirmDialog(this, panel, "Size", JOptionPane.OK_CANCEL_OPTION);
+        if (res == JOptionPane.OK_OPTION) {
+            dimension.setSize(Integer.parseInt(width.getText()), Integer.parseInt(height.getText()));
+            drawPanel.revalidate();
+        }
     }
 }

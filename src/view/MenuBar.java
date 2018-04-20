@@ -157,36 +157,27 @@ public class MenuBar extends JMenuBar {
         JMenuItem jmiMinimize = new JMenuItem("Minimize");
         JMenuItem jmiMaximize = new JMenuItem("Maximize");
         JMenuItem jmiToolBar = new JMenuItem("Show/Hide Toolbar");
+        JMenuItem jmiSize = new JMenuItem("Change size");
 
         /* Add actions */
-        jmiMinimize.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                view.setExtendedState(JFrame.ICONIFIED);
+        jmiMinimize.addActionListener(e -> view.setExtendedState(JFrame.ICONIFIED));
+
+        jmiMaximize.addActionListener(e -> view.setExtendedState(JFrame.MAXIMIZED_BOTH));
+
+        jmiToolBar.addActionListener(e -> {
+            if (jpToolBar.isVisible()) {
+                jpToolBar.setVisible(false);
+            } else {
+                jpToolBar.setVisible(true);
             }
         });
 
-        jmiMaximize.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                view.setExtendedState(JFrame.MAXIMIZED_BOTH);
-            }
-        });
-
-        jmiToolBar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (jpToolBar.isVisible()) {
-                    jpToolBar.setVisible(false);
-                } else {
-                    jpToolBar.setVisible(true);
-                }
-            }
-        });
+        jmiSize.addActionListener(e -> view.changeDimension());
 
         jmWindow.add(jmiMinimize);
         jmWindow.add(jmiMaximize);
         jmWindow.add(jmiToolBar);
+        jmWindow.add(jmiSize);
     }
 
 
