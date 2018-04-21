@@ -5,6 +5,7 @@ import model.EdgeType;
 import model.NodeType;
 import view.ToolBar;
 
+import javax.swing.*;
 import java.awt.*;
 
 public enum CursorDetail {
@@ -14,17 +15,17 @@ public enum CursorDetail {
     DELETE_POPUP(Cursor.getDefaultCursor(), null, null),
     EDIT(Cursor.getDefaultCursor(), null, null),
 
-    ADD_TAD(createCursor(ToolBar.TAD_ICON), NodeType.TAD, "Name"),
-    ADD_VARIABLE(createCursor(ToolBar.VAR_ICON), NodeType.VARIABLE, "Variable"),
-    ADD_PERIPHERAL(createCursor(ToolBar.PERIPHERAL_ICON), NodeType.PERIPHERAL, "Peripheral"),
-    ADD_STATE(createCursor(ToolBar.STATE_ICON), NodeType.STATE, null),
+    ADD_TAD(createCursor(ToolBar.TAD_ICON_C), NodeType.TAD, "Name"),
+    ADD_VARIABLE(createCursor(ToolBar.VAR_ICON_C), NodeType.VARIABLE, "Variable"),
+    ADD_PERIPHERAL(createCursor(ToolBar.PERIPHERAL_ICON_C), NodeType.PERIPHERAL, "Peripheral"),
+    ADD_STATE(createCursor(ToolBar.STATE_ICON_C), NodeType.STATE, null),
 
-    ADD_TRANSITION(createCursor(ToolBar.TRANSITION_CURSOR), EdgeType.TRANSITION, "Condition"),
-    ADD_INTERRUPT(createCursor(ToolBar.INTERRUPT_ICON), EdgeType.INTERRUPT, "IRQ"),
-    ADD_OPERATION(createCursor(ToolBar.OPERATION_ICON), EdgeType.OPERATION, null),
-    ADD_INTERFACE(createCursor(ToolBar.INTERFACE_ICON), EdgeType.INTERFACE, null),
+    ADD_TRANSITION(createCursor(ToolBar.TRANSITION_CURSOR_C), EdgeType.TRANSITION, "Condition"),
+    ADD_INTERRUPT(createCursor(ToolBar.INTERRUPT_ICON_C), EdgeType.INTERRUPT, "IRQ"),
+    ADD_OPERATION(createCursor(ToolBar.OPERATION_ICON_C), EdgeType.OPERATION, null),
+    ADD_INTERFACE(createCursor(ToolBar.INTERFACE_ICON_C), EdgeType.INTERFACE, null),
     //ADD_ACTION(createCursor(ToolBar.ACTION_CURSOR), EdgeType.ACTION, null), //deprecado
-    ADD_ACTION(createCursor(ToolBar.ACTION_CURSOR), Action.class, "action 1;\naction 2;"),
+    ADD_ACTION(createCursor(ToolBar.ACTION_CURSOR_C), Action.class, "action 1;\naction 2;"),
 
     NEW_FILE(Cursor.getDefaultCursor(), null, null),
     OPEN_FILE(Cursor.getDefaultCursor(), null, null),
@@ -59,9 +60,14 @@ public enum CursorDetail {
 
     private static Cursor createCursor(String path) {
         Toolkit tk = Toolkit.getDefaultToolkit();
-        if (path != null)
-            return tk.createCustomCursor(tk.createImage(CursorDetail.class.getResource(path)), new Point(0, 0), "");
-        else
+        if (path != null) {
+            Image img = new ImageIcon(CursorDetail.class.getResource(path)).getImage()
+                    .getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+
+            if (img != null) return tk.createCustomCursor(img, new Point(0, 0), "");
             return Cursor.getDefaultCursor();
+        } else {
+            return Cursor.getDefaultCursor();
+        }
     }
 }

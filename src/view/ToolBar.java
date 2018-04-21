@@ -51,15 +51,27 @@ public class ToolBar extends JPanel {
     private static final String PRINT_FILE_ICON = "/img/toolbar/print_file.png";
     private static final String CURSOR_ICON = "/img/toolbar/cursor.png";
     public static final String DELETE_ICON = "/img/toolbar/delete.png";
-    public static final String TAD_ICON = "/img/toolbar/TAD.png";
-    public static final String VAR_ICON = "/img/toolbar/var.png";
-    public static final String PERIPHERAL_ICON = "/img/toolbar/peripheral.png";
-    public static final String INTERFACE_ICON = "/img/toolbar/interface.png";
-    public static final String OPERATION_ICON = "/img/toolbar/operation.png";
-    public static final String INTERRUPT_ICON = "/img/toolbar/interrupt.png";
-    public static final String STATE_ICON = "/img/toolbar/state.png";
-    public static final String TRANSITION_CURSOR = "/img/toolbar/transition.png";
-    public static final String ACTION_CURSOR = "/img/toolbar/action.png";
+    private static final String TAD_ICON = "/img/toolbar/TAD.png";
+    private static final String VAR_ICON = "/img/toolbar/var.png";
+    private static final String PERIPHERAL_ICON = "/img/toolbar/peripheral.png";
+    private static final String INTERFACE_ICON = "/img/toolbar/interface.png";
+    private static final String OPERATION_ICON = "/img/toolbar/operation.png";
+    private static final String INTERRUPT_ICON = "/img/toolbar/interrupt.png";
+    private static final String STATE_ICON = "/img/toolbar/state.png";
+    private static final String TRANSITION_CURSOR = "/img/toolbar/transition.png";
+    private static final String ACTION_CURSOR = "/img/toolbar/action.png";
+
+    public static final String TAD_ICON_C = "/img/cursor/TAD_c.png";
+    public static final String VAR_ICON_C = "/img/cursor/var_c.png";
+    public static final String PERIPHERAL_ICON_C = "/img/cursor/peripheral_c.png";
+    public static final String INTERFACE_ICON_C = "/img/cursor/interface_c.png";
+    public static final String OPERATION_ICON_C = "/img/cursor/operation_c.png";
+    public static final String INTERRUPT_ICON_C = "/img/cursor/interrupt_c.png";
+    public static final String STATE_ICON_C = "/img/cursor/state_c.png";
+    public static final String TRANSITION_CURSOR_C = "/img/cursor/transition_c.png";
+    public static final String ACTION_CURSOR_C = "/img/cursor/action_c.png";
+
+
 
     public ToolBar() {
 
@@ -171,8 +183,9 @@ public class ToolBar extends JPanel {
         });
 
         try {
-            //Icons must be the same size as the button
-            ImageIcon icon = new ImageIcon(getClass().getResource(iconPath));
+            Image img = new ImageIcon(getClass().getResource(iconPath)).getImage()
+                    .getScaledInstance(BUTTON_SIZE, BUTTON_SIZE, Image.SCALE_SMOOTH);
+            ImageIcon icon = new ImageIcon(img);
             jb.setIcon(icon);
         } catch (Exception e) {
             e.printStackTrace();
