@@ -47,19 +47,18 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     private static String fileName;
 
-    private static final String COMMENT_HEADER = "//-----------------------------------------------------------------\n";
+    private static final String COMMENT_HEADER = "//---------------------------------------------------------";
     private static final String TAD_H = "//TAD: ";
     private static final String DATA_H = "//DATA: ";
     private static final String AUTHOR_H = "//AUTHOR: ";
-    private static final String DESCR_H = "//DESCRIPTION:\n";
-    private static final String INCLUD_H = "\n//------------------------ INCLUDES -----------------------\n";
-    private static final String VAR_CONST_H = "\n//------------------------ VARIABLES ----------------------";
-    private static final String FUNC_H = "//------------------------ FUNCTIONS ----------------------\n";
-    private static final String INIT_FUNC = "\nvoid init";
-    private static final String INIT_FUNC_2 = "(void) {\n\n}\n";
-    private static final String INIT_FUNC_3 = "(void);\n";
+    private static final String DESCR_H = "//DESCRIPTION:";
+    private static final String INCLUD_H = "//------------------------ INCLUDES -----------------------";
+    private static final String VAR_CONST_H = "//------------------------ VARIABLES ----------------------";
+    private static final String FUNC_H = "//------------------------ FUNCTIONS ----------------------";
+
     private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
     private static final FileFilter FILTER = new FileNameExtensionFilter("Microflow file", "mcf");
+    private static final String sep = System.lineSeparator();
 
     public Controller(View view) {
         this.view = view;
@@ -85,8 +84,6 @@ public class Controller extends MouseAdapter implements ActionListener {
         view.changeCursor(state.getCursor());
 
         switch (state) {
-            case UNDO:
-                break;
             case NEW_FILE:
                 newFile();
                 break;
@@ -107,6 +104,10 @@ public class Controller extends MouseAdapter implements ActionListener {
                 break;
             case GEN_MOTOR:
                 exportMotor();
+                break;
+            case GEN_DICT:
+                //TODO: generate dictionary
+                System.out.println("DICTIONARY!");
                 break;
             case DELETE_POPUP:
                 deletePopup();
@@ -563,61 +564,109 @@ public class Controller extends MouseAdapter implements ActionListener {
                         //.c
                         String filePath = folder.toString() + "/T" + n.getName() + ".c";
                         String name = "T" + n.getName();
+                        StringBuilder sb = new StringBuilder();
+                        String header;
 
-                        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
-                            writer.write(COMMENT_HEADER);
-                            writer.write(TAD_H);
-                            writer.write(name + "\n");
-                            writer.write(DESCR_H);
-                            writer.write(AUTHOR_H);
-                            writer.write(System.getProperty("user.name") + "\n");
-                            writer.write(DATA_H);
-                            writer.write(dateFormat.format(date) + "\n");
-                            writer.write(COMMENT_HEADER);
-                            writer.write(INCLUD_H);
-                            writer.write("#include \"" + name + ".h\"\n");
-                            writer.write(VAR_CONST_H);
-                            for (Edge e: model.getEdges()) {
-                                if (e.getN1().equals(n)) {
-                                    if (e.getN2().getType().equals(NodeType.VARIABLE)) {
-                                        writer.write("\n" + e.getN2().getName() + ";");
-                                    }
-                                } else if (e.getN2().equals(n)) {
-                                    if (e.getN1().getType().equals(NodeType.VARIABLE)) {
-                                        writer.write("\n" + e.getN1().getName() + ";");
-                                    }
+                        /* HEADER */
+                        sb.append(COMMENT_HEADER);
+                        sb.append(sep);
+                        sb.append(TAD_H);
+                        sb.append(name);
+                        sb.append(sep);
+                        sb.append(DESCR_H);
+                        sb.append(sep);
+                        sb.append(AUTHOR_H);
+                        sb.append(System.getProperty("user.name"));
+                        sb.append(sep);
+                        sb.append(DATA_H);
+                        sb.append(dateFormat.format(date));
+                        sb.append(sep);
+                        sb.append(COMMENT_HEADER);
+                        sb.append(sep);
+                        sb.append(sep);
+
+                        header = sb.toString();
+                        sb.setLength(0);
+
+                        sb.append(INCLUD_H);
+                        sb.append(sep);
+                        sb.append(sep);
+                        sb.append("#include \"");
+                        sb.append(name);
+                        sb.append(".h\"");
+                        sb.append(sep);
+                        sb.append(sep);
+                        sb.append(VAR_CONST_H);
+                        sb.append(sep);
+
+                        for (Edge e: model.getEdges()) {
+                            if (e.getN1().equals(n)) {
+                                if (e.getN2().getType().equals(NodeType.VARIABLE)) {
+                                    sb.append(sep);
+                                    sb.append(e.getN2().getName());
+                                    sb.append(";");
+                                }
+                            } else if (e.getN2().equals(n)) {
+                                if (e.getN1().getType().equals(NodeType.VARIABLE)) {
+                                    sb.append(sep);
+                                    sb.append(e.getN1().getName());
+                                    sb.append(";");
                                 }
                             }
-                            writer.write("\n\n");
-                            writer.write(FUNC_H);
-                            writer.write(INIT_FUNC + name + INIT_FUNC_2);
+                        }
+                        sb.append(sep);
+                        sb.append(sep);
+                        sb.append(FUNC_H);
+                        sb.append(sep);
+                        sb.append(sep);
+                        sb.append("void init");
+                        sb.append(name);
+                        sb.append("(void) {");
+                        sb.append(sep);
+                        sb.append(sep);
+                        sb.append("}");
+                        sb.append(sep);
+
+                        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
+                            writer.write(header);
+                            writer.write(sb.toString());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+                        sb.setLength(0);
 
                         //.h
                         filePath = folder.toString() + "/T" + n.getName() + ".h";
-                        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
-                            writer.write(COMMENT_HEADER);
-                            writer.write(TAD_H);
-                            writer.write(name + "\n");
-                            writer.write(DESCR_H);
-                            writer.write(AUTHOR_H);
-                            writer.write(System.getProperty("user.name") + "\n");
-                            writer.write(DATA_H);
-                            writer.write(dateFormat.format(date) + "\n");
-                            writer.write(COMMENT_HEADER);
-                            writer.write(INCLUD_H);
-                            for (Edge e: model.getEdges()) {
-                                if (e.getN1().equals(n) && e.getN2().getType() == NodeType.TAD) {
-                                    writer.write("\n#include \"T" + e.getN2().getName() + ".h\"");
-                                }
+
+                        sb.append(INCLUD_H);
+                        sb.append(sep);
+
+                        for (Edge e: model.getEdges()) {
+                            if (e.getN1().equals(n) && e.getN2().getType() == NodeType.TAD) {
+                                sb.append(sep);
+                                sb.append("#include \"T");
+                                sb.append(e.getN2().getName());
+                                sb.append(".h\"");
                             }
-                            writer.write("\n");
-                            writer.write(INIT_FUNC + name + INIT_FUNC_3);
+                        }
+                        sb.append(sep);
+                        sb.append(sep);
+                        sb.append(FUNC_H);
+                        sb.append(sep);
+                        sb.append(sep);
+                        sb.append("void init");
+                        sb.append(name);
+                        sb.append("(void);");
+                        sb.append(sep);
+
+                        try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
+                            writer.write(header);
+                            writer.write(sb.toString());
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
+
+                        sb.setLength(0);
 
                     }
                 }
@@ -636,41 +685,79 @@ public class Controller extends MouseAdapter implements ActionListener {
             if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                 String filePath = chooser.getSelectedFile().getAbsolutePath() + ".c";
                 String name = chooser.getSelectedFile().getName();
+                StringBuilder sb = new StringBuilder();
+
+
+                sb.append("void ");
+                sb.append(name);
+                sb.append("(void) {");
+                sb.append(sep);
+                sb.append("\tstatic char estat = 0;\n");
+                sb.append(sep);
+                sb.append("\tswitch(estat) {");
+                sb.append(sep);
+
+                String aux = sb.toString();
+
+                sb.setLength(0);
+
+                for (Node n : model.getNodes()) {
+                    if (n.getType().equals(NodeType.STATE)) {
+                        boolean hasCondition = false;
+                        sb.append("\t\tcase ");
+                        sb.append(n.getName());
+                        sb.append(":");
+                        sb.append(sep);
+
+                        for (Edge e: model.getEdges()) {
+                            if (e.getN1().equals(n)) {
+                                hasCondition = true;
+                                sb.append("\t\t\tif (");
+                                sb.append(e.getName());
+                                sb.append(") {");
+                                sb.append(sep);
+
+                                if (e.getAction() != null) {
+                                    String[] actions = e.getAction().getName().split(";");
+                                    for (String a : actions) {
+                                        sb.append("\t\t\t\t");
+                                        sb.append(a.trim());
+                                        sb.append(";");
+                                        sb.append(sep);
+                                    }
+                                    sb.append("\t\t\t\testat = ");
+                                    sb.append(e.getN2().getName());
+                                    sb.append(";");
+                                    sb.append(sep);
+                                } else {
+                                    sb.append("\t\t\t\testat = ");
+                                    sb.append(e.getN2().getName());
+                                    sb.append(";");
+                                    sb.append(sep);
+                                }
+                                sb.append("\t\t\t}");
+                                sb.append(sep);
+                            }
+                        }
+                        if (!hasCondition) {
+                            sb.append(sep);
+                        }
+                        sb.append("\t\tbreak;");
+                        sb.append(sep);
+                    }
+                }
+                sb.append("\t}");
+                sb.append(sep);
+                sb.append("}");
 
                 try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
-                    writer.write("void " + name + "(void) {\n");
-                    writer.write("\tstatic char estat = 0;\n");
-                    writer.write("\n\tswitch(estat) {\n");
-                    for (Node n : model.getNodes()) {
-                        if (n.getType().equals(NodeType.STATE)) {
-                            boolean hasCondition = false;
-                            writer.write("\t\tcase " + n.getName() + ":\n");
-                            for (Edge e: model.getEdges()) {
-                                if (e.getN1().equals(n)) {
-                                    hasCondition = true;
-                                    writer.write("\t\t\tif (" + e.getName() + ") {\n");
-                                    if (e.getAction() != null) {
-                                        String[] actions = e.getAction().getName().split(";");
-                                        for (String a : actions) {
-                                            writer.write("\t\t\t\t" + a.trim() + ";\n");
-                                        }
-                                    } else {
-                                        writer.write("\n");
-                                    }
-                                    writer.write("\t\t\t}\n");
-                                }
-                            }
-                            if (!hasCondition) {
-                                writer.write("\t\t\t//TODO empty case\n");
-                            }
-                            writer.write("\t\tbreak;\n");
-                        }
-                    }
-                    writer.write("\t}\n");
-                    writer.write("}");
+                    writer.write(aux);
+                    writer.write(sb.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                sb.setLength(0);
+
             }
             chooser.setFileFilter(FILTER);
         }

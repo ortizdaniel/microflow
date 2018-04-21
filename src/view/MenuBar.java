@@ -19,8 +19,9 @@ public class MenuBar extends JMenuBar {
     private JPanel jpToolBar;
 
     private static final String ABOUT_MSG = "Microflow\nDaniel Ortiz & Joan Gómez\n" +
-            "Inspired by the original BubbleWizard of F. Escudero\nCopyright (C) 2018";
-    private static final String LOGO_PATH = "/res/img/logo.png";
+            "Inspired by the original BubbleWizard of F. Escudero\nhttps://github.com/ortizdaniel/microflow/releases\n" +
+            "Copyright (C) 2018";
+    private static final String LOGO_PATH = "/img/logo.png";
 
     /* Menu File Items */
     private JMenuItem jmiNewFile;
@@ -30,10 +31,10 @@ public class MenuBar extends JMenuBar {
     private JMenuItem jmiPrint;
     private JMenuItem jmiGenFiles;
     private JMenuItem jmiGenMotor;
+    private JMenuItem jmiGenDict;
 
     /* Tools Items */
     private JMenuItem jmiCursor;
-    private JMenuItem jmiUndo;
     private JMenuItem jmiDelete;
     private JMenuItem jmiTAD;
     private JMenuItem jmiVar;
@@ -105,9 +106,11 @@ public class MenuBar extends JMenuBar {
         /* Generation options */
         jmiGenFiles = new JMenuItem("Create .c .h files");
         jmiGenMotor = new JMenuItem("Create motor");
+        jmiGenDict = new JMenuItem("Create dictionary");
 
         jmFile.add(jmiGenFiles);
         jmFile.add(jmiGenMotor);
+        jmFile.add(jmiGenDict);
         jmFile.addSeparator();
 
         /* Exit */
@@ -117,13 +120,9 @@ public class MenuBar extends JMenuBar {
     private void addToolsOptions() {
         /* Basic Options */
         jmiCursor = new JMenuItem("Cursor");
-        jmiUndo = new JMenuItem("Undo");
-        jmiUndo.setAccelerator(
-                KeyStroke.getKeyStroke(KeyEvent.VK_Z, (Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())));
         jmiDelete = new JMenuItem("Delete");
 
         jmTools.add(jmiCursor);
-        jmTools.add(jmiUndo);
         jmTools.add(jmiDelete);
         jmTools.addSeparator();
 
@@ -209,11 +208,11 @@ public class MenuBar extends JMenuBar {
         jmiGenFiles.setActionCommand(CursorDetail.GEN_FILES.name());
         jmiGenMotor.addActionListener(c);
         jmiGenMotor.setActionCommand(CursorDetail.GEN_MOTOR.name());
+        jmiGenDict.addActionListener(c);
+        jmiGenDict.setActionCommand(CursorDetail.GEN_DICT.name());
 
         jmiCursor.addActionListener(c);
         jmiCursor.setActionCommand(CursorDetail.SELECTING.name());
-        jmiUndo.addActionListener(c);
-        jmiUndo.setActionCommand(CursorDetail.UNDO.name());
         jmiDelete.addActionListener(c);
         jmiDelete.setActionCommand(CursorDetail.DELETING.name());
 

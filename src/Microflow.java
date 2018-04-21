@@ -16,21 +16,23 @@ public class Microflow {
     /*
         TODO
 
-    resize iconos
-    arreglar input
-    cambiar \n por System.lineSeparator() al exportar
-    añadir el link al github en el about
-    añadir estat = X en la generación
+        resize iconos
+        arreglar input
+
+        no tiene porque haber condicion, cambiar tambien al exportar no solo en el input
 
 
         DEFINIR COLORES!!!! (para los botones tmb)
 
         Opcionales:
 
+        "Hold" nombres de estados cambiados
+        Scroll en vista
+
      */
 
     private static final String VERSION = "1.0.0";
-    private static final String LOGO_PATH = "/res/img/logo.png";
+    private static final String LOGO_PATH = "/img/logo.png";
 
     public static void main(String[] args) {
         try {
