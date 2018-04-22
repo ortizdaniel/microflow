@@ -334,7 +334,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             Node n = (Node) clicked;
             name = askForString("Enter a " + (n.getType().equals(NodeType.STATE) ? "number:" :
                             (n.getType().equals(NodeType.TAD) ? "TAD name" : n.getType().name().toLowerCase()) + ":"),
-                    clicked.getName());
+                    clicked.getName(), false);
                 contextMenu.showEditButton(true);
                 if (name != null) {
                     clicked.setName(name);
@@ -344,10 +344,16 @@ public class Controller extends MouseAdapter implements ActionListener {
         } else if (clicked instanceof Edge) {
             Edge e = (Edge) clicked;
             switch (e.getType()) {
-                case TRANSITION:
                 case INTERRUPT:
                 case INTERFACE:
-                    name = askForString("Enter " + e.getType().name().toLowerCase() + ":", clicked.getName());
+                    name = askForString("Enter " + e.getType().name().toLowerCase() + ":", clicked.getName(), false);
+                    if (name != null) {
+                        clicked.setName(name);
+                        clicked.holdName(true);
+                    }
+                    break;
+                case TRANSITION:
+                    name = askForString("Enter " + e.getType().name().toLowerCase() + ":", clicked.getName(), true);
                     if (name != null) {
                         clicked.setName(name);
                         clicked.holdName(true);
@@ -424,12 +430,15 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     }
 
-    private String askForString(String msg, String hint) {
+    private String askForString(String msg, String hint, boolean canBeEmpty) {
         String s = "";
         while (s.isEmpty()) {
             s = JOptionPane.showInputDialog(msg, hint);
             if (s == null) break;
-            if (s.trim().length() == 0) s = "";
+            if (s.trim().length() == 0) {
+                if (canBeEmpty) return "";
+                else s = "";
+            }
         }
         return s;
     }
@@ -569,64 +578,30 @@ public class Controller extends MouseAdapter implements ActionListener {
                         String header;
 
                         /* HEADER */
-                        sb.append(COMMENT_HEADER);
-                        sb.append(sep);
-                        sb.append(TAD_H);
-                        sb.append(name);
-                        sb.append(sep);
-                        sb.append(DESCR_H);
-                        sb.append(sep);
-                        sb.append(AUTHOR_H);
-                        sb.append(System.getProperty("user.name"));
-                        sb.append(sep);
-                        sb.append(DATA_H);
-                        sb.append(dateFormat.format(date));
-                        sb.append(sep);
-                        sb.append(COMMENT_HEADER);
-                        sb.append(sep);
-                        sb.append(sep);
+                        sb.append(COMMENT_HEADER).append(sep).append(TAD_H).append(name).append(sep);
+                        sb.append(DESCR_H).append(sep).append(AUTHOR_H).append(System.getProperty("user.name"));
+                        sb.append(sep).append(DATA_H).append(dateFormat.format(date)).append(sep);
+                        sb.append(COMMENT_HEADER).append(sep).append(sep);
 
                         header = sb.toString();
                         sb.setLength(0);
 
-                        sb.append(INCLUD_H);
-                        sb.append(sep);
-                        sb.append(sep);
-                        sb.append("#include \"");
-                        sb.append(name);
-                        sb.append(".h\"");
-                        sb.append(sep);
-                        sb.append(sep);
-                        sb.append(VAR_CONST_H);
-                        sb.append(sep);
+                        sb.append(INCLUD_H).append(sep).append(sep).append("#include \"").append(name).append(".h\"");
+                        sb.append(sep).append(sep).append(VAR_CONST_H).append(sep);
 
                         for (Edge e: model.getEdges()) {
                             if (e.getN1().equals(n)) {
                                 if (e.getN2().getType().equals(NodeType.VARIABLE)) {
-                                    sb.append(sep);
-                                    sb.append(e.getN2().getName());
-                                    sb.append(";");
+                                    sb.append(sep).append(e.getN2().getName()).append(";");
                                 }
                             } else if (e.getN2().equals(n)) {
                                 if (e.getN1().getType().equals(NodeType.VARIABLE)) {
-                                    sb.append(sep);
-                                    sb.append(e.getN1().getName());
-                                    sb.append(";");
+                                    sb.append(sep).append(e.getN1().getName()).append(";");
                                 }
                             }
                         }
-                        sb.append(sep);
-                        sb.append(sep);
-                        sb.append(FUNC_H);
-                        sb.append(sep);
-                        sb.append(sep);
-                        sb.append("void init");
-                        sb.append(name);
-                        sb.append("(void) {");
-                        sb.append(sep);
-                        sb.append(sep);
-                        sb.append("}");
-                        sb.append(sep);
+                        sb.append(sep).append(sep).append(FUNC_H).append(sep).append(sep).append("void init");
+                        sb.append(name).append("(void) {").append(sep).append(sep).append("}").append(sep);
 
                         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
                             writer.write(header);
@@ -644,21 +619,11 @@ public class Controller extends MouseAdapter implements ActionListener {
 
                         for (Edge e: model.getEdges()) {
                             if (e.getN1().equals(n) && e.getN2().getType() == NodeType.TAD) {
-                                sb.append(sep);
-                                sb.append("#include \"T");
-                                sb.append(e.getN2().getName());
-                                sb.append(".h\"");
+                                sb.append(sep).append("#include \"T").append(e.getN2().getName()).append(".h\"");
                             }
                         }
-                        sb.append(sep);
-                        sb.append(sep);
-                        sb.append(FUNC_H);
-                        sb.append(sep);
-                        sb.append(sep);
-                        sb.append("void init");
-                        sb.append(name);
-                        sb.append("(void);");
-                        sb.append(sep);
+                        sb.append(sep).append(sep).append(FUNC_H).append(sep).append(sep).append("void init");
+                        sb.append(name).append("(void);").append(sep);
 
                         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
                             writer.write(header);
@@ -689,14 +654,8 @@ public class Controller extends MouseAdapter implements ActionListener {
                 StringBuilder sb = new StringBuilder();
 
 
-                sb.append("void ");
-                sb.append(name);
-                sb.append("(void) {");
-                sb.append(sep);
-                sb.append("\tstatic char estat = 0;\n");
-                sb.append(sep);
-                sb.append("\tswitch(estat) {");
-                sb.append(sep);
+                sb.append("void ").append(name).append("(void) {").append(sep);
+                sb.append("\tstatic char estat = 0;\n").append(sep).append("\tswitch(estat) {").append(sep);
 
                 String aux = sb.toString();
 
@@ -705,51 +664,39 @@ public class Controller extends MouseAdapter implements ActionListener {
                 for (Node n : model.getNodes()) {
                     if (n.getType().equals(NodeType.STATE)) {
                         boolean hasCondition = false;
-                        sb.append("\t\tcase ");
-                        sb.append(n.getName());
-                        sb.append(":");
-                        sb.append(sep);
+                        sb.append("\t\tcase ").append(n.getName()).append(":").append(sep);
 
                         for (Edge e: model.getEdges()) {
                             if (e.getN1().equals(n)) {
                                 hasCondition = true;
-                                sb.append("\t\t\tif (");
-                                sb.append(e.getName());
-                                sb.append(") {");
-                                sb.append(sep);
+                                String tabs = "\t\t\t\t";
+                                if (e.getName().length() == 0) {
+                                    tabs = "\t\t\t";
+                                } else {
+                                    sb.append("\t\t\tif (").append(e.getName()).append(") {").append(sep);
+                                }
 
                                 if (e.getAction() != null) {
                                     String[] actions = e.getAction().getName().split(";");
                                     for (String a : actions) {
-                                        sb.append("\t\t\t\t");
-                                        sb.append(a.trim());
-                                        sb.append(";");
-                                        sb.append(sep);
+                                        sb.append(tabs).append(a.trim()).append(";").append(sep);
                                     }
-                                    sb.append("\t\t\t\testat = ");
-                                    sb.append(e.getN2().getName());
-                                    sb.append(";");
-                                    sb.append(sep);
+                                    sb.append(tabs).append("estat = ").append(e.getN2().getName()).append(";").append(sep);
                                 } else {
-                                    sb.append("\t\t\t\testat = ");
-                                    sb.append(e.getN2().getName());
-                                    sb.append(";");
-                                    sb.append(sep);
+                                    sb.append(tabs).append("estat = ").append(e.getN2().getName()).append(";").append(sep);
                                 }
-                                sb.append("\t\t\t}");
-                                sb.append(sep);
+                                if (e.getName().length() > 0) {
+                                    sb.append("\t\t\t}").append(sep);
+                                }
                             }
                         }
                         if (!hasCondition) {
                             sb.append(sep);
                         }
-                        sb.append("\t\tbreak;");
-                        sb.append(sep);
+                        sb.append("\t\tbreak;").append(sep);
                     }
                 }
-                sb.append("\t}");
-                sb.append(sep);
-                sb.append("}");
+                sb.append("\t}").append(sep).append("}");
 
                 try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
                     writer.write(aux);
@@ -765,8 +712,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     }
 
     private void exportDictionary() {
-        if (model.canBeExported(1)) ;
-        {
+        if (model.canBeExported(1)) {
             StringBuilder sb = new StringBuilder();
             HashSet<String> added = new HashSet<>();
             for (Edge e : model.getEdges()) {
@@ -785,6 +731,9 @@ public class Controller extends MouseAdapter implements ActionListener {
                 }
             }
             chooser.setFileFilter(FILTER);
+        } else {
+            JOptionPane.showMessageDialog(null, "Dictionary cannot be empty or with states"
+                    , "Error while exporting", JOptionPane.ERROR_MESSAGE);
         }
     }
 }
