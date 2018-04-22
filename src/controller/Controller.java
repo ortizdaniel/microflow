@@ -567,7 +567,12 @@ public class Controller extends MouseAdapter implements ActionListener {
             chooser.setFileFilter(null);
             if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                 Date date = new Date();
-                Path folder = chooser.getCurrentDirectory().toPath();
+                Path folder;
+                if (System.getProperty("os.name").startsWith("Mac")) {
+                    folder = chooser.getCurrentDirectory().toPath();
+                } else {
+                    folder = chooser.getSelectedFile().toPath();
+                }
 
                 for (Node n : model.getNodes()) {
                     if (n.getType().equals(NodeType.TAD)) {

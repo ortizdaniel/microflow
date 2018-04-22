@@ -18,7 +18,7 @@ public class Microflow {
 
     */
 
-    public static final String VERSION = "1.1.1";
+    public static final String VERSION = "1.1.2";
     private static final String LOGO_PATH = "/img/logo.png";
 
     public static void main(String[] args) {
