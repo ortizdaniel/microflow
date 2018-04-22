@@ -22,6 +22,7 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,6 +30,7 @@ import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashSet;
 
 public class Controller extends MouseAdapter implements ActionListener {
 
@@ -57,7 +59,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     private static final String FUNC_H = "//------------------------ FUNCTIONS ----------------------";
 
     private static final DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-    private static final FileFilter FILTER = new FileNameExtensionFilter("Microflow file", "mcf");
+    private static final FileFilter FILTER = new FileNameExtensionFilter("Microflow file (.mcf)", "mcf");
     private static final String sep = System.lineSeparator();
 
     public Controller(View view) {
@@ -106,8 +108,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 exportMotor();
                 break;
             case GEN_DICT:
-                //TODO: generate dictionary
-                System.out.println("DICTIONARY!");
+                exportDictionary();
                 break;
             case DELETE_POPUP:
                 deletePopup();
@@ -162,7 +163,7 @@ public class Controller extends MouseAdapter implements ActionListener {
      */
     private void saveFilePng() {
         JFileChooser c = new JFileChooser();
-        c.setFileFilter(new FileNameExtensionFilter("PNG", "png"));
+        c.setFileFilter(new FileNameExtensionFilter("PNG (.png)", "png"));
         if (c.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
             Dimension d = view.getDrawPanel().getSize();
             BufferedImage img = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
@@ -681,7 +682,7 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     private void exportMotor() {
         if (model.canBeExported(0)) {
-            chooser.setFileFilter(new FileNameExtensionFilter("C source", "c"));
+            chooser.setFileFilter(new FileNameExtensionFilter("C source (.c)", "c"));
             if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                 String filePath = chooser.getSelectedFile().getAbsolutePath() + ".c";
                 String name = chooser.getSelectedFile().getName();
@@ -763,4 +764,27 @@ public class Controller extends MouseAdapter implements ActionListener {
         }
     }
 
+    private void exportDictionary() {
+        if (model.canBeExported(1)) ;
+        {
+            StringBuilder sb = new StringBuilder();
+            HashSet<String> added = new HashSet<>();
+            for (Edge e : model.getEdges()) {
+                if (e.getType().equals(EdgeType.INTERFACE) && !added.contains(e.getName())) {
+                    sb.append("//Interficie ").append(e.getName()).append(sep).append(sep);
+                    added.add(e.getName());
+                }
+            }
+
+            chooser.setFileFilter(new FileNameExtensionFilter("Text file (.txt)", "txt"));
+            if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
+                try (FileWriter fw = new FileWriter(chooser.getSelectedFile().getAbsolutePath() + ".txt")) {
+                    fw.write(sb.toString());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            chooser.setFileFilter(FILTER);
+        }
+    }
 }

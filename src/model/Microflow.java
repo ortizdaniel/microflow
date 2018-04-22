@@ -1,3 +1,5 @@
+package model;
+
 import controller.Controller;
 import view.View;
 
@@ -6,7 +8,6 @@ import java.awt.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -15,23 +16,12 @@ public class Microflow {
 
     /*
         TODO
-
         resize iconos
         arreglar input
-
         no tiene porque haber condicion, cambiar tambien al exportar no solo en el input
-
-
-        DEFINIR COLORES!!!! (para los botones tmb)
-
-        Opcionales:
-
-        "Hold" nombres de estados cambiados
-        Scroll en vista
-
      */
 
-    private static final String VERSION = "1.0.1";
+    public static final String VERSION = "1.1.0";
     private static final String LOGO_PATH = "/img/logo.png";
 
     public static void main(String[] args) {
@@ -60,7 +50,7 @@ public class Microflow {
 
     private static void checkUpdates() {
         try {
-            URL url = new URL("https://raw.githubusercontent.com/ortizdaniel/bubblewizard/master/VERSION");
+            URL url = new URL("https://raw.githubusercontent.com/ortizdaniel/microflow/master/VERSION");
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
             String line = reader.readLine();
             if (line != null && !line.equals(VERSION)) {
@@ -68,7 +58,7 @@ public class Microflow {
                         "New update available. Would you like to be taken to the download page?", "Update",
                         JOptionPane.YES_NO_OPTION);
                 if (res == JOptionPane.YES_OPTION) {
-                    Desktop.getDesktop().browse(new URI("https://github.com/ortizdaniel/bubblewizard/releases"));
+                    Desktop.getDesktop().browse(new URI("https://github.com/ortizdaniel/microflow/releases"));
                 }
             }
             reader.close();
