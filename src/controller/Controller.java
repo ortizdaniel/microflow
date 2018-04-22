@@ -454,8 +454,9 @@ public class Controller extends MouseAdapter implements ActionListener {
             }
             Component c = e.getComponent(); //DrawPanel instance
             if (!c.contains(e.getPoint())) {
-                //TODO scrollear
-                System.out.println("fuera");
+                ((DrawPanel) c).addSize(30, 30);
+                view.addSize(30, 30);
+                c.revalidate();
             }
         } else if (obj instanceof EdgeType) {
             Element element = model.getElementAt(e.getPoint());

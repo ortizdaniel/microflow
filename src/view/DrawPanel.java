@@ -79,4 +79,9 @@ public class DrawPanel extends JPanel {
     public void setLineStyle(int type) {
         this.type = type;
     }
+
+    public void addSize(int width, int height) {
+        bounds.width += width;
+        bounds.height += height;
+    }
 }

@@ -35,6 +35,8 @@ public class View extends JFrame {
         JScrollPane scrollPane = new JScrollPane(drawPanel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.getHorizontalScrollBar().setUnitIncrement(16);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         content.add(scrollPane, BorderLayout.CENTER);
 
         jmbMenuBar = new MenuBar(this, jpToolBar);
@@ -124,5 +126,10 @@ public class View extends JFrame {
             dimension.setSize(Integer.parseInt(width.getText()), Integer.parseInt(height.getText()));
             drawPanel.revalidate();
         }
+    }
+
+    public void addSize(int width, int height) {
+        int w = dimension.width, h = dimension.height;
+        dimension.setSize(w + width, h + height);
     }
 }

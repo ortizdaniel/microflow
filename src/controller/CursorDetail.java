@@ -25,7 +25,7 @@ public enum CursorDetail {
     ADD_OPERATION(createCursor(ToolBar.OPERATION_ICON_C), EdgeType.OPERATION, null),
     ADD_INTERFACE(createCursor(ToolBar.INTERFACE_ICON_C), EdgeType.INTERFACE, null),
     //ADD_ACTION(createCursor(ToolBar.ACTION_CURSOR), EdgeType.ACTION, null), //deprecado
-    ADD_ACTION(createCursor(ToolBar.ACTION_CURSOR_C), Action.class, "action 1;\naction 2;"),
+    ADD_ACTION(createCursor(ToolBar.ACTION_CURSOR_C), Action.class, "Action"),
 
     NEW_FILE(Cursor.getDefaultCursor(), null, null),
     OPEN_FILE(Cursor.getDefaultCursor(), null, null),
