@@ -16,6 +16,32 @@ public class View extends JFrame {
     private final ToolBar jpToolBar;
     private final MenuBar jmbMenuBar;
     private Dimension dimension = new Dimension(MIN_WIDTH, MIN_HEIGHT);
+    private final static String n = System.lineSeparator();
+    private final static String TIMER_DEFAULT = "//Pre: Hi ha algun timer lliure." + n +
+            "//Post: Retorna un handle per usar les funcions TiGetTics i TiResetTics. " + n +
+            "//Retorna -1 si no hi ha cap timer disponible." + n +
+            "char TiGetTimer (void);" + n + n +
+
+            "//Pre: Handle ha estat retornat per TiGetTimer." + n +
+            "//Post: Retorna els milisegons transcorreguts des de la crida a TiResetTics del Handle." + n +
+            "unsigned int TiGetTics (unsigned char Handle);" + n + n +
+
+            "//Pre: Handle ha estat retornat per TiGetTimer." + n +
+            "//Post: Engega la temporització associada a 'Handle' i agafa la referencia temporal del sistema." +
+            n + "void TiResetTics (unsigned char Handle);" + n + n;
+    private final static String SIO_DEFAULT = "//Post: retorna el nombre de caràcters rebuts que no s'han recollit" + n +
+            "//Retorna -1 si no hi ha cap timer disponible." + n +
+            "int SiCharAvail(void);" + n + n +
+
+            "//Pre: SiCharAvail() és major que zero" + n +
+            "//Post: Treu i retorna el primer caràcter de la cua de recepció." + n +
+            "char SiGetChar(void);" + n + n +
+
+            "//Post: espera que el caràcter anterior s'hagi enviat i envia aquest." +
+            n + "void SiSendChar(char c);" + n + n;
+    private final static String ADC_DEFAULT = "//Post: Retorna la mostra convertida en 10 bits" + n +
+            "int AdGetMostra(void);" + n + n;
+    private static final String FUNC_DEFAULT = "//Pre: " + n + "//Post: " + n + "void func(void);" + n + n;
 
     public View() {
         setTitle(TITLE);
@@ -126,6 +152,49 @@ public class View extends JFrame {
             dimension.setSize(Integer.parseInt(width.getText()), Integer.parseInt(height.getText()));
             drawPanel.revalidate();
         }
+    }
+
+    public String editFunctionDialog(String initial) {
+        JPanel panel = new JPanel() {
+            @Override
+            public Dimension getPreferredSize() {
+                return new Dimension(650, 600);
+            }
+        };
+        JTextArea text = new JTextArea(initial);
+        text.setTabSize(2);
+        BorderLayout bl = new BorderLayout();
+        bl.setVgap(10);
+        panel.setLayout(bl);
+        JScrollPane scroll = new JScrollPane(text);
+        panel.add(new JLabel("Edit the functions for the interface here:"), BorderLayout.NORTH);
+        panel.add(scroll, BorderLayout.CENTER);
+
+        JPanel south = new JPanel(new GridLayout(2, 1));
+        JPanel southSouth = new JPanel(new GridLayout(1, 4));
+        JButton defaultTimer = new JButton("Timer"), defaultSIO = new JButton("SIO"),
+                defaultADC = new JButton("ADC"), addPrePost = new JButton("Pre/Post");
+
+        south.add(new JLabel("Add default functions:"));
+        southSouth.add(addPrePost);
+        southSouth.add(defaultTimer);
+        southSouth.add(defaultSIO);
+        southSouth.add(defaultADC);
+        south.add(southSouth);
+        panel.add(south, BorderLayout.SOUTH);
+
+
+        defaultTimer.addActionListener(e -> text.append(TIMER_DEFAULT));
+        defaultSIO.addActionListener(e -> text.append(SIO_DEFAULT));
+        defaultADC.addActionListener(e -> text.append(ADC_DEFAULT));
+        addPrePost.addActionListener(e -> text.append(FUNC_DEFAULT));
+        int res = JOptionPane.showConfirmDialog(
+                this, panel, "Show/edit functions", JOptionPane.OK_CANCEL_OPTION
+        );
+        if (res == JOptionPane.OK_OPTION) {
+            return text.getText();
+        }
+        return null;
     }
 
     public void addSize(int width, int height) {

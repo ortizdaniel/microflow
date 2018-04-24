@@ -13,6 +13,7 @@ public enum CursorDetail {
     SELECTING(Cursor.getDefaultCursor(), null, null), //normal cursor
     DELETING(createCursor(ToolBar.DELETE_ICON), null, null),
     DELETE_POPUP(Cursor.getDefaultCursor(), null, null),
+    SHOW_EDIT_FUNCTION(Cursor.getDefaultCursor(), null, null),
     EDIT(Cursor.getDefaultCursor(), null, null),
 
     ADD_TAD(createCursor(ToolBar.TAD_ICON_C), NodeType.TAD, "Name"),

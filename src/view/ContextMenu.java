@@ -10,14 +10,17 @@ import java.awt.event.ActionListener;
 public class ContextMenu extends JPopupMenu {
 
     private JMenuItem jmiEdit;
+    private JMenuItem jmiEditFunctions;
     private JMenuItem jmiDelete;
 
     public ContextMenu() {
 
         jmiEdit = new JMenuItem("Edit");
         jmiDelete = new JMenuItem("Delete");
+        jmiEditFunctions = new JMenuItem("Show/edit functions");
 
         this.add(jmiEdit);
+        this.add(jmiEditFunctions);
         this.add(jmiDelete);
 
         this.setVisible(false);
@@ -25,6 +28,10 @@ public class ContextMenu extends JPopupMenu {
 
     public void showEditButton(boolean b) {
         jmiEdit.setVisible(b);
+    }
+
+    public void showEditFunctionButton(boolean b) {
+        jmiEditFunctions.setVisible(b);
     }
 
     public void hideContextMenu() {
@@ -37,6 +44,8 @@ public class ContextMenu extends JPopupMenu {
         jmiEdit.setActionCommand(CursorDetail.EDIT.name());
         jmiDelete.addActionListener(l);
         jmiDelete.setActionCommand(CursorDetail.DELETE_POPUP.name());
+        jmiEditFunctions.setActionCommand(CursorDetail.SHOW_EDIT_FUNCTION.name());
+        jmiEditFunctions.addActionListener(l);
     }
 
     public void setEditString(String s) {

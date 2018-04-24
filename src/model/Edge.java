@@ -11,6 +11,7 @@ public class Edge extends Element {
     private Node n2;
     private final Node originalN1;
     private final Node originalN2;
+    private String functions;
 
     private Action action;
 
@@ -41,6 +42,7 @@ public class Edge extends Element {
         setBounds();
         nameBounds = new Rectangle();
         setName(name);
+        functions = "";
     }
 
     private void setDefaultPivot(Point p1, Point p2) {
@@ -217,6 +219,11 @@ public class Edge extends Element {
                 nameBounds = new Rectangle(namePoint.x - 20, namePoint.y - 20, 40, 40);
             }
         }
+        for (Edge e : Graph.getInstance().getEdges()) {
+            if (e != this && e.getType().equals(EdgeType.INTERFACE) && e.getName().equals(name)) {
+                functions = e.functions;
+            }
+        }
         this.name = name;
     }
 
@@ -328,5 +335,18 @@ public class Edge extends Element {
             }
         }
         return nearest;
+    }
+
+    public String getFunctions() {
+        return functions;
+    }
+
+    public void setFunctions(String functions) {
+        this.functions = functions;
+        for (Edge e : Graph.getInstance().getEdges()) {
+            if (e != this && e.getType().equals(EdgeType.INTERFACE) && e.getName().equals(name)) {
+                e.functions = functions;
+            }
+        }
     }
 }

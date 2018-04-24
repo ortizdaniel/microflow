@@ -122,6 +122,9 @@ public class Controller extends MouseAdapter implements ActionListener {
             case EDIT:
                 changeClickedName();
                 break;
+            case SHOW_EDIT_FUNCTION:
+                showEditFunction();
+                break;
         }
 
         if (state.getCursor().equals(Cursor.getDefaultCursor())) {
@@ -225,6 +228,7 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     private void contextMenuHideEditButton() {
         contextMenu.showEditButton(true);
+        contextMenu.showEditFunctionButton(false);
         if (clicked instanceof Node) {
             NodeType n = ((Node) clicked).getType();
             if (n.equals(NodeType.STATE)) {
@@ -239,6 +243,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             EdgeType e = ((Edge) clicked).getType();
             if (e.equals(EdgeType.INTERFACE)) {
                 contextMenu.setEditString("interface number");
+                contextMenu.showEditFunctionButton(true);
             } else if (e.equals(EdgeType.TRANSITION)) {
                 contextMenu.setEditString("condition");
             } else if (e.equals(EdgeType.OPERATION)) {
@@ -255,6 +260,15 @@ public class Controller extends MouseAdapter implements ActionListener {
         if (clicked != null) {
             finalDelete();
             state = CursorDetail.SELECTING;
+        }
+    }
+
+    private void showEditFunction() {
+        Edge e = (Edge) clicked;
+        String content = view.editFunctionDialog(e.getFunctions());
+        if (content != null) {
+            //e.holdName(true);
+            e.setFunctions(content);
         }
     }
 
@@ -736,7 +750,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             HashSet<String> added = new HashSet<>();
             for (Edge e : model.getEdges()) {
                 if (e.getType().equals(EdgeType.INTERFACE) && !added.contains(e.getName())) {
-                    sb.append("//Interficie ").append(e.getName()).append(sep).append(sep);
+                    sb.append("//Interficie ").append(e.getName()).append(sep).append(sep).append(e.getFunctions());
                     added.add(e.getName());
                 }
             }
