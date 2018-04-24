@@ -78,6 +78,10 @@ public class Graph {
         }
 
         nodes.remove(n);
+        decrementStatesCount(n);
+    }
+
+    public void decrementStatesCount(Node n) {
         if (n.getType().equals(NodeType.STATE)) {
             int count = 0;
             for (Node k : nodes) {
@@ -102,7 +106,7 @@ public class Graph {
         }
     }
 
-    private void decrementEdgesCount(Edge e) {
+    public void decrementEdgesCount(Edge e) {
         if (e.getType().equals(EdgeType.INTERFACE)) {
             int count = 0;
             for (Edge k : edges) {
