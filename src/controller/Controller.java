@@ -11,10 +11,7 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.awt.print.PageFormat;
 import java.awt.print.Printable;
@@ -46,6 +43,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     private boolean draggingName;
     private boolean draggingActionPivot;
     private Point mousePoint, delta;
+    private long lastClick;
 
     private static String fileName;
 
@@ -77,6 +75,14 @@ public class Controller extends MouseAdapter implements ActionListener {
         mousePoint = new Point();
         delta = new Point();
 
+        //https://stackoverflow.com/questions/5344823/how-can-i-listen-for-key-presses-within-java-swing-across-all-components
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(e -> {
+            if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                state = CursorDetail.SELECTING;
+                view.changeCursor(Cursor.getDefaultCursor());
+            }
+            return false;
+        });
         fileName = "Diagram 1";
     }
 
@@ -278,7 +284,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                     return;
                 } else if (edge.nameBoundsContains(e.getPoint())) {
                     draggingName = true;
-                    return;
+                    //return;
                 }
             } else if (clicked instanceof Action && ((Action) clicked).pivotContains(e.getPoint())) {
                 draggingActionPivot = true;
@@ -287,6 +293,10 @@ public class Controller extends MouseAdapter implements ActionListener {
 
             if (clicked.contains(e.getPoint())) {
                 //no hacer nada, puede que ahora se vaya a mover
+                if (System.currentTimeMillis() - lastClick < 200) {
+                    changeClickedName();
+                }
+                lastClick = System.currentTimeMillis();
             } else {
                 //se ha clickado fuera de un elemento, posiblemente
                 if (clicked instanceof Node || clicked instanceof Action || clicked instanceof Edge && !((Edge) clicked).pivotContains(e.getPoint())
@@ -300,6 +310,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 }
             }
         }
+        lastClick = System.currentTimeMillis();
     }
 
     private void delete(MouseEvent e) {
