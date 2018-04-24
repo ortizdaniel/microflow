@@ -38,27 +38,29 @@ public class Action extends Element {
         g.fillOval(start.x - 4, start.y - 4, 8, 8);
         if (selected) g.fill(pivot);
 
+        Point p = endGstart ? start : end;
+        Point p2 = endGstart ? end : start;
         g.setFont(FONT_MED);
         String[] lines = name.replace("\t", "    ").split("\n");
         if (lines.length > 1) {
             int linesAbove = (int) Math.ceil(lines.length / 2.0);
             FontMetrics metrics = g.getFontMetrics();
             int height = metrics.getAscent();
-            Point p = endGstart ? start : end;
-            Point p2 = endGstart ? end : start;
 
             int y1 = p.y - (height * linesAbove) + 11;
             int y2 = p.y + (height * (lines.length - linesAbove)) + 11;
 
             bounds.setBounds(p.x, y1, p2.x - p.x, y2 - y1); //porquería
+            g.draw(bounds);
             for (int i = 0; i < lines.length; i++) {
                 g.setColor(Color.BLACK);
                 String line = lines[i];
                 g.drawString(line, p.x + 20, p.y - (height * (linesAbove - i - 1)) + 11);
             }
         } else {
+            bounds.setBounds(p.x, p.y, p2.x - p.x, g.getFontMetrics().getAscent());
             if (endGstart)
-                g.drawString(name, start.x + 20, start.y + 13);
+                g.drawString(name, p.x + 20, start.y + 13);
             else
                 g.drawString(name, end.x + 10, start.y + 13);
         }
