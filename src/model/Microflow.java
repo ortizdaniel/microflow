@@ -14,7 +14,7 @@ import java.net.URL;
 
 public class Microflow {
 
-    public static final String VERSION = "1.2.0";
+    public static final String VERSION = "1.2.1";
     private static final String LOGO_PATH = "/img/logo.png";
 
     public static void main(String[] args) {

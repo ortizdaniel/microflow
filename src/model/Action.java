@@ -51,7 +51,6 @@ public class Action extends Element {
             int y2 = p.y + (height * (lines.length - linesAbove)) + 11;
 
             bounds.setBounds(p.x, y1, p2.x - p.x, y2 - y1); //porquería
-            g.draw(bounds);
             for (int i = 0; i < lines.length; i++) {
                 g.setColor(Color.BLACK);
                 String line = lines[i];

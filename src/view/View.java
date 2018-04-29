@@ -17,31 +17,35 @@ public class View extends JFrame {
     private final MenuBar jmbMenuBar;
     private Dimension dimension = new Dimension(MIN_WIDTH, MIN_HEIGHT);
     private final static String n = System.lineSeparator();
-    private final static String TIMER_DEFAULT = "//Pre: Hi ha algun timer lliure." + n +
+    private final static String TIMER_DEFAULT = "char TiGetTimer (void);" + n +
+            "//Pre: Hi ha algun timer lliure." + n +
             "//Post: Retorna un handle per usar les funcions TiGetTics i TiResetTics. " + n +
-            "//Retorna -1 si no hi ha cap timer disponible." + n +
-            "char TiGetTimer (void);" + n + n +
+            "//Retorna -1 si no hi ha cap timer disponible." + n + n +
 
+            "unsigned int TiGetTics (unsigned char Handle);" + n +
             "//Pre: Handle ha estat retornat per TiGetTimer." + n +
-            "//Post: Retorna els milisegons transcorreguts des de la crida a TiResetTics del Handle." + n +
-            "unsigned int TiGetTics (unsigned char Handle);" + n + n +
+            "//Post: Retorna els milisegons transcorreguts des de la crida a TiResetTics del Handle." + n + n +
 
+            "void TiResetTics (unsigned char Handle);" + n +
             "//Pre: Handle ha estat retornat per TiGetTimer." + n +
-            "//Post: Engega la temporització associada a 'Handle' i agafa la referencia temporal del sistema." +
-            n + "void TiResetTics (unsigned char Handle);" + n + n;
-    private final static String SIO_DEFAULT = "//Post: retorna el nombre de caràcters rebuts que no s'han recollit" + n +
-            "//Retorna -1 si no hi ha cap timer disponible." + n +
-            "int SiCharAvail(void);" + n + n +
+            "//Post: Engega la temporització associada a 'Handle' i agafa la referencia temporal del sistema." + n + n;
 
-            "//Pre: SiCharAvail() és major que zero" + n +
-            "//Post: Treu i retorna el primer caràcter de la cua de recepció." + n +
-            "char SiGetChar(void);" + n + n +
+    private final static String SIO_DEFAULT =
+            "int SiCharAvail(void);" + n +
+                    "//Post: retorna el nombre de caràcters rebuts que no s'han recollit" + n +
+                    "//Retorna -1 si no hi ha cap timer disponible." + n + n +
 
-            "//Post: espera que el caràcter anterior s'hagi enviat i envia aquest." +
-            n + "void SiSendChar(char c);" + n + n;
-    private final static String ADC_DEFAULT = "//Post: Retorna la mostra convertida en 10 bits" + n +
-            "int AdGetMostra(void);" + n + n;
-    private static final String FUNC_DEFAULT = "//Pre: " + n + "//Post: " + n + "void func(void);" + n + n;
+                    "char SiGetChar(void);" + n +
+                    "//Pre: SiCharAvail() és major que zero" + n +
+                    "//Post: Treu i retorna el primer caràcter de la cua de recepció." + n + n +
+
+                    "void SiSendChar(char c);" + n +
+                    "//Post: espera que el caràcter anterior s'hagi enviat i envia aquest." + n + n;
+
+    private final static String ADC_DEFAULT =
+            "int AdGetMostra(void);" + n +
+                    "//Post: Retorna la mostra convertida en 10 bits" + n + n;
+    private static final String FUNC_DEFAULT = "void func(void);" + n + "//Pre: " + n + "//Post: " + n + n;
 
     public View() {
         setTitle(TITLE);

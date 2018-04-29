@@ -84,10 +84,9 @@ public class Edge extends Element {
 
     public void update() {
         setBounds();
-        setNamePoint(bezierQuadratic(0.5, n1.getCenter(), pivotPoint, n2.getCenter()));
-        if (action != null) {
-            action.update();
-        }
+        if (!type.equals(EdgeType.TRANSITION))
+            setNamePoint(bezierQuadratic(0.5, n1.getCenter(), pivotPoint, n2.getCenter()));
+        if (action != null) action.update();
     }
 
     @Override
