@@ -639,10 +639,14 @@ public class Controller extends MouseAdapter implements ActionListener {
                         sb.append(name).append("(void) {").append(sep).append(sep).append("}").append(sep);
 
                         //Functions
+                        ArrayList<String> alreadyExported = new ArrayList<>();
                         for (Edge e: model.getEdges()) {
-                            if (e.getN1().equals(n)) {
-                                if (e.getN2().getType().equals(NodeType.TAD)) {
+                            if (e.getN2().equals(n)) {
+                                if (e.getN1().getType().equals(NodeType.TAD)) {
                                     if (e.getFunctions() != null) {
+                                        //Check if already exported
+                                        if (alreadyExported.contains(e.getName())) continue;
+
                                         //Get all lines
                                         ArrayList<String> a = new ArrayList<>();
                                         String[] f = e.getFunctions().split(";");
@@ -657,17 +661,14 @@ public class Controller extends MouseAdapter implements ActionListener {
                                         for (String line : a) {
                                             if (line.trim().equals("")) continue;
                                             if (line.startsWith("//")) continue;
-                                            if (line.contains("TiGetTimer") || line.contains("TiGetTics")
-                                                    || line.contains("TiResetTics") || line.contains("SiCharAvail")
-                                                    || line.contains("SiGetChar") || line.contains("SiSendChar")
-                                                    || line.contains("AdGetMostra")) {
-                                                continue;
-                                            }
                                             sb.append(sep).append(line).append(" {").append(sep).append(sep);
                                             sb.append("}").append(sep);
                                         }
 
+                                        alreadyExported.add(e.getName());
+
                                     }
+                                    break;
                                 }
                             }
                         }
@@ -695,10 +696,14 @@ public class Controller extends MouseAdapter implements ActionListener {
                         sb.append(name).append("(void);").append(sep);
 
                         //Functions
+                        alreadyExported.clear();
                         for (Edge e: model.getEdges()) {
-                            if (e.getN1().equals(n)) {
-                                if (e.getN2().getType().equals(NodeType.TAD)) {
+                            if (e.getN2().equals(n)) {
+                                if (e.getN1().getType().equals(NodeType.TAD)) {
                                     if (e.getFunctions() != null) {
+                                        //Check if already exported
+                                        if (alreadyExported.contains(e.getName())) continue;
+
                                         ArrayList<String> a = new ArrayList<>();
                                         String[] f = e.getFunctions().split(";");
                                         for (String x : f) {
@@ -708,29 +713,16 @@ public class Controller extends MouseAdapter implements ActionListener {
                                             }
                                         }
 
-                                        boolean ignoreConditions = false;
                                         for (String line : a) {
                                             if (line.trim().equals("")) continue;
-                                            if (line.contains("TiGetTimer") || line.contains("TiGetTics")
-                                                    || line.contains("TiResetTics") || line.contains("SiCharAvail")
-                                                    || line.contains("SiGetChar") || line.contains("SiSendChar")
-                                                    || line.contains("AdGetMostra")) {
-                                                ignoreConditions = true;
-                                                continue;
-                                            }
-                                            if (ignoreConditions) {
-                                                if (line.startsWith("//")) {
-                                                    continue;
-                                                } else {
-                                                    ignoreConditions = false;
-                                                }
-                                            }
                                             if (line.startsWith("//")) {
                                                 sb.append(line).append(sep);
                                             } else {
                                                 sb.append(sep).append(line).append(";").append(sep);
                                             }
                                         }
+
+                                        alreadyExported.add(e.getName());
                                     }
                                 }
                             }
