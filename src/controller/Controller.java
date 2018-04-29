@@ -26,6 +26,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -636,6 +638,40 @@ public class Controller extends MouseAdapter implements ActionListener {
                         sb.append(sep).append(sep).append(FUNC_H).append(sep).append(sep).append("void init");
                         sb.append(name).append("(void) {").append(sep).append(sep).append("}").append(sep);
 
+                        //Functions
+                        for (Edge e: model.getEdges()) {
+                            if (e.getN1().equals(n)) {
+                                if (e.getN2().getType().equals(NodeType.TAD)) {
+                                    if (e.getFunctions() != null) {
+                                        //Get all lines
+                                        ArrayList<String> a = new ArrayList<>();
+                                        String[] f = e.getFunctions().split(";");
+                                        for (String x : f) {
+                                            String[] aux = x.split("\n");
+                                            if (aux.length > 0) {
+                                                Collections.addAll(a, aux);
+                                            }
+                                        }
+
+                                        //Write only function lines
+                                        for (String line : a) {
+                                            if (line.trim().equals("")) continue;
+                                            if (line.startsWith("//")) continue;
+                                            if (line.contains("TiGetTimer") || line.contains("TiGetTics")
+                                                    || line.contains("TiResetTics") || line.contains("SiCharAvail")
+                                                    || line.contains("SiGetChar") || line.contains("SiSendChar")
+                                                    || line.contains("AdGetMostra")) {
+                                                continue;
+                                            }
+                                            sb.append(sep).append(line).append(" {").append(sep).append(sep);
+                                            sb.append("}").append(sep);
+                                        }
+
+                                    }
+                                }
+                            }
+                        }
+
                         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
                             writer.write(header);
                             writer.write(sb.toString());
@@ -657,6 +693,48 @@ public class Controller extends MouseAdapter implements ActionListener {
                         }
                         sb.append(sep).append(sep).append(FUNC_H).append(sep).append(sep).append("void init");
                         sb.append(name).append("(void);").append(sep);
+
+                        //Functions
+                        for (Edge e: model.getEdges()) {
+                            if (e.getN1().equals(n)) {
+                                if (e.getN2().getType().equals(NodeType.TAD)) {
+                                    if (e.getFunctions() != null) {
+                                        ArrayList<String> a = new ArrayList<>();
+                                        String[] f = e.getFunctions().split(";");
+                                        for (String x : f) {
+                                            String[] aux = x.split("\n");
+                                            if (aux.length > 0) {
+                                                Collections.addAll(a, aux);
+                                            }
+                                        }
+
+                                        boolean ignoreConditions = false;
+                                        for (String line : a) {
+                                            if (line.trim().equals("")) continue;
+                                            if (line.contains("TiGetTimer") || line.contains("TiGetTics")
+                                                    || line.contains("TiResetTics") || line.contains("SiCharAvail")
+                                                    || line.contains("SiGetChar") || line.contains("SiSendChar")
+                                                    || line.contains("AdGetMostra")) {
+                                                ignoreConditions = true;
+                                                continue;
+                                            }
+                                            if (ignoreConditions) {
+                                                if (line.startsWith("//")) {
+                                                    continue;
+                                                } else {
+                                                    ignoreConditions = false;
+                                                }
+                                            }
+                                            if (line.startsWith("//")) {
+                                                sb.append(line).append(sep);
+                                            } else {
+                                                sb.append(sep).append(line).append(";").append(sep);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
                         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
                             writer.write(header);
