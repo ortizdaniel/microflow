@@ -376,7 +376,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                     model.addPhase();
                     clicked.setName(name);
                     clicked.holdName(true);
-                    model.decrementStatesCount(n);
+                    //model.decrementStatesCount(n);
                 }
             //}
         } else if (clicked instanceof Edge) {
@@ -389,7 +389,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                         model.addPhase();
                         clicked.setName(name);
                         clicked.holdName(true);
-                        model.decrementEdgesCount(e);
+                        //model.decrementEdgesCount(e);
                     }
                     break;
                 case TRANSITION:

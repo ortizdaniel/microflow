@@ -241,7 +241,6 @@ public class Graph {
 
     public void addPhase() {
         phases.add(toJson());
-        System.out.println("añadido" + phases.size());
     }
 
     public void undo() {
