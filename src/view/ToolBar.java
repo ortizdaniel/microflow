@@ -23,6 +23,7 @@ public class ToolBar extends JPanel {
     /* Main Options */
     private JButton jbCursor;
     private JButton jbDelete;
+    private JButton jbUndo;
 
     /* TADs diagram */
     private JButton jbTAD;
@@ -116,9 +117,11 @@ public class ToolBar extends JPanel {
 
         jbCursor = makeCustomButton("Select cursor", CURSOR_ICON);
         jbDelete = makeCustomButton("Delete element", DELETE_ICON);
+        jbUndo = makeCustomButton("Undo", DELETE_ICON);
 
         jpButtons.add(jbCursor);
         jpButtons.add(jbDelete);
+        jpButtons.add(jbUndo);
 
         jtbIcons.add(jpButtons);
     }
@@ -208,6 +211,9 @@ public class ToolBar extends JPanel {
         jbCursor.setActionCommand(CursorDetail.SELECTING.name());
         jbDelete.addActionListener(c);
         jbDelete.setActionCommand(CursorDetail.DELETING.name());
+        jbUndo.addActionListener(c);
+        jbUndo.setActionCommand(CursorDetail.UNDO.name());
+
 
         jbTAD.addActionListener(c);
         jbTAD.setActionCommand(CursorDetail.ADD_TAD.name());

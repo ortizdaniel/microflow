@@ -4,10 +4,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.awt.*;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,6 +21,8 @@ public class Graph {
     private LinkedList<Node> nodes;
     private LinkedList<Edge> edges;
     private LinkedList<Action> actions;
+    private transient LinkedList<String> phases;
+    private transient int index;
 
     public static Graph getInstance() {
         if (instance == null) instance = new Graph();
@@ -30,6 +33,9 @@ public class Graph {
         nodes = new LinkedList<>();
         edges = new LinkedList<>();
         actions = new LinkedList<>();
+        phases = new LinkedList<>();
+        index = -1;
+        addPhase();
     }
 
     public Element getElementAt(Point p) {
@@ -147,37 +153,35 @@ public class Graph {
         );
     }
 
-    public boolean loadFromFile(String path) {
+    public boolean loadFromJson(String json) {
         try {
-            Graph g = gson.fromJson(new FileReader(path), Graph.class);
+            Graph g = fromJson(json);
             edges = g.edges;
             nodes = g.nodes;
             actions = g.actions;
-            for (Edge e : edges) {
-                for (Node n : nodes) {
-                    if (e.getN1().equals(n)) e.setN1(n);
-                    if (e.getN2().equals(n)) e.setN2(n);
-                }
-                if (e.getAction() != null) {
-                    int size = actions.size();
-                    for (int i = 0; i < size; i++) {
-                        Action a = actions.get(i);
-                        if (a.equals(e.getAction())) {
-                            actions.set(i, e.getAction());
-                            e.getAction().setParent(e);
-                        }
-                    }
-                }
-            }
             return true;
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean loadFromFile(String path) {
+        try {
+            BufferedReader reader = Files.newBufferedReader(Paths.get(path));
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            return loadFromJson(sb.toString());
+        } catch (IOException e) {
             return false;
         }
     }
 
     public boolean saveToFile(String path) {
         try (FileWriter fw = new FileWriter(path)) {
-            fw.write(gson.toJson(this));
+            fw.write(toJson());
             return true;
         } catch (IOException e) {
             return false;
@@ -210,4 +214,38 @@ public class Graph {
 
     }
 
+    private String toJson() {
+        return gson.toJson(this);
+    }
+
+    private Graph fromJson(String json) {
+        Graph g = gson.fromJson(json, Graph.class);
+        for (Edge e : g.edges) {
+            for (Node n : g.nodes) {
+                if (e.getN1().equals(n)) e.setN1(n);
+                if (e.getN2().equals(n)) e.setN2(n);
+            }
+            if (e.getAction() != null) {
+                int size = g.actions.size();
+                for (int i = 0; i < size; i++) {
+                    Action a = g.actions.get(i);
+                    if (a.equals(e.getAction())) {
+                        g.actions.set(i, e.getAction());
+                        e.getAction().setParent(e);
+                    }
+                }
+            }
+        }
+        return g;
+    }
+
+    public void addPhase() {
+        phases.add(toJson());
+        System.out.println("añadido" + phases.size());
+    }
+
+    public void undo() {
+        loadFromJson(phases.getLast());
+        if (phases.size() > 1) phases.removeLast();
+    }
 }

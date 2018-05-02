@@ -247,12 +247,12 @@ public class Edge extends Element {
             if (type.equals(EdgeType.OPERATION)) {
                 Point cur = bezierLinear(t, n1.getCenter(), pivotPoint);
                 Point cur2 = bezierLinear(t, pivotPoint, n2.getCenter());
-                if (Math.hypot(p.x - cur.x, p.y - cur.y) <= 15 || Math.hypot(p.x - cur2.x, p.y - cur2.y) <= 15) {
+                if (Math.hypot(p.x - cur.x, p.y - cur.y) <= 10 || Math.hypot(p.x - cur2.x, p.y - cur2.y) <= 10) {
                     return true;
                 }
             } else {
                 Point cur = bezierQuadratic(t, n1.getCenter(), pivotPoint, n2.getCenter());
-                if (Math.hypot(p.x - cur.x, p.y - cur.y) <= 15) {
+                if (Math.hypot(p.x - cur.x, p.y - cur.y) <= 10) {
                     return true;
                 }
             }

@@ -126,6 +126,8 @@ public class Controller extends MouseAdapter implements ActionListener {
                 break;
             case SHOW_EDIT_FUNCTION:
                 showEditFunction();
+            case UNDO:
+                model.undo();
                 break;
         }
 
@@ -135,6 +137,7 @@ public class Controller extends MouseAdapter implements ActionListener {
         contextMenu.hideContextMenu();
         clearAllSelected();
         clicked = null;
+
         view.repaint();
     }
 
@@ -150,8 +153,9 @@ public class Controller extends MouseAdapter implements ActionListener {
                 delete(e);
                 break;
             default:
-                if (e.getButton() == MouseEvent.BUTTON1)
+                if (e.getButton() == MouseEvent.BUTTON1) {
                     possibleAdd(e);
+                }
                 break;
         }
 
@@ -165,7 +169,6 @@ public class Controller extends MouseAdapter implements ActionListener {
                 contextMenu.show(view.getDrawPanel(), e.getX(), e.getY());
             }
         }
-
         e.getComponent().repaint();
     }
 
@@ -278,6 +281,7 @@ public class Controller extends MouseAdapter implements ActionListener {
         int result = JOptionPane.showConfirmDialog(view, "Are you sure you want to create a new file?",
                 "Create new diagram", JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.OK_OPTION) {
+            model.addPhase();
             model.deleteAll();
             fileName = "Diagram 1";
             view.setTitle(fileName);
@@ -289,6 +293,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             clicked = model.getElementAt(e.getPoint());
             if (clicked != null) {
                 clicked.setSelected(true);
+                model.addPhase();
                 selecting(e);
             }
         } else {
@@ -297,13 +302,16 @@ public class Controller extends MouseAdapter implements ActionListener {
                 Edge edge = (Edge) clicked;
                 if (edge.pivotContains(e.getPoint())) {
                     draggingPivot = true;
+                    model.addPhase();
                     return;
                 } else if (edge.nameBoundsContains(e.getPoint())) {
                     draggingName = true;
+                    model.addPhase();
                     //return;
                 }
             } else if (clicked instanceof Action && ((Action) clicked).pivotContains(e.getPoint())) {
                 draggingActionPivot = true;
+                model.addPhase();
                 return;
             }
 
@@ -350,6 +358,7 @@ public class Controller extends MouseAdapter implements ActionListener {
         } else if (clicked instanceof Action) {
             model.deleteAction((Action) clicked);
         }
+        model.addPhase();
         clicked = null;
     }
 
@@ -364,6 +373,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                     clicked.getName(), false);
                 contextMenu.showEditButton(true);
                 if (name != null) {
+                    model.addPhase();
                     clicked.setName(name);
                     clicked.holdName(true);
                     model.decrementStatesCount(n);
@@ -376,6 +386,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 case INTERFACE:
                     name = askForString("Enter " + e.getType().name().toLowerCase() + ":", clicked.getName(), false);
                     if (name != null) {
+                        model.addPhase();
                         clicked.setName(name);
                         clicked.holdName(true);
                         model.decrementEdgesCount(e);
@@ -384,6 +395,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 case TRANSITION:
                     name = askForString("Enter " + e.getType().name().toLowerCase() + ":", clicked.getName(), true);
                     if (name != null) {
+                        model.addPhase();
                         clicked.setName(name);
                         clicked.holdName(true);
                     }
@@ -393,12 +405,15 @@ public class Controller extends MouseAdapter implements ActionListener {
                             "Operation settings", 0, JOptionPane.QUESTION_MESSAGE, null, OPTIONS,
                             null);
                     if (res == 2) { //read
+                        model.addPhase();
                         e.setBidirectional(false);
                         e.setAsRead();
                     } else if (res == 1) { //write
+                        model.addPhase();
                         e.setBidirectional(false);
                         e.setAsWrite();
                     } else if (res == 0) {//read/write
+                        model.addPhase();
                         e.setBidirectional(true);
                     }
                     break;
@@ -474,6 +489,7 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     private void possibleAdd(MouseEvent e) {
         Object obj = state.getElementToAdd();
+        model.addPhase();
         if (obj instanceof NodeType) {
             NodeType nt = (NodeType) obj;
             if (nt.equals(NodeType.STATE)) {
