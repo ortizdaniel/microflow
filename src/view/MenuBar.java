@@ -37,6 +37,7 @@ public class MenuBar extends JMenuBar {
     /* Tools Items */
     private JMenuItem jmiCursor;
     private JMenuItem jmiDelete;
+    private JMenuItem jmiUndo;
     private JMenuItem jmiTAD;
     private JMenuItem jmiVar;
     private JMenuItem jmiPeri;
@@ -122,9 +123,13 @@ public class MenuBar extends JMenuBar {
         /* Basic Options */
         jmiCursor = new JMenuItem("Cursor");
         jmiDelete = new JMenuItem("Delete");
+        jmiUndo = new JMenuItem("Undo");
+        jmiUndo.setAccelerator(
+                KeyStroke.getKeyStroke(KeyEvent.VK_Z, (Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())));
 
         jmTools.add(jmiCursor);
         jmTools.add(jmiDelete);
+        jmTools.add(jmiUndo);
         jmTools.addSeparator();
 
         /* TAD Tools */
@@ -216,6 +221,8 @@ public class MenuBar extends JMenuBar {
         jmiCursor.setActionCommand(CursorDetail.SELECTING.name());
         jmiDelete.addActionListener(c);
         jmiDelete.setActionCommand(CursorDetail.DELETING.name());
+        jmiUndo.setActionCommand(CursorDetail.UNDO.name());
+        jmiUndo.addActionListener(c);
 
         jmiTAD.addActionListener(c);
         jmiTAD.setActionCommand(CursorDetail.ADD_TAD.name());

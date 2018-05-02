@@ -124,6 +124,40 @@ public class Graph {
         }
     }
 
+    public void changedStateName(Node n) {
+        if (n.getType().equals(NodeType.STATE)) {
+            int changedTo = Integer.valueOf(n.getName());
+            int count = 0;
+            for (int i = 0; i < nodes.size(); i++) {
+                Node k = nodes.get(i);
+                if (k.getType().equals(NodeType.STATE) && !k.nameHold()) {
+                    if (count == changedTo) {
+                        count++;
+                    } else {
+                        k.setName(String.valueOf(count++));
+                    }
+                }
+            }
+        }
+    }
+
+    public void changedInterfaceName(Edge e) {
+        if (e.getType().equals(EdgeType.INTERFACE)) {
+            int changedTo = Integer.valueOf(e.getName());
+            int count = 0;
+            for (int i = 0; i < edges.size(); i++) {
+                Edge k = edges.get(i);
+                if (k.getType().equals(EdgeType.INTERFACE) && !k.nameHold()) {
+                    if (count == changedTo) {
+                        count++;
+                    } else {
+                        k.setName(String.valueOf(count++));
+                    }
+                }
+            }
+        }
+    }
+
     public void deleteAll() {
         Edge.setInterfaceCount(0);
         Node.setStateCount(0);

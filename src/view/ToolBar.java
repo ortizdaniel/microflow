@@ -52,6 +52,8 @@ public class ToolBar extends JPanel {
     private static final String PRINT_FILE_ICON = "/img/toolbar/print_file.png";
     private static final String CURSOR_ICON = "/img/toolbar/cursor.png";
     public static final String DELETE_ICON = "/img/toolbar/delete.png";
+    public static final String UNDO_ICON = "/img/toolbar/undo.png";
+
     private static final String TAD_ICON = "/img/toolbar/TAD.png";
     private static final String VAR_ICON = "/img/toolbar/var.png";
     private static final String PERIPHERAL_ICON = "/img/toolbar/peripheral.png";
@@ -117,7 +119,7 @@ public class ToolBar extends JPanel {
 
         jbCursor = makeCustomButton("Select cursor", CURSOR_ICON);
         jbDelete = makeCustomButton("Delete element", DELETE_ICON);
-        jbUndo = makeCustomButton("Undo", DELETE_ICON);
+        jbUndo = makeCustomButton("Undo", UNDO_ICON);
 
         jpButtons.add(jbCursor);
         jpButtons.add(jbDelete);
