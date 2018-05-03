@@ -126,6 +126,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                 break;
             case SHOW_EDIT_FUNCTION:
                 showEditFunction();
+                break;
             case UNDO:
                 model.undo();
                 break;
@@ -275,6 +276,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             //e.holdName(true);
             e.setFunctions(content);
         }
+
     }
 
     private void newFile() {
