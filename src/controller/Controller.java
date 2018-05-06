@@ -50,10 +50,10 @@ public class Controller extends MouseAdapter implements ActionListener {
     private static String fileName;
 
     private static final String COMMENT_HEADER = "//---------------------------------------------------------";
-    private static final String TAD_H = "//TAD: ";
-    private static final String DATA_H = "//DATA: ";
-    private static final String AUTHOR_H = "//AUTHOR: ";
-    private static final String DESCR_H = "//DESCRIPTION:";
+    private static final String TAD_H = "// @File: ";
+    private static final String DATA_H = "// @Data: ";
+    private static final String AUTHOR_H = "// @Author: ";
+    private static final String DESCR_H = "// @Purpose:";
     private static final String INCLUD_H = "//------------------------ INCLUDES -----------------------";
     private static final String VAR_CONST_H = "//------------------------ VARIABLES ----------------------";
     private static final String FUNC_H = "//------------------------ FUNCTIONS ----------------------";
@@ -702,6 +702,8 @@ public class Controller extends MouseAdapter implements ActionListener {
                         //.h
                         filePath = folder.toString() + "/T" + n.getName() + ".h";
 
+                        sb.append("#ifndef _").append(name.toUpperCase()).append("_H_").append(sep);
+                        sb.append("#define _").append(name.toUpperCase()).append("_H_").append(sep).append(sep);
                         sb.append(INCLUD_H);
                         sb.append(sep);
 
@@ -745,6 +747,8 @@ public class Controller extends MouseAdapter implements ActionListener {
                                 }
                             }
                         }
+
+                        sb.append(sep).append("#endif");
 
                         try (BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath))) {
                             writer.write(header);
@@ -800,7 +804,16 @@ public class Controller extends MouseAdapter implements ActionListener {
                                 if (e.getAction() != null) {
                                     String[] actions = e.getAction().getName().split(";");
                                     for (String a : actions) {
-                                        sb.append(tabs).append(a.trim()).append(";").append(sep);
+                                        String[] l = a.split("\n");
+                                        for (String b : l) {
+                                            if (b.trim().length() == 0) continue;
+                                            sb.append(tabs).append(b);
+                                            if (b.contains("{") || b.contains("}")) {
+                                                sb.append(sep);
+                                            } else {
+                                                sb.append(";").append(sep);
+                                            }
+                                        }
                                     }
                                     sb.append(tabs).append("estat = ").append(e.getN2().getName()).append(";").append(sep);
                                 } else {
@@ -829,6 +842,9 @@ public class Controller extends MouseAdapter implements ActionListener {
 
             }
             chooser.setFileFilter(FILTER);
+        } else {
+        JOptionPane.showMessageDialog(null, "State diagram can't be empty or with TADs"
+                , "Error while exporting", JOptionPane.ERROR_MESSAGE);
         }
     }
 
