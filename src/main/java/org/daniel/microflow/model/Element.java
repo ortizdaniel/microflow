@@ -1,6 +1,6 @@
-package model;
+package org.daniel.microflow.model;
 
-import view.Drawable;
+import org.daniel.microflow.view.Drawable;
 
 import java.awt.*;
 

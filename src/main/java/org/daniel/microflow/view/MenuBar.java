@@ -1,7 +1,7 @@
-package view;
+package org.daniel.microflow.view;
 
-import controller.CursorDetail;
-import model.Microflow;
+import org.daniel.microflow.controller.CursorDetail;
+import org.daniel.microflow.MicroflowApplication;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +19,7 @@ public class MenuBar extends JMenuBar {
     private View view;
     private JPanel jpToolBar;
 
-    private static final String ABOUT_MSG = "Microflow " + Microflow.VERSION + "\nDaniel Ortiz & Joan Gómez\n" +
+    private static final String ABOUT_MSG = "Microflow " + MicroflowApplication.VERSION + "\nDaniel Ortiz & Joan Gómez\n" +
             "Inspired by the original BubbleWizard of F. Escudero\nhttps://github.com/ortizdaniel/microflow\n" +
             "Copyright (C) 2018";
     private static final String LOGO_PATH = "/img/logo.png";

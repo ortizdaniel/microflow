@@ -1,9 +1,8 @@
-package controller;
+package org.daniel.microflow.controller;
 
-import model.Action;
-import model.EdgeType;
-import model.NodeType;
-import view.ToolBar;
+import org.daniel.microflow.model.EdgeType;
+import org.daniel.microflow.model.NodeType;
+import org.daniel.microflow.view.ToolBar;
 
 import javax.swing.*;
 import java.awt.*;

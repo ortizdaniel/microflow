@@ -1,22 +1,25 @@
-package model;
+package org.daniel.microflow.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Graph {
 
     private static Graph instance;
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+    private static final Gson gson = new GsonBuilder().create();
 
     private LinkedList<Node> nodes;
     private LinkedList<Edge> edges;
@@ -201,14 +204,17 @@ public class Graph {
 
     public boolean loadFromFile(String path) {
         try {
-            BufferedReader reader = Files.newBufferedReader(Paths.get(path));
+            CharsetDecoder decoder = Charset.forName("ISO-8859-1").newDecoder();
+            InputStreamReader stream = new InputStreamReader(new FileInputStream(new File(path)), decoder);
+            BufferedReader reader = new BufferedReader(stream);
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
             }
             return loadFromJson(sb.toString());
-        } catch (IOException e) {
+        } catch (IOException  e) {
+            e.printStackTrace();
             return false;
         }
     }

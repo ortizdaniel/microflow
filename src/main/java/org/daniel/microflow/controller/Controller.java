@@ -1,10 +1,8 @@
-package controller;
+package org.daniel.microflow.controller;
 
-import model.Action;
-import model.*;
-import view.ContextMenu;
-import view.DrawPanel;
-import view.View;
+import org.daniel.microflow.model.*;
+import org.daniel.microflow.model.Action;
+import org.daniel.microflow.view.*;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

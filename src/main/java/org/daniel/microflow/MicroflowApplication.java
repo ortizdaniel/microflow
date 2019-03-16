@@ -1,7 +1,7 @@
-package model;
+package org.daniel.microflow;
 
-import controller.Controller;
-import view.View;
+import org.daniel.microflow.controller.Controller;
+import org.daniel.microflow.view.View;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,7 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class Microflow {
+public class MicroflowApplication {
 
     public static final String VERSION = "1.3.2";
     private static final String LOGO_PATH = "/img/logo.png";
@@ -20,10 +20,10 @@ public class Microflow {
     public static void main(String[] args) {
         try {
             if (System.getProperty("os.name").startsWith("Mac")) {
-                System.setProperty("apple.laf.useScreenMenuBar", "true" );
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Microflow");
-                com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
-                application.setDockIconImage(Toolkit.getDefaultToolkit().createImage(Microflow.class.getResource(LOGO_PATH)));
+                System.setProperty("apple.laf.useScreenMenuBar", "true");
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MicroflowApplication");
+                //com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
+                //application.setDockIconImage(Toolkit.getDefaultToolkit().createImage(MicroflowApplication.class.getResource(LOGO_PATH)));
             }
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {

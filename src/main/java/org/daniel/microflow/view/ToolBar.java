@@ -1,6 +1,6 @@
-package view;
+package org.daniel.microflow.view;
 
-import controller.CursorDetail;
+import org.daniel.microflow.controller.CursorDetail;
 
 import javax.swing.*;
 import javax.swing.border.BevelBorder;

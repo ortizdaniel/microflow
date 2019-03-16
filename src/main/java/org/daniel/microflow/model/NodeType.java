@@ -1,4 +1,4 @@
-package model;
+package org.daniel.microflow.model;
 
 import java.awt.*;
 

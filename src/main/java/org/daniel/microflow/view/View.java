@@ -1,4 +1,4 @@
-package view;
+package org.daniel.microflow.view;
 
 import javax.swing.*;
 import java.awt.*;

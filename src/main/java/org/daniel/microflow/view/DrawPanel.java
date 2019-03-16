@@ -1,6 +1,6 @@
-package view;
+package org.daniel.microflow.view;
 
-import model.Graph;
+import org.daniel.microflow.model.Graph;
 
 import javax.swing.*;
 import java.awt.*;
