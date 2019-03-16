@@ -46,33 +46,33 @@ public class ToolBar extends JPanel {
     private static final Dimension jbDimension = new Dimension(BUTTON_SIZE, BUTTON_SIZE);
 
     /* Icon paths */
-    private static final String NEW_FILE_ICON = "/img/toolbar/new_file.png";
-    private static final String OPEN_FILE_ICON = "/img/toolbar/open_file.png";
-    private static final String SAVE_FILE_ICON = "/img/toolbar/save_file.png";
-    private static final String PRINT_FILE_ICON = "/img/toolbar/print_file.png";
-    private static final String CURSOR_ICON = "/img/toolbar/cursor.png";
-    public static final String DELETE_ICON = "/img/toolbar/delete.png";
-    public static final String UNDO_ICON = "/img/toolbar/undo.png";
+    private static final String NEW_FILE_ICON = "/image/toolbar/new_file.png";
+    private static final String OPEN_FILE_ICON = "/image/toolbar/open_file.png";
+    private static final String SAVE_FILE_ICON = "/image/toolbar/save_file.png";
+    private static final String PRINT_FILE_ICON = "/image/toolbar/print_file.png";
+    private static final String CURSOR_ICON = "/image/toolbar/cursor.png";
+    public static final String DELETE_ICON = "/image/toolbar/delete.png";
+    public static final String UNDO_ICON = "/image/toolbar/undo.png";
 
-    private static final String TAD_ICON = "/img/toolbar/TAD.png";
-    private static final String VAR_ICON = "/img/toolbar/var.png";
-    private static final String PERIPHERAL_ICON = "/img/toolbar/peripheral.png";
-    private static final String INTERFACE_ICON = "/img/toolbar/interface.png";
-    private static final String OPERATION_ICON = "/img/toolbar/operation.png";
-    private static final String INTERRUPT_ICON = "/img/toolbar/interrupt.png";
-    private static final String STATE_ICON = "/img/toolbar/state.png";
-    private static final String TRANSITION_CURSOR = "/img/toolbar/transition.png";
-    private static final String ACTION_CURSOR = "/img/toolbar/action.png";
+    private static final String TAD_ICON = "/image/toolbar/TAD.png";
+    private static final String VAR_ICON = "/image/toolbar/var.png";
+    private static final String PERIPHERAL_ICON = "/image/toolbar/peripheral.png";
+    private static final String INTERFACE_ICON = "/image/toolbar/interface.png";
+    private static final String OPERATION_ICON = "/image/toolbar/operation.png";
+    private static final String INTERRUPT_ICON = "/image/toolbar/interrupt.png";
+    private static final String STATE_ICON = "/image/toolbar/state.png";
+    private static final String TRANSITION_CURSOR = "/image/toolbar/transition.png";
+    private static final String ACTION_CURSOR = "/image/toolbar/action.png";
 
-    public static final String TAD_ICON_C = "/img/cursor/TAD_c.png";
-    public static final String VAR_ICON_C = "/img/cursor/var_c.png";
-    public static final String PERIPHERAL_ICON_C = "/img/cursor/peripheral_c.png";
-    public static final String INTERFACE_ICON_C = "/img/cursor/interface_c.png";
-    public static final String OPERATION_ICON_C = "/img/cursor/operation_c.png";
-    public static final String INTERRUPT_ICON_C = "/img/cursor/interrupt_c.png";
-    public static final String STATE_ICON_C = "/img/cursor/state_c.png";
-    public static final String TRANSITION_CURSOR_C = "/img/cursor/transition_c.png";
-    public static final String ACTION_CURSOR_C = "/img/cursor/action_c.png";
+    public static final String TAD_ICON_C = "/image/cursor/TAD_c.png";
+    public static final String VAR_ICON_C = "/image/cursor/var_c.png";
+    public static final String PERIPHERAL_ICON_C = "/image/cursor/peripheral_c.png";
+    public static final String INTERFACE_ICON_C = "/image/cursor/interface_c.png";
+    public static final String OPERATION_ICON_C = "/image/cursor/operation_c.png";
+    public static final String INTERRUPT_ICON_C = "/image/cursor/interrupt_c.png";
+    public static final String STATE_ICON_C = "/image/cursor/state_c.png";
+    public static final String TRANSITION_CURSOR_C = "/image/cursor/transition_c.png";
+    public static final String ACTION_CURSOR_C = "/image/cursor/action_c.png";
 
 
 

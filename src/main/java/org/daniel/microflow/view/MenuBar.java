@@ -21,8 +21,8 @@ public class MenuBar extends JMenuBar {
 
     private static final String ABOUT_MSG = "Microflow " + MicroflowApplication.VERSION + "\nDaniel Ortiz & Joan Gómez\n" +
             "Inspired by the original BubbleWizard of F. Escudero\nhttps://github.com/ortizdaniel/microflow\n" +
-            "Copyright (C) 2018";
-    private static final String LOGO_PATH = "/img/logo.png";
+            "Copyright (C) 2018-2019";
+    private static final String LOGO_PATH = "/image/logo.png";
 
     /* Menu File Items */
     private JMenuItem jmiNewFile;

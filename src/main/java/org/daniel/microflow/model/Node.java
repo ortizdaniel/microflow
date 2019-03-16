@@ -5,8 +5,8 @@ import java.awt.geom.QuadCurve2D;
 
 public class Node extends Element {
 
-    private Point center;
-    private NodeType type;
+    protected Point center;
+    protected NodeType type;
 
     private static int stateCount = 0;
 

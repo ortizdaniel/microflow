@@ -7,14 +7,9 @@ import java.awt.*;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CodingErrorAction;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class Graph {
 
@@ -213,7 +208,7 @@ public class Graph {
                 sb.append(line);
             }
             return loadFromJson(sb.toString());
-        } catch (IOException  e) {
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
@@ -222,8 +217,10 @@ public class Graph {
     public boolean saveToFile(String path) {
         try (FileWriter fw = new FileWriter(path)) {
             fw.write(toJson());
+            fw.close();
             return true;
         } catch (IOException e) {
+            e.printStackTrace();
             return false;
         }
     }

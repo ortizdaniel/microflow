@@ -14,16 +14,14 @@ import java.net.URL;
 
 public class MicroflowApplication {
 
-    public static final String VERSION = "1.3.2";
-    private static final String LOGO_PATH = "/img/logo.png";
+    public static final String VERSION = "1.4.0";
 
     public static void main(String[] args) {
         try {
             if (System.getProperty("os.name").startsWith("Mac")) {
                 System.setProperty("apple.laf.useScreenMenuBar", "true");
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "MicroflowApplication");
-                //com.apple.eawt.Application application = com.apple.eawt.Application.getApplication();
-                //application.setDockIconImage(Toolkit.getDefaultToolkit().createImage(MicroflowApplication.class.getResource(LOGO_PATH)));
+                System.setProperty("apple.eawt.quitStrategy", "CLOSE_ALL_WINDOWS");
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Microflow");
             }
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
@@ -46,7 +44,7 @@ public class MicroflowApplication {
             URL url = new URL("https://raw.githubusercontent.com/ortizdaniel/microflow/master/VERSION");
             BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
             String line = reader.readLine();
-            if (line != null && !line.equals(VERSION)) {
+            if (line != null && line.compareTo(VERSION) > 0) {
                 int res = JOptionPane.showConfirmDialog(null,
                         "New update available. Would you like to be taken to the download page?", "Update",
                         JOptionPane.YES_NO_OPTION);

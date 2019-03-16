@@ -1,5 +1,6 @@
 package org.daniel.microflow.controller;
 
+import org.daniel.microflow.model.Action;
 import org.daniel.microflow.model.EdgeType;
 import org.daniel.microflow.model.NodeType;
 import org.daniel.microflow.view.ToolBar;
