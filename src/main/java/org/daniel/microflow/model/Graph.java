@@ -258,7 +258,17 @@ public class Graph {
     private Graph fromJson(String json) {
         Graph g = gson.fromJson(json, Graph.class);
         for (Edge e : g.edges) {
+            if (e.getType().equals(EdgeType.INTERFACE)) {
+                if (String.valueOf(Edge.getInterfaceCount()).compareTo(e.getName()) < 0) {
+                    Edge.setInterfaceCount(Integer.valueOf(e.getName()) + 1);
+                }
+            }
             for (Node n : g.nodes) {
+                if (n.getType().equals(NodeType.STATE)) {
+                    if (String.valueOf(Node.getStateCount()).compareTo(n.getName()) < 0) {
+                        Node.setStateCount(Integer.valueOf(n.getName()) + 1);
+                    }
+                }
                 if (e.getN1().equals(n)) e.setN1(n);
                 if (e.getN2().equals(n)) e.setN2(n);
             }
