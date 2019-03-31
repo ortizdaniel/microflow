@@ -20,7 +20,7 @@ public class Action extends Element {
 
     @Override
     protected void setBounds() {
-        //inutil, guarro, se calcula cuando se pinta
+        //inutil, se calcula cuando se pinta
     }
 
     @Override

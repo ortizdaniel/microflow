@@ -1,6 +1,8 @@
 package org.daniel.microflow.model;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.QuadCurve2D;
 import java.awt.geom.Rectangle2D;
 
@@ -18,6 +20,8 @@ public class Edge extends Element {
     private Point pivotPoint;
     private Rectangle pivot;
     private QuadCurve2D.Float curve;
+    private Ellipse2D.Float curveToSame;
+    private Point centerPointSame;
     private boolean bidir;
     private Polygon arrow;
     private Polygon arrowBidir;
@@ -29,14 +33,30 @@ public class Edge extends Element {
 
     private static final int PIVOT_WIDTH = 15;
     private static final int PIVOT_HEIGHT = 15;
+    private static final int H = 50;
+    private static final int K = 50;
 
     public Edge(EdgeType type, String name, Node n1, Node n2) {
         super(name);
         this.type = type;
         this.n1 = n1;
         this.n2 = n2;
-        originalN1 = n1;
-        originalN2 = n2;
+
+        if (type.equals(EdgeType.OPERATION)) {
+            if (n1.type.equals(NodeType.TAD)) {
+                this.n1 = n2;
+                this.n2 = n1;
+                originalN1 = n2;
+                originalN2 = n1;
+            } else {
+                originalN1 = n1;
+                originalN2 = n2;
+            }
+        } else {
+            originalN1 = n1;
+            originalN2 = n2;
+        }
+
         bidir = false;
         setDefaultPivot(n1.getCenter(), n2.getCenter());
         setBounds();
@@ -46,7 +66,11 @@ public class Edge extends Element {
     }
 
     private void setDefaultPivot(Point p1, Point p2) {
-        pivotPoint = Graph.getThirdPoint(p1, p2);
+        if (p1.equals(p2)) {
+            pivotPoint = new Point(p1.x - 40, p2.y - 40);
+        } else {
+            pivotPoint = Graph.getThirdPoint(p1, p2);
+        }
         updatePivot(pivotPoint);
     }
 
@@ -96,30 +120,94 @@ public class Edge extends Element {
         curve = new QuadCurve2D.Float(p0.x, p0.y, pivotPoint.x, pivotPoint.y, p2.x, p2.y);
         bounds = curve.getBounds();
 
-        double distance = Math.hypot(
-                n1.getCenter().getX() - n2.getCenter().getX(),
-                n1.getCenter().getY() - n2.getCenter().getY()
-        );
+        if (p0.equals(p2)) {
+            Point dest = findIntersection(pivotPoint, n1);
+            centerPointSame = dest;
+            curveToSame = new Ellipse2D.Float(dest.x - (H / 2f), dest.y - (K / 2f), H, K);
+        }
 
-        arrow = makeArrow(distance, p0, pivotPoint, p2, n2);
-        if (bidir) arrowBidir = makeArrow(distance, p2, pivotPoint, p0, n1);
+        arrow = makeArrow(p0, pivotPoint, p2, n2);
+        if (bidir) arrowBidir = makeArrow(p2, pivotPoint, p0, n1);
     }
 
-    private Polygon makeArrow(double distance, Point p0, Point p1, Point p2, Node dest) {
-        NodeType destType = dest.getType();
-        //double initial = distance > 30 ? 0.60 : 0.49;
+    private Point findIntersection(Point p0, Node dest) {
         for (double t = 0; t <= 1; t += 0.005) {
-            Point actual = type.equals(EdgeType.OPERATION) ? bezierLinear(t, p1, p2) : bezierQuadratic(t, p0, p1, p2);
-            //si el nodo destino es un TAD o un STATE, mirar su circulo, no su bound entero
-            if ((destType.equals(NodeType.TAD) || destType.equals(NodeType.STATE)) ?
-                    dest.circleContains(actual) :
-                    dest.contains(actual)) {
-                return getArrowFor(pivotPoint, actual);
+            Point p = bezierLinear(t, p0, dest.getCenter());
+
+            if (dest.circleContains(p))
+                return p;
+        }
+
+        return new Point();
+    }
+
+    private Polygon makeArrow(Point p0, Point p1, Point p2, Node dest) {
+        NodeType destType = dest.getType();
+
+        if (n1 == n2) {
+            /*Point destination =
+                    findIntersection(n1.getCenter(), centerPointSame, NodeType.STATE.getWidth() / 2, H / 2);
+            Point origin = findOriginForArrow(destination, n1.getCenter());
+            return getArrowFor(origin, destination);*/
+        } else {
+
+            for (double t = 0; t <= 1; t += 0.005) {
+                Point actual = type.equals(EdgeType.OPERATION) ? bezierLinear(t, p1, p2) : bezierQuadratic(t, p0, p1, p2);
+                //si el nodo destino es un TAD o un STATE, mirar su circulo, no su bound entero
+                if ((destType.equals(NodeType.TAD) || destType.equals(NodeType.STATE)) ?
+                        dest.circleContains(actual) :
+                        dest.contains(actual)) {
+                    return getArrowFor(pivotPoint, actual);
+                }
             }
         }
         return new Polygon(); //no se puede encontrar el punto, nunca se da este caso
     }
 
+    private Point findOriginForArrow(Point intersection, Point center) {
+        //y - y1 = m(x - x1) --> m = (y2 - y1)/(x2 - x1)
+        //(x1, y1) = center | (x2, y2) = destination
+        double m;
+        try {
+           m = (intersection.y - center.y)/(intersection.x - center.x);
+        } catch (ArithmeticException ex) {
+            m  = 0;
+        }
+        double x = intersection.x + 5;
+        double y = m*(x - center.x) + center.y;
+        Point p = new Point((int) x, (int) y);
+        if (n1.circleContains(p)) {
+            p.y = (int) (m*(intersection.x - 5 - center.x) + center.y);
+        }
+        return p;
+    }
+
+    private Point findIntersection(Point p1, Point p2, int r1, int r2) {
+        int x1 = p1.x;
+        int x2 = p2.x;
+        int y1 = p1.y;
+        int y2 = p2.y;
+        double centerDx = x1 - x2;
+        double centerDy = y1 - y2;
+        double R = Math.sqrt(centerDx * centerDx + centerDy * centerDy);
+
+        double R2 = R*R;
+        double R4 = R2*R2;
+        double a = (r1*r1 - r2*r2) / (2 * R2);
+        double r2r2 = (r1*r1 - r2*r2);
+        double c = Math.sqrt(2 * (r1*r1 + r2*r2) / R2 - (r2r2 * r2r2) / R4 - 1);
+
+        double fx = (x1+x2) / 2f + a * (x2 - x1);
+        double gx = c * (y2 - y1) / 2;
+        double ix1 = fx + gx;
+
+        double fy = (y1+y2) / 2f + a * (y2 - y1);
+        double gy = c * (x1 - x2) / 2;
+        double iy1 = fy + gy;
+
+        return new Point((int) ix1, (int) iy1);
+    }
+    
     private Point bezierLinear(double t, Point p0, Point p1) {
         return new Point(
                 (int) (p0.x + t * (p1.x - p0.x)),
@@ -158,6 +246,8 @@ public class Edge extends Element {
     }
 
     public void updatePivot(Point p) {
+        if (n1.circleContains(p) || n2.circleContains(p)) return;
+
         pivotPoint = p;
         pivot = new Rectangle(p.x - PIVOT_WIDTH / 2, p.y - PIVOT_HEIGHT / 2,
                 PIVOT_WIDTH, PIVOT_HEIGHT);
@@ -176,7 +266,12 @@ public class Edge extends Element {
             g.drawLine(p1.x, p1.y, pivotPoint.x, pivotPoint.y);
             g.drawLine(pivotPoint.x, pivotPoint.y, p2.x, p2.y);
         } else {
-            g.draw(curve);
+            if (p1.equals(p2)) {
+                //transition to same state
+                g.draw(curveToSame);
+            } else {
+                g.draw(curve);
+            }
             if (type.equals(EdgeType.TRANSITION) || type.equals(EdgeType.INTERRUPT)) {
                 g.setColor(selected ? Color.GRAY : Color.BLACK);
                 drawCenteredText(g, namePoint.x, namePoint.y, name, FONT_LARGE, this);
@@ -201,6 +296,17 @@ public class Edge extends Element {
         }
 
         if (action != null) action.draw(g);
+
+        /*if (n1 == n2) {
+            g.setStroke(new BasicStroke(3));
+            g.setColor(Color.RED);
+            for (int i = 0; i < H + 1; i++) {
+                 pos = pointOfEllipsePositive(i, centerPointSame.x, centerPointSame.y, H / 2);
+                Point neg = pointOfEllipseNegative(i, centerPointSame.x, centerPointSame.y, H / 2);
+                g.drawLine(pos.x, pos.Pointy, pos.x, pos.y);
+                g.drawLine(neg.x, neg.y, neg.x, neg.y);
+            }
+        }*/
     }
 
     public void setBidirectional(boolean bidir) {
@@ -255,8 +361,27 @@ public class Edge extends Element {
                 if (Math.hypot(p.x - cur.x, p.y - cur.y) <= 10) {
                     return true;
                 }
+
+                if (n1 == n2) {
+                    if (curveToSame.contains(p) || distanceToCircle(p, centerPointSame)) return true;
+                }
+
             }
         }
+        return false;
+    }
+
+    private boolean distanceToCircle(Point origin, Point circleCenter) {
+        for (int i = 0; i < H; i++) {
+            Point2D.Double pos = pointOfEllipsePositive(i, circleCenter.x, circleCenter.y, H / 2);
+            Point2D.Double neg = pointOfEllipseNegative(i, circleCenter.x, circleCenter.y, H / 2);
+
+            if (distanceTo(pos, origin) <= 15 || distanceTo(neg, origin) <= 15) {
+                System.out.println();
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -323,17 +448,41 @@ public class Edge extends Element {
 
     //únicamente para las transiciones y usado por las acciones
     public Point getNearestTo(Point p) {
-        Point nearest = new Point(0, 0);
         double min = Double.MAX_VALUE;
-        for (double t = 0; t <= 1; t += 0.001) {
-            Point actual = bezierQuadratic(t, n1.getCenter(), pivotPoint, n2.getCenter());
-            double d = Math.hypot(p.x - actual.x, p.y - actual.y);
-            if (d < min) {
-                min = d;
-                nearest = actual;
+        Point actual;
+        if (n1 != n2) {
+            Point nearest = new Point(0, 0);
+            for (double t = 0; t <= 1; t += 0.05) {
+                actual = bezierQuadratic(t, n1.getCenter(), pivotPoint, n2.getCenter());
+                double d = Math.hypot(p.x - actual.x, p.y - actual.y);
+                if (d < min) {
+                    min = d;
+                    nearest = actual;
+                }
             }
+            return nearest;
+        } else {
+            Point2D.Double nearest = new Point2D.Double(0, 0);
+            for (double i = 0; i < H; i += 0.05) {
+                //if (p.y >= centerPointSame.y) {
+                    Point2D.Double pos = pointOfEllipsePositive(i, centerPointSame.x, centerPointSame.y, H/2);
+                    double dPos = Math.hypot(p.x - pos.x, p.y - pos.y);
+                    if (dPos < min) {
+                        min = dPos;
+                        nearest = pos;
+                    }
+                //} else {
+                    Point2D.Double neg = pointOfEllipseNegative(i, centerPointSame.x, centerPointSame.y, H / 2);
+                    double dNeg = Math.hypot(p.x - neg.x, p.y - neg.y);
+
+                    if (dNeg < min) {
+                        min = dNeg;
+                        nearest = neg;
+                    }
+                //}
+            }
+            return new Point((int) nearest.x, (int) nearest.y);
         }
-        return nearest;
     }
 
     public String getFunctions() {

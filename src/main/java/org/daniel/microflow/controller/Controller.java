@@ -1,8 +1,10 @@
 package org.daniel.microflow.controller;
 
-import org.daniel.microflow.model.*;
 import org.daniel.microflow.model.Action;
-import org.daniel.microflow.view.*;
+import org.daniel.microflow.model.*;
+import org.daniel.microflow.view.ContextMenu;
+import org.daniel.microflow.view.DrawPanel;
+import org.daniel.microflow.view.View;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -784,19 +786,27 @@ public class Controller extends MouseAdapter implements ActionListener {
 
                 sb.setLength(0);
 
+                HashSet<String> alreadyInSwitch = new HashSet<>();
+                boolean isElseIf;
                 for (Node n : model.getNodes()) {
-                    if (n.getType().equals(NodeType.STATE)) {
+                    if (n.getType().equals(NodeType.STATE) && !alreadyInSwitch.contains(n.getName())) {
                         boolean hasCondition = false;
                         sb.append("\t\tcase ").append(n.getName()).append(":").append(sep);
-
+                        isElseIf = false;
                         for (Edge e: model.getEdges()) {
+
                             if (e.getN1().equals(n)) {
                                 hasCondition = true;
                                 String tabs = "\t\t\t\t";
                                 if (e.getName().length() == 0) {
                                     tabs = "\t\t\t";
                                 } else {
-                                    sb.append("\t\t\tif (").append(e.getName()).append(") {").append(sep);
+                                    if (!isElseIf) {
+                                        sb.append("\t\t\tif (").append(e.getName()).append(") {").append(sep);
+                                        isElseIf = true;
+                                    } else {
+                                        sb.append("\t\t\telse if (").append(e.getName()).append(") {").append(sep);
+                                    }
                                 }
 
                                 if (e.getAction() != null) {
@@ -826,6 +836,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                             sb.append(sep);
                         }
                         sb.append("\t\tbreak;").append(sep);
+                        alreadyInSwitch.add(n.getName());
                     }
                 }
                 sb.append("\t}").append(sep).append("}");
@@ -841,8 +852,8 @@ public class Controller extends MouseAdapter implements ActionListener {
             }
             chooser.setFileFilter(FILTER);
         } else {
-        JOptionPane.showMessageDialog(null, "State diagram can't be empty or with TADs"
-                , "Error while exporting", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "State diagram can't be empty or with TADs"
+                    , "Error while exporting", JOptionPane.ERROR_MESSAGE);
         }
     }
 
