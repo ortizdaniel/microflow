@@ -823,10 +823,12 @@ public class Controller extends MouseAdapter implements ActionListener {
                                             }
                                         }
                                     }
-                                    sb.append(tabs).append("estat = ").append(e.getN2().getName()).append(";").append(sep);
-                                } else {
+                                }
+
+                                if (e.getN1() != e.getN2()) {
                                     sb.append(tabs).append("estat = ").append(e.getN2().getName()).append(";").append(sep);
                                 }
+
                                 if (e.getName().length() > 0) {
                                     sb.append("\t\t\t}").append(sep);
                                 }
