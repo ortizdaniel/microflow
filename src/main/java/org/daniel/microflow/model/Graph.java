@@ -13,26 +13,18 @@ import java.util.List;
 
 public class Graph {
 
-    private static Graph instance;
-    private static final Gson gson = new GsonBuilder().create();
+    private transient static final Gson gson = new GsonBuilder().create();
 
     private LinkedList<Node> nodes;
     private LinkedList<Edge> edges;
     private LinkedList<Action> actions;
     private transient LinkedList<String> phases;
-    private transient int index;
 
-    public static Graph getInstance() {
-        if (instance == null) instance = new Graph();
-        return instance;
-    }
-
-    private Graph() {
+    public Graph() {
         nodes = new LinkedList<>();
         edges = new LinkedList<>();
         actions = new LinkedList<>();
         phases = new LinkedList<>();
-        index = -1;
         addPhase();
     }
 
@@ -193,6 +185,7 @@ public class Graph {
             actions = g.actions;
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -258,19 +251,28 @@ public class Graph {
     private Graph fromJson(String json) {
         Graph g = gson.fromJson(json, Graph.class);
         for (Edge e : g.edges) {
+            e.setSelected(false);
             if (e.getType().equals(EdgeType.INTERFACE)) {
-                if (String.valueOf(Edge.getInterfaceCount()).compareTo(e.getName()) < 0) {
-                    Edge.setInterfaceCount(Integer.valueOf(e.getName()) + 1);
-                }
+                try {
+                    int ours = Edge.getInterfaceCount();
+                    int theirs = Integer.parseInt(e.getName());
+                    if (ours <= theirs) {
+                        Edge.setInterfaceCount(theirs + 1);
+                    }
+                } catch (NumberFormatException ok) { }
             }
             for (Node n : g.nodes) {
-                if (n.getType().equals(NodeType.STATE)) {
-                    if (String.valueOf(Node.getStateCount()).compareTo(n.getName()) < 0) {
-                        Node.setStateCount(Integer.valueOf(n.getName()) + 1);
+                try {
+                    int ours = Node.getStateCount();
+                    int theirs = Integer.parseInt(n.getName());
+                    if (ours <= theirs) {
+                        Node.setStateCount(theirs + 1);
                     }
-                }
+                } catch (NumberFormatException ok) { }
                 if (e.getN1().equals(n)) e.setN1(n);
                 if (e.getN2().equals(n)) e.setN2(n);
+                n.setSelected(false);
+                e.setGraph(g);
             }
             if (e.getAction() != null) {
                 int size = g.actions.size();

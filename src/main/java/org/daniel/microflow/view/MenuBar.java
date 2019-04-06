@@ -1,7 +1,7 @@
 package org.daniel.microflow.view;
 
+import org.daniel.microflow.Microflow;
 import org.daniel.microflow.controller.CursorDetail;
-import org.daniel.microflow.MicroflowApplication;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +16,10 @@ public class MenuBar extends JMenuBar {
     private JMenu jmWindow;
     private JMenu jmHelp;
 
-    private View view;
+    private DiagramView view;
     private JPanel jpToolBar;
 
-    private static final String ABOUT_MSG = "Microflow " + MicroflowApplication.VERSION + "\nDaniel Ortiz & Joan Gómez\n" +
+    private static final String ABOUT_MSG = "Microflow " + Microflow.VERSION + "\nDaniel Ortiz & Joan Gómez\n" +
             "Inspired by the original BubbleWizard of F. Escudero\nhttps://github.com/ortizdaniel/microflow\n" +
             "Copyright (C) 2018-2019";
     private static final String LOGO_PATH = "/image/logo.png";
@@ -49,7 +49,7 @@ public class MenuBar extends JMenuBar {
     private JMenuItem jmiAddAction;
 
 
-    public MenuBar(View view, JPanel jpToolBar) {
+    public MenuBar(DiagramView view, JPanel jpToolBar) {
         this.view = view;
         this.jpToolBar = jpToolBar;
 
@@ -106,7 +106,7 @@ public class MenuBar extends JMenuBar {
         jmFile.addSeparator();
 
         /* Generation options */
-        jmiGenFiles = new JMenuItem("Create .c .h files");
+        jmiGenFiles = new JMenuItem("Create .c and .h files");
         jmiGenMotor = new JMenuItem("Create motor");
         jmiGenDict = new JMenuItem("Create dictionary");
 
@@ -161,13 +161,13 @@ public class MenuBar extends JMenuBar {
     private void addWindowOptions() {
         JMenuItem jmiMinimize = new JMenuItem("Minimize");
         JMenuItem jmiMaximize = new JMenuItem("Maximize");
-        JMenuItem jmiToolBar = new JMenuItem("Show/Hide Toolbar");
+        JMenuItem jmiToolBar = new JMenuItem("Show/hide Toolbar");
         JMenuItem jmiSize = new JMenuItem("Change size");
 
         /* Add actions */
-        jmiMinimize.addActionListener(e -> view.setExtendedState(JFrame.ICONIFIED));
+        //jmiMinimize.addActionListener(e -> view.setExtendedState(JFrame.ICONIFIED));
 
-        jmiMaximize.addActionListener(e -> view.setExtendedState(JFrame.MAXIMIZED_BOTH));
+        //jmiMaximize.addActionListener(e -> view.setExtendedState(JFrame.MAXIMIZED_BOTH));
 
         jmiToolBar.addActionListener(e -> {
             if (jpToolBar.isVisible()) {
