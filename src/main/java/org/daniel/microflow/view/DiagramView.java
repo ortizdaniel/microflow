@@ -3,21 +3,15 @@ package org.daniel.microflow.view;
 import org.daniel.microflow.model.Graph;
 
 import javax.swing.*;
-import javax.swing.border.Border;
-import javax.swing.plaf.basic.BasicInternalFrameUI;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.beans.PropertyVetoException;
 
 public class DiagramView extends JPanel {
 
-    private static final String TITLE = "Diagram 1";
-    private static final int MIN_WIDTH = 1024;
-    private static final int MIN_HEIGHT = 768;
-    private final MainView parent;
+    private static final int MIN_WIDTH = 900;
+    private static final int MIN_HEIGHT = 675;
+    private final OuterView parent;
     private final DrawPanel drawPanel;
     private final ToolBar jpToolBar;
     private final MenuBar jmbMenuBar;
@@ -53,10 +47,8 @@ public class DiagramView extends JPanel {
                     "//Post: Retorna la mostra convertida en 10 bits" + n + n;
     private static final String FUNC_DEFAULT = "void func(void);" + n + "//Pre: " + n + "//Post: " + n + n;
 
-    public DiagramView(MainView parent, Graph graph) {
-        //setTitle(TITLE);
+    public DiagramView(OuterView parent, Graph graph) {
         setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-        //setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
         this.parent = parent;
         setLayout(new BorderLayout());
@@ -83,19 +75,6 @@ public class DiagramView extends JPanel {
 
         content.add(north, BorderLayout.NORTH);
 
-        /*addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                if (JOptionPane.showConfirmDialog(DiagramView.this, "Are you sure you want to quit?",
-                        "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
-                    System.exit(0);
-                }
-            }
-        });*/
-
-        //pack();
-        //setLocationRelativeTo(null);
-        //setMaximizable(true);
         this.setVisible(true);
 
     }
@@ -212,5 +191,9 @@ public class DiagramView extends JPanel {
     public void addSize(int width, int height) {
         int w = dimension.width, h = dimension.height;
         dimension.setSize(w + width, h + height);
+    }
+
+    public OuterView getMainView() {
+        return parent;
     }
 }

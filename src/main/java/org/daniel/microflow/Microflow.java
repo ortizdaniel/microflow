@@ -1,9 +1,7 @@
 package org.daniel.microflow;
 
-import org.daniel.microflow.controller.Controller;
-import org.daniel.microflow.model.Graph;
-import org.daniel.microflow.view.DiagramView;
-import org.daniel.microflow.view.MainView;
+import org.daniel.microflow.controller.OuterController;
+import org.daniel.microflow.view.OuterView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,7 +12,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-public class MicroflowApplication {
+public class Microflow {
 
     public static final String VERSION = "1.6.0";
 
@@ -31,14 +29,9 @@ public class MicroflowApplication {
         }
 
         SwingUtilities.invokeLater(() -> {
-            MainView mainView = new MainView();
-
-            mainView.setVisible(true);
-            /*Graph graph = new Graph();
-            DiagramView view = new DiagramView(graph);
-            Controller controller = new Controller(view, graph);
+            OuterView view = new OuterView();
+            OuterController controller = new OuterController(view);
             view.registerController(controller);
-            view.addActionListener(controller);*/
         });
 
         checkUpdates();

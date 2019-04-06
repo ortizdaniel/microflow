@@ -52,7 +52,7 @@
               <archive>
                 <manifest>
                   <addClasspath>true</addClasspath>
-                  <mainClass>org.daniel.microflow.MicroflowApplication</mainClass>
+                  <mainClass>org.daniel.microflow.Microflow</mainClass>
                 </manifest>
               </archive>
               <descriptorRefs>
@@ -81,7 +81,7 @@
               <dontWrapJar>false</dontWrapJar>
               <errTitle>Error in launch4j plugin</errTitle>
               <classPath>
-                <mainClass>org.daniel.microflow.MicroflowApplication</mainClass>
+                <mainClass>org.daniel.microflow.Microflow</mainClass>
               </classPath>
               <icon>src/main/resources/icon/icon.ico</icon>
               <jre>
@@ -111,7 +111,7 @@
         <artifactId>appbundle-maven-plugin</artifactId>
         <version>1.2.0</version>
         <configuration>
-          <mainClass>org.daniel.microflow.MicroflowApplication</mainClass>
+          <mainClass>org.daniel.microflow.Microflow</mainClass>
           <iconFile>src/main/resources/icon/icon.icns</iconFile>
           <generateDiskImageFile>true</generateDiskImageFile>
         </configuration>

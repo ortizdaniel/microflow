@@ -185,6 +185,7 @@ public class Graph {
             actions = g.actions;
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -250,19 +251,28 @@ public class Graph {
     private Graph fromJson(String json) {
         Graph g = gson.fromJson(json, Graph.class);
         for (Edge e : g.edges) {
+            e.setSelected(false);
             if (e.getType().equals(EdgeType.INTERFACE)) {
-                if (String.valueOf(Edge.getInterfaceCount()).compareTo(e.getName()) < 0) {
-                    Edge.setInterfaceCount(Integer.valueOf(e.getName()) + 1);
-                }
+                try {
+                    int ours = Edge.getInterfaceCount();
+                    int theirs = Integer.parseInt(e.getName());
+                    if (ours <= theirs) {
+                        Edge.setInterfaceCount(theirs + 1);
+                    }
+                } catch (NumberFormatException ok) { }
             }
             for (Node n : g.nodes) {
-                if (n.getType().equals(NodeType.STATE)) {
-                    if (String.valueOf(Node.getStateCount()).compareTo(n.getName()) < 0) {
-                        Node.setStateCount(Integer.valueOf(n.getName()) + 1);
+                try {
+                    int ours = Node.getStateCount();
+                    int theirs = Integer.parseInt(n.getName());
+                    if (ours <= theirs) {
+                        Node.setStateCount(theirs + 1);
                     }
-                }
+                } catch (NumberFormatException ok) { }
                 if (e.getN1().equals(n)) e.setN1(n);
                 if (e.getN2().equals(n)) e.setN2(n);
+                n.setSelected(false);
+                e.setGraph(g);
             }
             if (e.getAction() != null) {
                 int size = g.actions.size();
@@ -279,7 +289,7 @@ public class Graph {
     }
 
     public void addPhase() {
-        //phases.add(toJson());
+        phases.add(toJson());
     }
 
     public void undo() {

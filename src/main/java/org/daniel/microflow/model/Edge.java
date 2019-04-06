@@ -15,7 +15,7 @@ public class Edge extends Element {
     private final Node originalN2;
     private String functions;
 
-    private Graph graph;
+    private transient Graph graph;
     private Action action;
 
     private Point pivotPoint;
@@ -454,7 +454,7 @@ public class Edge extends Element {
         Point actual;
         if (n1 != n2) {
             Point nearest = new Point(0, 0);
-            for (double t = 0; t <= 1; t += 0.05) {
+            for (double t = 0; t <= 1; t += 0.005) {
                 actual = bezierQuadratic(t, n1.getCenter(), pivotPoint, n2.getCenter());
                 double d = Math.hypot(p.x - actual.x, p.y - actual.y);
                 if (d < min) {
@@ -465,7 +465,7 @@ public class Edge extends Element {
             return nearest;
         } else {
             Point2D.Double nearest = new Point2D.Double(0, 0);
-            for (double i = 0; i < H; i += 0.05) {
+            for (double i = 0; i < H; i += 0.005) {
                 //if (p.y >= centerPointSame.y) {
                     Point2D.Double pos = pointOfEllipsePositive(i, centerPointSame.x, centerPointSame.y, H/2);
                     double dPos = Math.hypot(p.x - pos.x, p.y - pos.y);
@@ -498,5 +498,9 @@ public class Edge extends Element {
                 e.functions = functions;
             }
         }
+    }
+
+    public void setGraph(Graph graph) {
+        this.graph = graph;
     }
 }
