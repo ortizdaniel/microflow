@@ -4,7 +4,7 @@ import org.daniel.microflow.model.Action;
 import org.daniel.microflow.model.*;
 import org.daniel.microflow.view.ContextMenu;
 import org.daniel.microflow.view.DrawPanel;
-import org.daniel.microflow.view.View;
+import org.daniel.microflow.view.DiagramView;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -33,7 +33,7 @@ import java.util.HashSet;
 
 public class Controller extends MouseAdapter implements ActionListener {
 
-    private final View view;
+    private final DiagramView view;
     private final Graph model;
     private Element clicked;
     private CursorDetail state;
@@ -62,9 +62,9 @@ public class Controller extends MouseAdapter implements ActionListener {
     private static final FileFilter FILTER = new FileNameExtensionFilter("Microflow file (.mcf)", "mcf");
     private static final String sep = System.lineSeparator();
 
-    public Controller(View view) {
+    public Controller(DiagramView view, Graph graph) {
         this.view = view;
-        model = Graph.getInstance();
+        model = graph;
         clicked = null;
         state = CursorDetail.SELECTING;
         addingEdgeFrom = null;
@@ -198,7 +198,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             String name = chooser.getSelectedFile().getAbsolutePath();
             if (model.loadFromFile(name)) {
                 fileName = chooser.getSelectedFile().getName();
-                view.setTitle(fileName.substring(0, fileName.length() - 4));
+                //view.setTitle(fileName.substring(0, fileName.length() - 4));
             } else {
                 JOptionPane.showMessageDialog(view, "Error loading file.");
             }
@@ -225,7 +225,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             path += ".mcf";
         }
         if (model.saveToFile(path)) {
-            view.setTitle(fileName.replace(extension, ""));
+            //view.setTitle(fileName.replace(extension, ""));
         } else {
             JOptionPane.showMessageDialog(view, "Error saving file.");
         }
@@ -286,7 +286,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             model.addPhase();
             model.deleteAll();
             fileName = "Diagram 1";
-            view.setTitle(fileName);
+            //view.setTitle(fileName);
         }
     }
 
@@ -563,9 +563,9 @@ public class Controller extends MouseAdapter implements ActionListener {
             if (element instanceof Node) {
                 EdgeType edgeType = (EdgeType) state.getElementToAdd();
                 if (edgeType.equals(EdgeType.INTERFACE)) {
-                    model.addEdge(new Edge(edgeType, addingEdgeFrom, (Node) element));
+                    model.addEdge(new Edge(edgeType, addingEdgeFrom, (Node) element, model));
                 } else {
-                    model.addEdge(new Edge(edgeType, state.getNameToAdd(), addingEdgeFrom, (Node) element));
+                    model.addEdge(new Edge(edgeType, state.getNameToAdd(), addingEdgeFrom, (Node) element, model));
                 }
             }
             view.getDrawPanel().setLineStyle(DrawPanel.NONE);

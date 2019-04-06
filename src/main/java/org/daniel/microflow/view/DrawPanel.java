@@ -20,8 +20,9 @@ public class DrawPanel extends JPanel {
     private int type;
     private Rectangle bounds;
     private final Stroke lineStroke = new BasicStroke(1.5f);
+    private final Graph graph;
 
-    public DrawPanel() {
+    public DrawPanel(Graph graph) {
         super();
         setBackground(Color.decode("#FEFEFE"));
         type = NONE;
@@ -33,6 +34,7 @@ public class DrawPanel extends JPanel {
                 bounds.setBounds(0, 0, getWidth() - 30, getHeight() - 30);
             }
         });
+        this.graph = graph;
     }
 
     @Override
@@ -50,11 +52,11 @@ public class DrawPanel extends JPanel {
             g.drawLine(pivot.x, pivot.y, end.x, end.y);
         }
 
-        for (Drawable d : Graph.getInstance().getEdges()) {
+        for (Drawable d : graph.getEdges()) {
             d.draw(g);
         }
 
-        for (Drawable d : Graph.getInstance().getNodes()) {
+        for (Drawable d : graph.getNodes()) {
             d.draw(g);
         }
     }

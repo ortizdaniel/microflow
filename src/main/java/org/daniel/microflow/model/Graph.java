@@ -13,26 +13,18 @@ import java.util.List;
 
 public class Graph {
 
-    private static Graph instance;
-    private static final Gson gson = new GsonBuilder().create();
+    private transient static final Gson gson = new GsonBuilder().create();
 
     private LinkedList<Node> nodes;
     private LinkedList<Edge> edges;
     private LinkedList<Action> actions;
     private transient LinkedList<String> phases;
-    private transient int index;
 
-    public static Graph getInstance() {
-        if (instance == null) instance = new Graph();
-        return instance;
-    }
-
-    private Graph() {
+    public Graph() {
         nodes = new LinkedList<>();
         edges = new LinkedList<>();
         actions = new LinkedList<>();
         phases = new LinkedList<>();
-        index = -1;
         addPhase();
     }
 
@@ -287,7 +279,7 @@ public class Graph {
     }
 
     public void addPhase() {
-        phases.add(toJson());
+        //phases.add(toJson());
     }
 
     public void undo() {

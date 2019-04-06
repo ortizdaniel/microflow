@@ -1,7 +1,9 @@
 package org.daniel.microflow;
 
 import org.daniel.microflow.controller.Controller;
-import org.daniel.microflow.view.View;
+import org.daniel.microflow.model.Graph;
+import org.daniel.microflow.view.DiagramView;
+import org.daniel.microflow.view.MainView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,10 +31,14 @@ public class MicroflowApplication {
         }
 
         SwingUtilities.invokeLater(() -> {
-            View view = new View();
-            Controller controller = new Controller(view);
+            MainView mainView = new MainView();
+
+            mainView.setVisible(true);
+            /*Graph graph = new Graph();
+            DiagramView view = new DiagramView(graph);
+            Controller controller = new Controller(view, graph);
             view.registerController(controller);
-            view.addActionListener(controller);
+            view.addActionListener(controller);*/
         });
 
         checkUpdates();

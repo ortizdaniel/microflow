@@ -1,21 +1,27 @@
 package org.daniel.microflow.view;
 
+import org.daniel.microflow.model.Graph;
+
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.beans.PropertyVetoException;
 
-public class View extends JFrame {
+public class DiagramView extends JPanel {
 
     private static final String TITLE = "Diagram 1";
-    private static final int MIN_WIDTH = 800;
-    private static final int MIN_HEIGHT = 600;
+    private static final int MIN_WIDTH = 1024;
+    private static final int MIN_HEIGHT = 768;
+    private final MainView parent;
     private final DrawPanel drawPanel;
     private final ToolBar jpToolBar;
     private final MenuBar jmbMenuBar;
-    private Dimension dimension = new Dimension(MIN_WIDTH, MIN_HEIGHT);
+    private final Dimension dimension = new Dimension(MIN_WIDTH, MIN_HEIGHT);
     private final static String n = System.lineSeparator();
     private final static String TIMER_DEFAULT = "char TiGetTimer (void);" + n +
             "//Pre: Hi ha algun timer lliure." + n +
@@ -47,20 +53,23 @@ public class View extends JFrame {
                     "//Post: Retorna la mostra convertida en 10 bits" + n + n;
     private static final String FUNC_DEFAULT = "void func(void);" + n + "//Pre: " + n + "//Post: " + n + n;
 
-    public View() {
-        setTitle(TITLE);
+    public DiagramView(MainView parent, Graph graph) {
+        //setTitle(TITLE);
         setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        //setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
-        JPanel content = (JPanel) getContentPane();
-        drawPanel = new DrawPanel() {
+        this.parent = parent;
+        setLayout(new BorderLayout());
+        JPanel content = this;
+        JPanel north = new JPanel(new BorderLayout());
+        drawPanel = new DrawPanel(graph) {
             @Override
             public Dimension getPreferredSize() {
                 return dimension;
             }
         };
         jpToolBar = new ToolBar();
-        content.add(jpToolBar, BorderLayout.NORTH);
+        north.add(jpToolBar, BorderLayout.SOUTH);
 
         JScrollPane scrollPane = new JScrollPane(drawPanel);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -70,21 +79,25 @@ public class View extends JFrame {
         content.add(scrollPane, BorderLayout.CENTER);
 
         jmbMenuBar = new MenuBar(this, jpToolBar);
-        this.setJMenuBar(jmbMenuBar);
+        north.add(jmbMenuBar, BorderLayout.NORTH);
 
-        addWindowListener(new WindowAdapter() {
+        content.add(north, BorderLayout.NORTH);
+
+        /*addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                if (JOptionPane.showConfirmDialog(View.this, "Are you sure you want to quit?",
+                if (JOptionPane.showConfirmDialog(DiagramView.this, "Are you sure you want to quit?",
                         "Exit", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
                     System.exit(0);
                 }
             }
-        });
+        });*/
 
-        pack();
-        setLocationRelativeTo(null);
+        //pack();
+        //setLocationRelativeTo(null);
+        //setMaximizable(true);
         this.setVisible(true);
+
     }
 
     public void registerController(MouseAdapter ma) {
@@ -103,11 +116,6 @@ public class View extends JFrame {
 
     public DrawPanel getDrawPanel() {
         return drawPanel;
-    }
-
-    @Override
-    public void setTitle(String title) {
-        super.setTitle("Microflow - " + title);
     }
 
     public String multiLineInput(String message, String title, String initial) {

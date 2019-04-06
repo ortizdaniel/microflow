@@ -15,6 +15,7 @@ public class Edge extends Element {
     private final Node originalN2;
     private String functions;
 
+    private Graph graph;
     private Action action;
 
     private Point pivotPoint;
@@ -36,8 +37,9 @@ public class Edge extends Element {
     private static final int H = 50;
     private static final int K = 50;
 
-    public Edge(EdgeType type, String name, Node n1, Node n2) {
+    public Edge(EdgeType type, String name, Node n1, Node n2, Graph graph) {
         super(name);
+        this.graph = graph;
         this.type = type;
         this.n1 = n1;
         this.n2 = n2;
@@ -74,8 +76,8 @@ public class Edge extends Element {
         updatePivot(pivotPoint);
     }
 
-    public Edge(EdgeType type, Node n1, Node n2) {
-        this(type, String.valueOf(interfaceCount++), n1, n2);
+    public Edge(EdgeType type, Node n1, Node n2, Graph g) {
+        this(type, String.valueOf(interfaceCount++), n1, n2, g);
     }
 
     public boolean pivotContains(Point p) {
@@ -324,7 +326,7 @@ public class Edge extends Element {
                 nameBounds = new Rectangle(namePoint.x - 20, namePoint.y - 20, 40, 40);
             }
         }
-        for (Edge e : Graph.getInstance().getEdges()) {
+        for (Edge e : graph.getEdges()) {
             if (e != this && e.getType().equals(EdgeType.INTERFACE) && e.getName().equals(name)) {
                 functions = e.functions;
             }
@@ -491,7 +493,7 @@ public class Edge extends Element {
 
     public void setFunctions(String functions) {
         this.functions = functions;
-        for (Edge e : Graph.getInstance().getEdges()) {
+        for (Edge e : graph.getEdges()) {
             if (e != this && e.getType().equals(EdgeType.INTERFACE) && e.getName().equals(name)) {
                 e.functions = functions;
             }
