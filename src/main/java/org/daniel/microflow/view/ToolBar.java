@@ -38,6 +38,8 @@ public class ToolBar extends JPanel {
     private JButton jbTransition;
     private JButton jbAction;
 
+    /* Extra buttons */
+    private JButton jbText;
 
     private static final int MIN_WIDTH = 640;
     private static final int MIN_HEIGHT = 40;
@@ -74,7 +76,7 @@ public class ToolBar extends JPanel {
     public static final String TRANSITION_CURSOR_C = "/image/cursor/transition_c.png";
     public static final String ACTION_CURSOR_C = "/image/cursor/action_c.png";
 
-
+    public static final String TEXT_ICON = "/image/toolbar/text.png";
 
     public ToolBar() {
 
@@ -93,6 +95,8 @@ public class ToolBar extends JPanel {
         this.addTADButtons();
         jtbIcons.addSeparator();
         this.addStatesButtons();
+        jtbIcons.addSeparator();
+        this.addExtraButtons();
 
         this.add(jtbIcons);
 
@@ -162,6 +166,15 @@ public class ToolBar extends JPanel {
         jtbIcons.add(jpButtons);
     }
 
+    private void addExtraButtons() {
+        JPanel panel = new JPanel();
+
+        jbText = makeCustomButton("Add floating text", TEXT_ICON);
+
+        panel.add(jbText);
+
+        jtbIcons.add(panel);
+    }
 
     private JButton makeCustomButton(String tipText, String iconPath) {
         JButton jb = new JButton();
@@ -236,6 +249,9 @@ public class ToolBar extends JPanel {
         jbTransition.setActionCommand(CursorDetail.ADD_TRANSITION.name());
         jbAction.addActionListener(c);
         jbAction.setActionCommand(CursorDetail.ADD_ACTION.name());
+
+        jbText.addActionListener(c);
+        jbText.setActionCommand(CursorDetail.ADD_TEXT.name());
 
     }
 }

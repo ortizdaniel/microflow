@@ -75,6 +75,32 @@ public class Node extends Element {
                     width + 10, type.getHeight()
             );
         }
+
+        if (type.equals(NodeType.TEXT)) {
+            String[] lines = name.replace("\t", "    ").split("\n");
+            int longest = 0;
+
+            for (String l : lines) {
+                int lineWidth = c.getFontMetrics(FONT_MED).stringWidth(l);
+                if (lineWidth > longest) longest = lineWidth;
+            }
+
+            if (lines.length > 1) {
+                FontMetrics metrics = c.getFontMetrics(FONT_MED);
+                int height = lines.length * metrics.getAscent() + 11;
+
+                bounds.setBounds(
+                        center.x - (longest / 2) - 5, center.y - (height / 2),
+                        longest + 10, height
+                );
+            } else {
+                bounds.setBounds(
+                        center.x - (longest / 2) - 5, center.y - (type.getHeight() / 2),
+                        longest + 10, type.getHeight()
+                );
+            }
+        }
+
         super.setName(name);
     }
 
@@ -129,20 +155,24 @@ public class Node extends Element {
                 }
                 g.draw(bounds);
                 break;
-            /*case STATE:
-                g.fill();
-                break;
-            case INTERFACE:
-                break;*/
         }
 
-        g.setFont(type.equals(NodeType.STATE) ? FONT_LARGE : FONT_MED);
-        g.setColor(Color.BLACK);
-        int nameWidth = g.getFontMetrics().stringWidth(name);
-        g.drawString(name, center.x - nameWidth / 2,
+        if (type.equals(NodeType.TEXT)) {
+            String[] lines = name.replace("\t", "    ").split("\n");
+            int lineHeight = g.getFontMetrics(FONT_MED).getAscent();
+            g.setFont(FONT_MED);
+            for (int i = 0; i < lines.length; i++) {
+                g.setColor(Color.BLACK);
+                String line = lines[i];
+                g.drawString(line, bounds.x + 5, bounds.y + (lineHeight * (i + 1)) + 4);
+            }
+        } else {
+            g.setFont(type.equals(NodeType.STATE) ? FONT_LARGE : FONT_MED);
+            g.setColor(Color.BLACK);
+            int nameWidth = g.getFontMetrics().stringWidth(name);
+            g.drawString(name, center.x - nameWidth / 2,
                 center.y + (type.equals(NodeType.STATE) ? FONT_LARGE.getSize() / 3 : FONT_MED.getSize() / 3));
-
-        //g.drawLine(center.x, center.y, center.x, center.y);
+        }
     }
 
     private void setStrokeAndColor(Graphics2D g) {

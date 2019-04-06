@@ -369,10 +369,16 @@ public class Controller extends MouseAdapter implements ActionListener {
         if (clicked instanceof Node) {
             //se quita para hacer cosas de este estilo
             //if (!((Node) clicked).getType().equals(NodeType.STATE)) {
-            Node n = (Node) clicked;
-            name = askForString("Enter a " + (n.getType().equals(NodeType.STATE) ? "number:" :
-                            (n.getType().equals(NodeType.TAD) ? "TAD name" : n.getType().name().toLowerCase()) + ":"),
-                    clicked.getName(), false);
+            if (((Node) clicked).getType().equals(NodeType.TEXT)) {
+                String content = view.multiLineInput("Enter the text you'd like:", "Floating text", clicked.getName());
+                if (content != null) clicked.setName(content);
+                clicked.setSelected(false);
+                clicked = null;
+            } else {
+                Node n = (Node) clicked;
+                name = askForString("Enter a " + (n.getType().equals(NodeType.STATE) ? "number:" :
+                                (n.getType().equals(NodeType.TAD) ? "TAD name" : n.getType().name().toLowerCase()) + ":"),
+                        clicked.getName(), false);
                 contextMenu.showEditButton(true);
                 if (name != null) {
                     model.addPhase();
@@ -380,6 +386,7 @@ public class Controller extends MouseAdapter implements ActionListener {
                     clicked.holdName(true);
                     model.changedStateName(n);
                 }
+            }
             //}
         } else if (clicked instanceof Edge) {
             Edge e = (Edge) clicked;
