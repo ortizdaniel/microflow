@@ -10,7 +10,7 @@ import java.awt.event.MouseAdapter;
 public class DiagramView extends JPanel {
 
     private static final int MIN_WIDTH = 900;
-    private static final int MIN_HEIGHT = 675;
+    private static final int MIN_HEIGHT = 600;
     private final OuterView parent;
     private final DrawPanel drawPanel;
     private final ToolBar jpToolBar;

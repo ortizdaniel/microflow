@@ -208,7 +208,9 @@ public class Controller extends MouseAdapter implements ActionListener {
             path += ".mcf";
         }
         if (model.saveToFile(path)) {
-            //view.setTitle(fileName.replace(extension, ""));
+            String legibleName = fileName.replace(extension, "");
+            view.getMainView().setTitle("Microflow - " + legibleName);
+            view.getMainView().setCurrentTabTitle(legibleName);
         } else {
             JOptionPane.showMessageDialog(view, "Error saving file.");
         }

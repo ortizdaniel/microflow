@@ -77,6 +77,7 @@ public class ToolBar extends JPanel {
     public static final String ACTION_CURSOR_C = "/image/cursor/action_c.png";
 
     public static final String TEXT_ICON = "/image/toolbar/text.png";
+    public static final String CLOSE_ICON = "/image/toolbar/close.png";
 
     public ToolBar() {
 
@@ -176,7 +177,11 @@ public class ToolBar extends JPanel {
         jtbIcons.add(panel);
     }
 
-    private JButton makeCustomButton(String tipText, String iconPath) {
+    public static JButton makeCustomButton(String tipText, String iconPath) {
+        return makeCustomButton(tipText, iconPath, BUTTON_SIZE);
+    }
+
+    public static JButton makeCustomButton(String tipText, String iconPath, int size) {
         JButton jb = new JButton();
 
         jb.setPreferredSize(jbDimension);
@@ -201,8 +206,8 @@ public class ToolBar extends JPanel {
         });
 
         try {
-            Image img = new ImageIcon(getClass().getResource(iconPath)).getImage()
-                    .getScaledInstance(BUTTON_SIZE, BUTTON_SIZE, Image.SCALE_SMOOTH);
+            Image img = new ImageIcon(ToolBar.class.getResource(iconPath)).getImage()
+                    .getScaledInstance(size, size, Image.SCALE_SMOOTH);
             ImageIcon icon = new ImageIcon(img);
             jb.setIcon(icon);
         } catch (Exception e) {

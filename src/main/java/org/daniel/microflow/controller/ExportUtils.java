@@ -6,6 +6,7 @@ import org.daniel.microflow.view.DiagramView;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -195,6 +196,7 @@ public class ExportUtils {
 
     public static void exportMotor(Graph model, JFileChooser chooser, DiagramView view) {
         if (model.canBeExported(0)) {
+            chooser.setSelectedFile(new File(chooser.getSelectedFile().getName().replace(".mcf", "")));
             chooser.setFileFilter(new FileNameExtensionFilter("C source (.c)", "c"));
             if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                 String filePath = chooser.getSelectedFile().getAbsolutePath() + ".c";

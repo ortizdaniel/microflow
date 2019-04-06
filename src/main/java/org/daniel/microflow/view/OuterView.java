@@ -28,6 +28,7 @@ public class OuterView extends JFrame {
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         tabbedPane = new JTabbedPane();
         tabbedPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+        tabbedPane.setBackground(Color.WHITE);
         setTitle("Microflow - " + TITLE + tabId);
 
         if (System.getProperty("os.name").startsWith("Mac")) {
@@ -83,11 +84,9 @@ public class OuterView extends JFrame {
         JPanel tabTitle = new JPanel(new FlowLayout(FlowLayout.CENTER, 3, 3));
 
         tabTitle.add(new JLabel(name));
-        if (System.getProperty("os.name").contains("Windows")) {
-            tabTitle.setBackground(Color.WHITE);
-        }
+        tabTitle.setBackground(Color.WHITE);
 
-        JButton closeButton = new JButton("X");
+        JButton closeButton = ToolBar.makeCustomButton("Close tab", ToolBar.CLOSE_ICON, 18);
         closeButton.setActionCommand(String.valueOf(tabId));
         closeButton.addActionListener(l -> {
             JButton btn = (JButton) l.getSource();
@@ -109,12 +108,19 @@ public class OuterView extends JFrame {
                 }
             }
         });
-        closeButton.setPreferredSize(new Dimension(18, 15));
+        closeButton.setPreferredSize(new Dimension(24, 15));
         tabTitle.add(closeButton);
         tabTitle.setBorder(new EmptyBorder(0, 0, 0, 0));
 
         tabbedPane.addTab(null, view);
         tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, tabTitle);
         tabId++;
+    }
+
+    public void setCurrentTabTitle(String title) {
+        int index = tabbedPane.getSelectedIndex();
+        JPanel currentTitle = (JPanel) tabbedPane.getTabComponentAt(index);
+        JLabel label = (JLabel) currentTitle.getComponent(0);
+        label.setText(title);
     }
 }
