@@ -129,8 +129,8 @@ public class DiagramView extends JPanel {
         north.add(new JLabel("Enter the desired size (in pixels)"));
         panel.add(north, BorderLayout.NORTH);
         JPanel grid = new JPanel(new GridLayout(2, 2));
-        JTextField width = new JTextField(String.valueOf(drawPanel.getPreferredSize().width));
-        JTextField height = new JTextField(String.valueOf(drawPanel.getPreferredSize().height));
+        JTextField width = new JTextField(String.valueOf(drawPanel.getSize().width));
+        JTextField height = new JTextField(String.valueOf(drawPanel.getSize().height));
         width.setColumns(10);
         height.setColumns(10);
         grid.add(new JLabel("Width:"));
