@@ -126,7 +126,7 @@ public class DiagramView extends JPanel {
         border.setHgap(10);
         JPanel panel = new JPanel(border);
         JPanel north = new JPanel();
-        north.add(new JLabel("Enter the desired size"));
+        north.add(new JLabel("Enter the desired size (in pixels)"));
         panel.add(north, BorderLayout.NORTH);
         JPanel grid = new JPanel(new GridLayout(2, 2));
         JTextField width = new JTextField(String.valueOf(drawPanel.getPreferredSize().width));

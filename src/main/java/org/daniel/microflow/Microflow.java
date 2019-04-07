@@ -18,12 +18,14 @@ public class Microflow {
 
     public static void main(String[] args) {
         try {
+
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             if (System.getProperty("os.name").startsWith("Mac")) {
                 System.setProperty("apple.laf.useScreenMenuBar", "true");
                 System.setProperty("apple.eawt.quitStrategy", "CLOSE_ALL_WINDOWS");
                 System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Microflow");
+                UIManager.put("TabbedPane.selected", Color.WHITE);
             }
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
