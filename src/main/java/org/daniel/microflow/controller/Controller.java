@@ -463,8 +463,9 @@ public class Controller extends MouseAdapter implements ActionListener {
         });
 
         try {
-            pj.printDialog();
-            pj.print();
+            if (pj.printDialog()) {
+                pj.print();
+            }
         } catch (PrinterException ex) {
             ex.printStackTrace();
         }
