@@ -37,7 +37,8 @@ public enum CursorDetail {
     GEN_FILES(Cursor.getDefaultCursor(), null, null),
     GEN_MOTOR(Cursor.getDefaultCursor(), null, null),
     GEN_DICT(Cursor.getDefaultCursor(), null, null),
-    UNDO(Cursor.getDefaultCursor(), null, null);
+    UNDO(Cursor.getDefaultCursor(), null, null),
+    REDO(Cursor.getDefaultCursor(), null, null);
 
     private Cursor cursor;
     private Object elementToAdd;

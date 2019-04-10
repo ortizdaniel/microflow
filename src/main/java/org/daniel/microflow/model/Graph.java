@@ -19,12 +19,14 @@ public class Graph {
     private LinkedList<Edge> edges;
     private LinkedList<Action> actions;
     private transient LinkedList<String> phases;
+    private transient LinkedList<String> revertedPhases;
 
     public Graph() {
         nodes = new LinkedList<>();
         edges = new LinkedList<>();
         actions = new LinkedList<>();
         phases = new LinkedList<>();
+        revertedPhases = new LinkedList<>();
         addPhase();
     }
 
@@ -290,10 +292,25 @@ public class Graph {
 
     public void addPhase() {
         phases.add(toJson());
+
+        if (revertedPhases.size() > 0) {
+            revertedPhases.clear(); // We don't want to re-do if we have already manually changed the last state
+        }
     }
 
     public void undo() {
-        loadFromJson(phases.getLast());
-        if (phases.size() > 1) phases.removeLast();
+        if (phases.size() > 0) {
+            revertedPhases.add(toJson());
+            loadFromJson(phases.getLast());
+            phases.removeLast();
+        }
+    }
+
+    public void redo() {
+        if (revertedPhases.size() > 0) {
+            phases.add(toJson());
+            loadFromJson(revertedPhases.getLast());
+            revertedPhases.removeLast();
+        }
     }
 }

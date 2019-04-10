@@ -109,6 +109,9 @@ public class Controller extends MouseAdapter implements ActionListener {
             case UNDO:
                 model.undo();
                 break;
+            case REDO:
+                model.redo();
+                break;
         }
 
         if (state.getCursor().equals(Cursor.getDefaultCursor())) {
