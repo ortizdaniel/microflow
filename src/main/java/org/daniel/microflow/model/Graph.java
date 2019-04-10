@@ -27,7 +27,6 @@ public class Graph {
         actions = new LinkedList<>();
         phases = new LinkedList<>();
         revertedPhases = new LinkedList<>();
-        addPhase();
     }
 
     public Element getElementAt(Point p) {
