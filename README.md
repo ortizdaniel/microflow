@@ -23,4 +23,4 @@ Note: the DMG file will only be built when ran on macOS. On other operating syst
 
 ---
 
-Based on the original BubbleWizard by Francisco.
+Based on the original BubbleWizard by Francesc.
