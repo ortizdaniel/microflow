@@ -205,7 +205,7 @@ public class ExportUtils {
 
 
                 sb.append("void ").append(name).append("(void) {").append(sep);
-                sb.append("\tstatic char estat = 0;\n").append(sep).append("\tswitch(estat) {").append(sep);
+                sb.append("\tstatic char state = 0;\n").append(sep).append("\tswitch(state) {").append(sep);
 
                 String aux = sb.toString();
 
@@ -251,7 +251,7 @@ public class ExportUtils {
                                 }
 
                                 if (e.getN1() != e.getN2()) {
-                                    sb.append(tabs).append("estat = ").append(e.getN2().getName()).append(";").append(sep);
+                                    sb.append(tabs).append("state = ").append(e.getN2().getName()).append(";").append(sep);
                                 }
 
                                 if (e.getName().length() > 0) {
@@ -290,7 +290,7 @@ public class ExportUtils {
             HashSet<String> added = new HashSet<>();
             for (Edge e : model.getEdges()) {
                 if (e.getType().equals(EdgeType.INTERFACE) && !added.contains(e.getName())) {
-                    sb.append("//Interficie ").append(e.getName()).append(sep).append(sep).append(e.getFunctions());
+                    sb.append("//Interface ").append(e.getName()).append(sep).append(sep).append(e.getFunctions());
                     added.add(e.getName());
                 }
             }
