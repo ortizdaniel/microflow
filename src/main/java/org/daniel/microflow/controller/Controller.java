@@ -490,9 +490,9 @@ public class Controller extends MouseAdapter implements ActionListener {
         if (obj instanceof NodeType) {
             NodeType nt = (NodeType) obj;
             if (nt.equals(NodeType.STATE)) {
-                model.addNode(new Node(nt, e.getPoint()));
+                model.addNode(new Node(nt, e.getPoint(), model));
             } else {
-                model.addNode(new Node(nt, state.getNameToAdd(), e.getPoint()));
+                model.addNode(new Node(nt, state.getNameToAdd(), e.getPoint(), model));
             }
             Component c = e.getComponent(); //DrawPanel instance
             if (!c.contains(e.getPoint())) {

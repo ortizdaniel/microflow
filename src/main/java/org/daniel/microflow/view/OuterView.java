@@ -31,7 +31,6 @@ public class OuterView extends JFrame {
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         tabbedPane = new JTabbedPane();
         tabbedPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-        //tabbedPane.setBackground(Color.WHITE);
         setTitle("Microflow - " + TITLE + tabId);
 
         if (System.getProperty("os.name").startsWith("Mac")) {
@@ -54,6 +53,8 @@ public class OuterView extends JFrame {
                 }
             }
         });
+
+        setJMenuBar(new JMenuBar());
 
         final JPanel content = (JPanel) getContentPane();
         content.setBorder(new EmptyBorder(0, 0, 0, 0));

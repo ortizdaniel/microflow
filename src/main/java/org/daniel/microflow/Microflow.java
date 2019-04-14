@@ -14,23 +14,22 @@ import java.net.URL;
 
 public class Microflow {
 
-    public static final String VERSION = "1.6.2";
+    public static final String VERSION = "1.6.3";
 
     public static void main(String[] args) {
         try {
-
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             if (System.getProperty("os.name").startsWith("Mac")) {
-                System.setProperty("apple.laf.useScreenMenuBar", "true");
-                System.setProperty("apple.eawt.quitStrategy", "CLOSE_ALL_WINDOWS");
-                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Microflow");
                 UIManager.put("TabbedPane.selected", Color.WHITE);
+                System.setProperty("apple.laf.useScreenMenuBar", "true");
+                System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Microflow");
+                System.setProperty("apple.eawt.quitStrategy", "CLOSE_ALL_WINDOWS");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        SwingUtilities.invokeLater(() -> {
+        EventQueue.invokeLater(() -> {
             OuterView view = new OuterView();
             OuterController controller = new OuterController(view);
             view.registerController(controller);

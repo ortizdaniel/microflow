@@ -30,8 +30,6 @@ public class Edge extends Element {
     private Point namePoint;
     private Rectangle nameBounds;
 
-    private static int interfaceCount = 0;
-
     private static final int PIVOT_WIDTH = 15;
     private static final int PIVOT_HEIGHT = 15;
     private static final int H = 50;
@@ -77,7 +75,8 @@ public class Edge extends Element {
     }
 
     public Edge(EdgeType type, Node n1, Node n2, Graph g) {
-        this(type, String.valueOf(interfaceCount++), n1, n2, g);
+        this(type, String.valueOf(g.getInterfaceCount()), n1, n2, g);
+        g.incInterfaceCount();
     }
 
     public boolean pivotContains(Point p) {
@@ -94,18 +93,6 @@ public class Edge extends Element {
 
     public Node getN2() {
         return n2;
-    }
-
-    public static void decrementInterfaceCount() {
-        interfaceCount--;
-    }
-
-    public static void setInterfaceCount(int count) {
-        interfaceCount = count;
-    }
-
-    public static int getInterfaceCount() {
-        return interfaceCount;
     }
 
     public void update() {

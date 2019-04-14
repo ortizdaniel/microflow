@@ -19,6 +19,8 @@ public class Graph {
     private LinkedList<Edge> edges;
     private LinkedList<Action> actions;
     private transient LinkedList<String> phases;
+    private int stateCount;
+    private int interfaceCount;
 
     public Graph() {
         nodes = new LinkedList<>();
@@ -85,7 +87,7 @@ public class Graph {
                     k.setName(String.valueOf(count++));
                 }
             }
-            Node.decrementStateCount();
+            stateCount--;
         }
     }
 
@@ -110,7 +112,7 @@ public class Graph {
                     k.setName(String.valueOf(count++));
                 }
             }
-            Edge.decrementInterfaceCount();
+            interfaceCount--;
         }
     }
 
@@ -149,8 +151,8 @@ public class Graph {
     }
 
     public void deleteAll() {
-        Edge.setInterfaceCount(0);
-        Node.setStateCount(0);
+        interfaceCount = 0;
+        stateCount = 0;
         nodes.clear();
         edges.clear();
         actions.clear();
@@ -254,19 +256,19 @@ public class Graph {
             e.setSelected(false);
             if (e.getType().equals(EdgeType.INTERFACE)) {
                 try {
-                    int ours = Edge.getInterfaceCount();
+                    int ours = interfaceCount;
                     int theirs = Integer.parseInt(e.getName());
                     if (ours <= theirs) {
-                        Edge.setInterfaceCount(theirs + 1);
+                        interfaceCount = theirs + 1;
                     }
                 } catch (NumberFormatException ok) { }
             }
             for (Node n : g.nodes) {
                 try {
-                    int ours = Node.getStateCount();
+                    int ours = stateCount;
                     int theirs = Integer.parseInt(n.getName());
                     if (ours <= theirs) {
-                        Node.setStateCount(theirs + 1);
+                        stateCount = theirs + 1;
                     }
                 } catch (NumberFormatException ok) { }
                 if (e.getN1().equals(n)) e.setN1(n);
@@ -295,5 +297,21 @@ public class Graph {
     public void undo() {
         loadFromJson(phases.getLast());
         if (phases.size() > 1) phases.removeLast();
+    }
+
+    public int getStateCount() {
+        return stateCount;
+    }
+
+    public int getInterfaceCount() {
+        return interfaceCount;
+    }
+
+    public void incStateCount() {
+        stateCount++;
+    }
+
+    public void incInterfaceCount() {
+        interfaceCount++;
     }
 }

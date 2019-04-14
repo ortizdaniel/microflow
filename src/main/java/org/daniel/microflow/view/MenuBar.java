@@ -90,13 +90,8 @@ public class MenuBar extends JMenuBar {
         jmiPrint.setAccelerator(
                 KeyStroke.getKeyStroke(KeyEvent.VK_P, (Toolkit.getDefaultToolkit().getMenuShortcutKeyMask())));
 
-        JMenuItem jmiExit = new JMenuItem("Exit");
-        jmiExit.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                System.exit(0);
-            }
-        });
+        //JMenuItem jmiExit = new JMenuItem("Exit");
+        //jmiExit.addActionListener(e -> System.exit(0));
 
         jmFile.add(jmiNewFile);
         jmFile.add(jmiOpenFile);
@@ -113,10 +108,10 @@ public class MenuBar extends JMenuBar {
         jmFile.add(jmiGenFiles);
         jmFile.add(jmiGenMotor);
         jmFile.add(jmiGenDict);
-        jmFile.addSeparator();
+        //jmFile.addSeparator();
 
         /* Exit */
-        jmFile.add(jmiExit);
+        //jmFile.add(jmiExit);
     }
 
     private void addToolsOptions() {
@@ -159,8 +154,8 @@ public class MenuBar extends JMenuBar {
     }
 
     private void addWindowOptions() {
-        JMenuItem jmiMinimize = new JMenuItem("Minimize");
-        JMenuItem jmiMaximize = new JMenuItem("Maximize");
+        //JMenuItem jmiMinimize = new JMenuItem("Minimize");
+        //JMenuItem jmiMaximize = new JMenuItem("Maximize");
         JMenuItem jmiToolBar = new JMenuItem("Show/hide Toolbar");
         JMenuItem jmiSize = new JMenuItem("Change size");
 
@@ -179,8 +174,8 @@ public class MenuBar extends JMenuBar {
 
         jmiSize.addActionListener(e -> view.changeDimension());
 
-        jmWindow.add(jmiMinimize);
-        jmWindow.add(jmiMaximize);
+        //jmWindow.add(jmiMinimize);
+        //jmWindow.add(jmiMaximize);
         jmWindow.add(jmiToolBar);
         jmWindow.add(jmiSize);
     }

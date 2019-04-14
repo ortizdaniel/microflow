@@ -7,12 +7,11 @@ public class Node extends Element {
 
     protected Point center;
     protected NodeType type;
-
-    private static int stateCount = 0;
+    private transient Graph graph;
 
     private static final String TAD = "TAD";
 
-    public Node(NodeType type, String name, Point center) {
+    public Node(NodeType type, String name, Point center, Graph g) {
         super(name);
         this.type = type;
         this.center = center;
@@ -20,8 +19,9 @@ public class Node extends Element {
         setName(name);
     }
 
-    public Node(NodeType type, Point center) {
-        this(type, String.valueOf(stateCount++), center);
+    public Node(NodeType type, Point center, Graph g) {
+        this(type, String.valueOf(g.getStateCount()), center, g);
+        g.incStateCount();
     }
 
     @Override
@@ -44,18 +44,6 @@ public class Node extends Element {
         this.center = center;
         setBounds();
         setName(name);
-    }
-
-    public static void decrementStateCount() {
-        stateCount--;
-    }
-
-    public static void setStateCount(int count) {
-        stateCount = count;
-    }
-
-    public static int getStateCount() {
-        return stateCount;
     }
 
     public boolean circleContains(Point p) {
