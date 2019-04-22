@@ -30,7 +30,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     private Node addingEdgeFrom;
     private ContextMenu contextMenu;
     private final static String OPTIONS[] = {"Read/Write", "Write", "Read"};
-    private final JFileChooser chooser;
+    private final static JFileChooser chooser = new JFileChooser();
     private boolean draggingPivot;
     private boolean draggingName;
     private boolean draggingActionPivot;
@@ -49,7 +49,6 @@ public class Controller extends MouseAdapter implements ActionListener {
         addingEdgeFrom = null;
         contextMenu = new ContextMenu();
         contextMenu.addListener(this);
-        chooser = new JFileChooser();
         chooser.setFileFilter(FILTER);
         draggingPivot = false;
         draggingName = false;
@@ -156,16 +155,19 @@ public class Controller extends MouseAdapter implements ActionListener {
      * https://stackoverflow.com/questions/5655908/export-jpanel-graphics-to-png-or-gif-or-jpg
      */
     private void saveFilePng() {
-        JFileChooser c = new JFileChooser();
-        c.setFileFilter(new FileNameExtensionFilter("PNG (.png)", "png"));
-        if (c.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
+        chooser.setFileFilter(new FileNameExtensionFilter("PNG (.png)", "png"));
+        if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
             Dimension d = view.getDrawPanel().getSize();
             BufferedImage img = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
             Graphics2D g = img.createGraphics();
             view.getDrawPanel().paint(g);
             g.dispose();
             try {
-                ImageIO.write(img, "png", new File(c.getSelectedFile().getAbsolutePath() + ".png"));
+                String fileName = chooser.getSelectedFile().getAbsolutePath();
+                if (!fileName.substring(fileName.length() - 4).equalsIgnoreCase(".png")) {
+                    fileName += ".png";
+                }
+                ImageIO.write(img, "png", new File(fileName));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -173,6 +175,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     }
 
     private void openFile() {
+        chooser.setFileFilter(FILTER);
         if (chooser.showOpenDialog(view) == JFileChooser.APPROVE_OPTION) {
             String name = chooser.getSelectedFile().getAbsolutePath();
             Graph newModel = new Graph();
@@ -181,7 +184,6 @@ public class Controller extends MouseAdapter implements ActionListener {
                 File selected = chooser.getSelectedFile();
                 view.getMainView().addTabFromGraph(newModel, fileName.substring(0, fileName.indexOf('.')), selected);
                 view.getMainView().goToLastTab();
-                //view.setTitle(fileName.substring(0, fileName.length() - 4));
             } else {
                 JOptionPane.showMessageDialog(view, "Error loading file.");
             }
@@ -189,6 +191,7 @@ public class Controller extends MouseAdapter implements ActionListener {
     }
 
     private void saveFile() {
+        chooser.setFileFilter(FILTER);
         if (chooser.getSelectedFile() == null) {
             if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                 fileName = chooser.getSelectedFile().getName();
@@ -495,9 +498,14 @@ public class Controller extends MouseAdapter implements ActionListener {
                 model.addNode(new Node(nt, state.getNameToAdd(), e.getPoint(), model));
             }
             Component c = e.getComponent(); //DrawPanel instance
-            if (!c.contains(e.getPoint())) {
-                ((DrawPanel) c).addSize(30, 30);
-                view.addSize(30, 30);
+            Rectangle bounds = c.getBounds();
+            if (e.getPoint().x > bounds.width) {
+                ((DrawPanel) c).addSize(100, 0);
+                c.revalidate();
+            }
+
+            if (e.getPoint().y > bounds.height) {
+                ((DrawPanel) c).addSize(0, 100);
                 c.revalidate();
             }
         } else if (obj instanceof EdgeType) {

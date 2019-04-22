@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.geom.QuadCurve2D;
 
 public class DrawPanel extends JPanel {
@@ -21,20 +22,25 @@ public class DrawPanel extends JPanel {
     private Rectangle bounds;
     private final Stroke lineStroke = new BasicStroke(1.5f);
     private final Graph graph;
+    private final ComponentListener resizeListener;
+    private Dimension dim;
 
     public DrawPanel(Graph graph) {
         super();
         setBackground(Color.decode("#FEFEFE"));
         type = NONE;
-        bounds = new Rectangle(0, 0, getWidth() - 30, getHeight() - 30);
+        bounds = new Rectangle(0, 0, getWidth() - 100, getHeight() - 100);
 
-        addComponentListener(new ComponentAdapter() {
+        resizeListener = new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                bounds.setBounds(0, 0, getWidth() - 30, getHeight() - 30);
+                bounds.setBounds(0, 0, getWidth() - 100, getHeight() - 100);
             }
-        });
+        };
+
+        addComponentListener(resizeListener);
         this.graph = graph;
+        dim = new Dimension();
     }
 
     @Override
@@ -83,7 +89,22 @@ public class DrawPanel extends JPanel {
     }
 
     public void addSize(int width, int height) {
-        bounds.width += width;
-        bounds.height += height;
+        bounds = new Rectangle(bounds.x, bounds.y, bounds.width + width, bounds.height + height);
+    }
+
+    public void setNewSize(int width, int height) {
+        bounds = new Rectangle(bounds.x, bounds. y, width, height);
+    }
+
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle(bounds);
+    }
+
+    @Override
+    public Dimension getPreferredSize() {
+        dim.width = bounds.width + 100;
+        dim.height = bounds.height + 100;
+        return dim;
     }
 }

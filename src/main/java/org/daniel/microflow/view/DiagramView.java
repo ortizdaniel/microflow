@@ -9,28 +9,18 @@ import java.awt.event.MouseAdapter;
 
 public class DiagramView extends JPanel {
 
-    private static final int MIN_WIDTH = 900;
-    private static final int MIN_HEIGHT = 600;
     private final OuterView parent;
     private final DrawPanel drawPanel;
     private final ToolBar jpToolBar;
     private final MenuBar jmbMenuBar;
-    private final Dimension dimension = new Dimension(MIN_WIDTH, MIN_HEIGHT);
     private final FunctionsDialogPanel functionsDialogPanel;
 
     public DiagramView(OuterView parent, Graph graph) {
-        setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
-
         this.parent = parent;
         setLayout(new BorderLayout());
         JPanel content = this;
         JPanel north = new JPanel(new BorderLayout());
-        drawPanel = new DrawPanel(graph) {
-            @Override
-            public Dimension getPreferredSize() {
-                return dimension;
-            }
-        };
+        drawPanel = new DrawPanel(graph);
         jpToolBar = new ToolBar();
         north.add(jpToolBar, BorderLayout.SOUTH);
 
@@ -112,7 +102,7 @@ public class DiagramView extends JPanel {
         panel.add(grid, BorderLayout.CENTER);
         int res = JOptionPane.showConfirmDialog(this, panel, "Size", JOptionPane.OK_CANCEL_OPTION);
         if (res == JOptionPane.OK_OPTION) {
-            dimension.setSize(Integer.parseInt(width.getText()), Integer.parseInt(height.getText()));
+            drawPanel.setNewSize(Integer.parseInt(width.getText()), Integer.parseInt(height.getText()));
             drawPanel.revalidate();
         }
     }
@@ -129,11 +119,6 @@ public class DiagramView extends JPanel {
         }
 
         return null;
-    }
-
-    public void addSize(int width, int height) {
-        int w = dimension.width, h = dimension.height;
-        dimension.setSize(w + width, h + height);
     }
 
     public OuterView getMainView() {

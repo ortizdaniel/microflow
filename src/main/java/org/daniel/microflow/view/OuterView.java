@@ -2,6 +2,7 @@ package org.daniel.microflow.view;
 
 import org.daniel.microflow.controller.Controller;
 import org.daniel.microflow.model.Graph;
+import org.daniel.microflow.model.Node;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -61,8 +62,8 @@ public class OuterView extends JFrame {
         content.add(tabbedPane, BorderLayout.CENTER);
 
         tabId = 0;
-        addTab();
         setVisible(true);
+        addTab();
     }
 
     public void registerController(ChangeListener l) {
@@ -101,6 +102,22 @@ public class OuterView extends JFrame {
         tabbedPane.setTabComponentAt(tabbedPane.getTabCount() - 1, tabTitle);
         closeButton.requestFocusInWindow();
         tabId++;
+
+        for (Node n : graph.getNodes()) {
+            int dx = n.getCenter().x - view.getDrawPanel().getBounds().width;
+            int dy = n.getCenter().y - view.getDrawPanel().getBounds().height;
+
+            Rectangle bounds = view.getDrawPanel().getBounds();
+            if (n.getCenter().x > bounds.width) {
+                view.getDrawPanel().addSize(dx + 30, 0);
+                view.revalidate();
+            }
+
+            if (n.getCenter().y > bounds.height) {
+                view.getDrawPanel().addSize(0, dy + 30);
+                view.revalidate();
+            }
+        }
     }
 
     public void setCurrentTabTitle(String title) {
