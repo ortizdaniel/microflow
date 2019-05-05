@@ -30,16 +30,23 @@ public class Controller extends MouseAdapter implements ActionListener {
     private Node addingEdgeFrom;
     private ContextMenu contextMenu;
     private final static String OPTIONS[] = {"Read/Write", "Write", "Read"};
-    private final static JFileChooser chooser = new JFileChooser();
     private boolean draggingPivot;
     private boolean draggingName;
     private boolean draggingActionPivot;
     private Point mousePoint, delta;
     private long lastClick;
 
-    private String fileName;
+    public static final FileFilter MCF_FILTER = new FileNameExtensionFilter("Microflow file (.mcf)", "mcf");
+    public static final FileFilter PNG_FILTER = new FileNameExtensionFilter("PNG (.png)", "png");
+    public static final FileFilter TXT_FILTER = new FileNameExtensionFilter("Text file (.txt)", "txt");
+    public static final FileFilter C_SOURCE = new FileNameExtensionFilter("C source code (.c)", "c");
 
-    public static final FileFilter FILTER = new FileNameExtensionFilter("Microflow file (.mcf)", "mcf");
+    private File lastMcfFile;
+    private File lastPngFile;
+    private File lastTxtFile;
+    private File lastGenerationFile;
+    private File lastSourceFile;
+    private static File lastOpenFile;
 
     public Controller(DiagramView view, Graph graph) {
         this.view = view;
@@ -49,7 +56,6 @@ public class Controller extends MouseAdapter implements ActionListener {
         addingEdgeFrom = null;
         contextMenu = new ContextMenu();
         contextMenu.addListener(this);
-        chooser.setFileFilter(FILTER);
         draggingPivot = false;
         draggingName = false;
         mousePoint = new Point();
@@ -63,13 +69,13 @@ public class Controller extends MouseAdapter implements ActionListener {
             }
             return false;
         });
-        fileName = "Diagram 1";
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         state = CursorDetail.valueOf(e.getActionCommand());
         view.changeCursor(state.getCursor());
+        JFileChooser chooser;
 
         switch (state) {
             case NEW_FILE:
@@ -88,13 +94,22 @@ public class Controller extends MouseAdapter implements ActionListener {
                 printFile();
                 break;
             case GEN_FILES:
-                ExportUtils.exportFile(model, chooser, view);
+                chooser = new JFileChooser();
+                chooser.setFileFilter(null);
+                if (lastGenerationFile != null) chooser.setSelectedFile(lastGenerationFile);
+                lastGenerationFile = ExportUtils.exportSourceCode(model, chooser, view);
                 break;
             case GEN_MOTOR:
-                ExportUtils.exportMotor(model, chooser, view);
+                chooser = new JFileChooser();
+                chooser.setFileFilter(C_SOURCE);
+                if (lastSourceFile != null) chooser.setSelectedFile(lastSourceFile);
+                lastSourceFile = ExportUtils.exportMotor(model, chooser, view);
                 break;
             case GEN_DICT:
-                ExportUtils.exportDictionary(model, chooser, view);
+                chooser = new JFileChooser();
+                chooser.setFileFilter(TXT_FILTER);
+                if (lastTxtFile != null) chooser.setSelectedFile(lastTxtFile);
+                lastTxtFile = ExportUtils.exportDictionary(model, chooser, view);
                 break;
             case DELETE_POPUP:
                 deletePopup();
@@ -155,7 +170,9 @@ public class Controller extends MouseAdapter implements ActionListener {
      * https://stackoverflow.com/questions/5655908/export-jpanel-graphics-to-png-or-gif-or-jpg
      */
     private void saveFilePng() {
-        chooser.setFileFilter(new FileNameExtensionFilter("PNG (.png)", "png"));
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(PNG_FILTER);
+        if (lastPngFile != null) chooser.setSelectedFile(lastPngFile);
         if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
             Dimension d = view.getDrawPanel().getSize();
             BufferedImage img = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
@@ -171,30 +188,35 @@ public class Controller extends MouseAdapter implements ActionListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            lastPngFile = chooser.getSelectedFile();
         }
     }
 
     private void openFile() {
-        chooser.setFileFilter(FILTER);
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(MCF_FILTER);
+        if (lastOpenFile != null) chooser.setSelectedFile(lastOpenFile);
         if (chooser.showOpenDialog(view) == JFileChooser.APPROVE_OPTION) {
             String name = chooser.getSelectedFile().getAbsolutePath();
             Graph newModel = new Graph();
             if (newModel.loadFromFile(name)) {
-                fileName = chooser.getSelectedFile().getName();
                 File selected = chooser.getSelectedFile();
-                view.getMainView().addTabFromGraph(newModel, fileName.substring(0, fileName.indexOf('.')), selected);
+                view.getMainView().addTabFromGraph(newModel, selected.getName().substring(0, selected.getName().indexOf('.')), selected);
                 view.getMainView().goToLastTab();
             } else {
                 JOptionPane.showMessageDialog(view, "Error loading file.");
             }
+            lastOpenFile = chooser.getSelectedFile();
         }
     }
 
     private void saveFile() {
-        chooser.setFileFilter(FILTER);
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(MCF_FILTER);
+        if (lastMcfFile != null) chooser.setSelectedFile(lastMcfFile);
         if (chooser.getSelectedFile() == null) {
             if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
-                fileName = chooser.getSelectedFile().getName();
+                lastMcfFile = chooser.getSelectedFile();
             } else {
                 return;
             }
@@ -211,7 +233,7 @@ public class Controller extends MouseAdapter implements ActionListener {
             path += ".mcf";
         }
         if (model.saveToFile(path)) {
-            String legibleName = fileName.replace(extension, "");
+            String legibleName = lastMcfFile.getName().replace(extension, "");
             view.getMainView().setTitle("Microflow - " + legibleName);
             view.getMainView().setCurrentTabTitle(legibleName);
         } else {
@@ -429,7 +451,7 @@ public class Controller extends MouseAdapter implements ActionListener {
 
     private void printFile() {
         PrinterJob pj = PrinterJob.getPrinterJob();
-        pj.setJobName("Print " + fileName);
+        pj.setJobName("Print");
 
         pj.setPrintable((pg, pf, pageNum) -> {
             if (pageNum > 0) {
@@ -466,8 +488,9 @@ public class Controller extends MouseAdapter implements ActionListener {
         });
 
         try {
-            pj.printDialog();
-            pj.print();
+            if (pj.printDialog()) {
+                pj.print();
+            }
         } catch (PrinterException ex) {
             ex.printStackTrace();
         }
@@ -612,11 +635,7 @@ public class Controller extends MouseAdapter implements ActionListener {
         }
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
     public void setChooserFile(File f) {
-        chooser.setSelectedFile(f);
+        lastMcfFile = f;
     }
 }

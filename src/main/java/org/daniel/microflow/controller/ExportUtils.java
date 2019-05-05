@@ -33,10 +33,9 @@ public class ExportUtils {
 
     private static final String sep = System.lineSeparator();
 
-    public static void exportFile(Graph model, JFileChooser chooser, DiagramView view) {
+    public static File exportSourceCode(Graph model, JFileChooser chooser, DiagramView view) {
         if (model.canBeExported(1)) {
             chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-            chooser.setFileFilter(null);
             if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                 Date date = new Date();
                 Path folder;
@@ -185,19 +184,16 @@ public class ExportUtils {
 
                     }
                 }
-                chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-                chooser.setFileFilter(Controller.FILTER);
             }
         } else {
             JOptionPane.showMessageDialog(null, "TAD diagram can't be empty or with States"
                     , "Error while exporting", JOptionPane.ERROR_MESSAGE);
         }
+        return chooser.getSelectedFile();
     }
 
-    public static void exportMotor(Graph model, JFileChooser chooser, DiagramView view) {
+    public static File exportMotor(Graph model, JFileChooser chooser, DiagramView view) {
         if (model.canBeExported(0)) {
-            chooser.setSelectedFile(new File(chooser.getSelectedFile().getName().replace(".mcf", "")));
-            chooser.setFileFilter(new FileNameExtensionFilter("C source (.c)", "c"));
             if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                 String filePath = chooser.getSelectedFile().getAbsolutePath() + ".c";
                 String name = chooser.getSelectedFile().getName();
@@ -277,14 +273,15 @@ public class ExportUtils {
                 sb.setLength(0);
 
             }
-            chooser.setFileFilter(Controller.FILTER);
         } else {
             JOptionPane.showMessageDialog(null, "State diagram can't be empty or with TADs"
                     , "Error while exporting", JOptionPane.ERROR_MESSAGE);
         }
+
+        return chooser.getSelectedFile();
     }
 
-    public static void exportDictionary(Graph model, JFileChooser chooser, DiagramView view) {
+    public static File exportDictionary(Graph model, JFileChooser chooser, DiagramView view) {
         if (model.canBeExported(1)) {
             StringBuilder sb = new StringBuilder();
             HashSet<String> added = new HashSet<>();
@@ -295,7 +292,6 @@ public class ExportUtils {
                 }
             }
 
-            chooser.setFileFilter(new FileNameExtensionFilter("Text file (.txt)", "txt"));
             if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
                 try (FileWriter fw = new FileWriter(chooser.getSelectedFile().getAbsolutePath() + ".txt")) {
                     fw.write(sb.toString());
@@ -303,10 +299,11 @@ public class ExportUtils {
                     e.printStackTrace();
                 }
             }
-            chooser.setFileFilter(Controller.FILTER);
         } else {
             JOptionPane.showMessageDialog(null, "Dictionary cannot be empty or with states"
                     , "Error while exporting", JOptionPane.ERROR_MESSAGE);
         }
+
+        return chooser.getSelectedFile();
     }
 }

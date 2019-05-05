@@ -83,7 +83,6 @@ public class OuterView extends JFrame {
         Controller controller = new Controller(view, graph);
         view.registerController(controller);
         view.addActionListener(controller);
-        controller.setFileName(name);
         controller.setChooserFile(selected);
 
         JPanel tabTitle = new JPanel(new FlowLayout(FlowLayout.CENTER, 3, 3));

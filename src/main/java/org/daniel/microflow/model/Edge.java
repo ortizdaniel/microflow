@@ -140,13 +140,14 @@ public class Edge extends Element {
             return getArrowFor(origin, destination);*/
         } else {
 
-            for (double t = 0; t <= 1; t += 0.005) {
+            for (double t = 1; t >= 0; t -= 0.005) {
                 Point actual = type.equals(EdgeType.OPERATION) ? bezierLinear(t, p1, p2) : bezierQuadratic(t, p0, p1, p2);
                 //si el nodo destino es un TAD o un STATE, mirar su circulo, no su bound entero
                 if ((destType.equals(NodeType.TAD) || destType.equals(NodeType.STATE)) ?
-                        dest.circleContains(actual) :
-                        dest.contains(actual)) {
-                    return getArrowFor(pivotPoint, actual);
+                        !dest.circleContains(actual) :
+                        !dest.contains(actual)) {
+                    Point next = type.equals(EdgeType.OPERATION) ? pivotPoint : bezierQuadratic(t - 0.05, p0, p1, p2);
+                    return getArrowFor(next, actual);
                 }
             }
         }

@@ -156,7 +156,7 @@ public class MenuBar extends JMenuBar {
     private void addWindowOptions() {
         //JMenuItem jmiMinimize = new JMenuItem("Minimize");
         //JMenuItem jmiMaximize = new JMenuItem("Maximize");
-        JMenuItem jmiToolBar = new JMenuItem("Show/hide Toolbar");
+        JMenuItem jmiToolBar = new JMenuItem("Show/hide toolbar");
         JMenuItem jmiSize = new JMenuItem("Change size");
 
         /* Add actions */
