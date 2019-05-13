@@ -172,7 +172,11 @@ public class Controller extends MouseAdapter implements ActionListener {
     private void saveFilePng() {
         JFileChooser chooser = new JFileChooser();
         chooser.setFileFilter(PNG_FILTER);
-        if (lastPngFile != null) chooser.setSelectedFile(lastPngFile);
+        if (lastPngFile != null) {
+            chooser.setSelectedFile(lastPngFile);
+        } else if (lastMcfFile != null) {
+            chooser.setSelectedFile(lastMcfFile);
+        }
         if (chooser.showSaveDialog(view) == JFileChooser.APPROVE_OPTION) {
             Dimension d = view.getDrawPanel().getSize();
             BufferedImage img = new BufferedImage(d.width, d.height, BufferedImage.TYPE_INT_ARGB);
