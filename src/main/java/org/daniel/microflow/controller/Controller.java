@@ -584,11 +584,15 @@ public class Controller extends MouseAdapter implements ActionListener {
         if (addingEdgeFrom != null) {
             Element element = model.getElementAt(e.getPoint());
             if (element instanceof Node) {
-                EdgeType edgeType = (EdgeType) state.getElementToAdd();
-                if (edgeType.equals(EdgeType.INTERFACE)) {
-                    model.addEdge(new Edge(edgeType, addingEdgeFrom, (Node) element, model));
-                } else {
-                    model.addEdge(new Edge(edgeType, state.getNameToAdd(), addingEdgeFrom, (Node) element, model));
+                if (!(element == addingEdgeFrom && !((Node) element).getType().equals(NodeType.STATE))) {
+                    EdgeType edgeType = (EdgeType) state.getElementToAdd();
+                    if (edgeType.equals(EdgeType.INTERFACE)) {
+                        if (addingEdgeFrom != element) {
+                            model.addEdge(new Edge(edgeType, addingEdgeFrom, (Node) element, model));
+                        }
+                    } else {
+                        model.addEdge(new Edge(edgeType, state.getNameToAdd(), addingEdgeFrom, (Node) element, model));
+                    }
                 }
             }
             view.getDrawPanel().setLineStyle(DrawPanel.NONE);

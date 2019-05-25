@@ -4,7 +4,7 @@ import java.awt.*;
 
 public enum NodeType {
 
-    TAD(90, 90, new BasicStroke(3), Color.BLACK, Color.decode("#FCD0A1")),
+    TAD(120, 120, new BasicStroke(3), Color.BLACK, Color.decode("#FCD0A1")),
     VARIABLE(80, 30, new BasicStroke(3), Color.BLACK, Color.WHITE),
     PERIPHERAL(80, 30, new BasicStroke(3), Color.BLACK, Color.decode("#CEDADA")),
     STATE(45, 45, new BasicStroke(3), Color.BLACK, Color.decode("#C8EAD3")),

@@ -14,7 +14,7 @@ import java.net.URL;
 
 public class Microflow {
 
-    public static final String VERSION = "1.6.6";
+    public static final String VERSION = "1.6.7";
 
     public static void main(String[] args) {
         try {

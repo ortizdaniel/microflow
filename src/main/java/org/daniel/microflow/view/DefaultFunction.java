@@ -23,10 +23,23 @@ public enum DefaultFunction {
                     "//Pre: SiCharAvail() returns a number greater than zero.\n"+
                     "//Post: returns and removes the first element from the reception queue.\n\n" +
 
+                    "char SiIsAvailable(void);\n" +
+                    "//Post: returns 1 if the SIO module is available for sending.\n\n" +
+
                     "void SiSendChar(char c);\n" +
-                    "//Post: waits for the last character to be sent and then sends this one (c).\n\n",
+                    "//Pre: SiIsAvailable().\n" +
+                    "//Post: starts sending the specified character.\n\n",
+
             "int AdGetMostra(void);\n" +
-                    "//Post: returns the analog sample converted to 10 bits.\n\n",
+                    "//Post: returns the last analog sample which was converted (10 bits).\n\n" +
+
+                    "char AdSampleAvailable(void)\n" +
+                    "//Post: returns 1 if the conversion has finished or 0 otherwise.\n\n" +
+
+                    "void AdSetChannel(char channel);\n" +
+                    "//Pre: channel is between 0 and MAX_CHANNELS.\n" +
+                    "//Post: sets and starts the conversion for the specified channel.\n\n",
+
             "void func(void);\n//Pre: \n//Post: \n\n"),
 
     SPANISH("char TiGetTimer (void);\n" +
@@ -43,17 +56,29 @@ public enum DefaultFunction {
             "//Post: enciende la temporización asociada a 'Handle' y toma la referencia temporal del sistema.\n\n",
 
             "int SiCharAvail(void);\n" +
-                    "//Post: retorna el número de caracteres disponibles que no se han sacado de la cola\n" +
+                    "//Post: retorna el número de caracteres disponibles que no se han sacado de la cola.\n" +
                     "//Retorna -1 si no hay ningún caracter disponible.\n\n" +
 
                     "char SiGetChar(void);\n" +
-                    "//Pre: SiCharAvail() retorna mayor que cero\n"+
+                    "//Pre: SiCharAvail() retorna mayor que cero.\n"+
                     "//Post: saca y retorna el primer caracter de la cola de recepción.\n\n" +
 
+                    "char SiIsAvailable(void);\n" +
+                    "//Post: retorna 1 si la SIO está disponible para enviar.\n\n" +
+
                     "void SiSendChar(char c);\n" +
-                    "//Post: espera que el caracter anterior se acabe de finalizar y envia este.\n\n",
+                    "//Pre: SiIsAvailable().\n" +
+                    "//Post: comienza a enviar el caracter especificado.\n\n",
+
             "int AdGetMostra(void);\n" +
-                    "//Post: retorna la muestra convertida en 10 bits\n\n",
+                    "//Post: retorna la última muestra convertida (10 bits).\n\n" +
+
+                    "char AdSampleAvailable(void)\n" +
+                    "//Post: returna 1 si la conversión ha finalizado o 0 en caso contrario.\n\n" +
+
+                    "void AdSetChannel(char channel);\n" +
+                    "//Pre: 'channel' está entre 0 y MAX_CHANNELS.\n" +
+                    "//Post: empieza la conversión para el canal especificado.\n\n",
 
             "void func(void);\n//Pre: \n//Post: \n\n"),
 
@@ -71,17 +96,30 @@ public enum DefaultFunction {
             "//Post: Engega la temporització associada a 'Handle' i agafa la referencia temporal del sistema.\n\n",
 
             "int SiCharAvail(void);\n" +
-                    "//Post: retorna el nombre de caràcters rebuts que no s'han recollit\n" +
+                    "//Post: retorna el nombre de caràcters rebuts que no s'han recollit.\n" +
                     "//Retorna -1 si no hi ha cap caracter disponible.\n\n" +
 
                     "char SiGetChar(void);\n" +
-                    "//Pre: SiCharAvail() és major que zero\n"+
+                    "//Pre: SiCharAvail() és major que zero.\n"+
                     "//Post: Treu i retorna el primer caràcter de la cua de recepció.\n\n" +
 
+                    "char SiIsAvailable(void);\n" +
+                    "//Post: returna 1 si la SIO està dispnible per enviar.\n\n" +
+
                     "void SiSendChar(char c);\n" +
-                    "//Post: espera que el caràcter anterior s'hagi enviat i envia aquest.\n\n",
+                    "//Pre: SiIsAvailable()\n" +
+                    "//Post: comença a enviar el caràcter especificat.\n\n",
+
             "int AdGetMostra(void);\n" +
-                    "//Post: Retorna la mostra convertida en 10 bits\n\n",
+                    "//Post: retorna la última mostra convertida (10 bits).\n\n" +
+
+                    "char AdSampleAvailable(void)\n" +
+                    "//Post: returna 1 si la conversión ha acabat o 0 altrament.\n\n" +
+
+                    "void AdSetChannel(char channel);\n" +
+                    "//Pre: 'channel' està entre 0 i MAX_CHANNELS.\n" +
+                    "//Post: comença la conversió pel canal especificat.\n\n",
+
             "void func(void);\n//Pre: \n//Post: \n\n");
 
     private String timerText;

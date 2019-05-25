@@ -15,6 +15,7 @@ public abstract class Element implements Drawable {
     protected static final Stroke STROKE_SMALL = new BasicStroke(1);
 
     protected static final Font FONT_SMALL = new Font("Calibri", Font.PLAIN, 14);
+    protected static final Font FONT_MED_SMALL = new Font("Calibri", Font.PLAIN, 16);
     protected static final Font FONT_MED = new Font("Calibri", Font.PLAIN, 18);
     protected static final Font FONT_LARGE = new Font("Calibri", Font.PLAIN, 24);
 
@@ -104,5 +105,31 @@ public abstract class Element implements Drawable {
 
     protected Point2D.Double toPoint2D(Point p) {
         return new Point2D.Double(p.x, p.y);
+    }
+
+    protected Point bezierQuadratic(double t, Point p0, Point p1, Point p2) {
+        return new Point(
+                (int) ((1 - t) * ((1 - t) * p0.x + t * p1.x) + t * ((1 - t) * p1.x + t * p2.x)),
+                (int) ((1 - t) * ((1 - t) * p0.y + t * p1.y) + t * ((1 - t) * p1.y + t * p2.y))
+        );
+    }
+
+    protected Point rotatePoint(Point centerForRotate, double angle, Point p) {
+        Point pp = new Point(p.x, p.y);
+
+        double s = Math.sin(angle);
+        double c = Math.sin(angle);
+
+        pp.x -= centerForRotate.x;
+        pp.y -= centerForRotate.y;
+
+        double xNew = pp.x * c - pp.y * s;
+        double yNew = pp.x * s + pp.y * c;
+
+        Point rotated = new Point();
+        rotated.x = (int) xNew + centerForRotate.x;
+        rotated.y = (int) yNew + centerForRotate.y;
+
+        return rotated;
     }
 }

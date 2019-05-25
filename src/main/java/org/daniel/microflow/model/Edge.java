@@ -134,10 +134,10 @@ public class Edge extends Element {
         NodeType destType = dest.getType();
 
         if (n1 == n2) {
-            /*Point destination =
+            Point destination =
                     findIntersection(n1.getCenter(), centerPointSame, NodeType.STATE.getWidth() / 2, H / 2);
-            Point origin = findOriginForArrow(destination, n1.getCenter());
-            return getArrowFor(origin, destination);*/
+            Point origin = closestIntersection(centerPointSame, H / 2, pivotPoint, n1.center);
+            return getArrowFor(rotatePoint(destination, 40 * Math.PI/180, origin), destination);
         } else {
 
             for (double t = 1; t >= 0; t -= 0.005) {
@@ -154,22 +154,63 @@ public class Edge extends Element {
         return new Polygon(); //no se puede encontrar el punto, nunca se da este caso
     }
 
-    private Point findOriginForArrow(Point intersection, Point center) {
-        //y - y1 = m(x - x1) --> m = (y2 - y1)/(x2 - x1)
-        //(x1, y1) = center | (x2, y2) = destination
-        double m;
-        try {
-           m = (intersection.y - center.y)/(intersection.x - center.x);
-        } catch (ArithmeticException ex) {
-            m  = 0;
+    public Point closestIntersection(Point center, float radius, Point lineStart, Point lineEnd) {
+        Point intersection1 = new Point();
+        Point intersection2 = new Point();
+        int intersections = findLineCircleIntersections(center.x, center.y, radius, lineStart, lineEnd, intersection1, intersection2);
+
+        if (intersections == 1) {
+            return intersection1;
         }
-        double x = intersection.x + 5;
-        double y = m*(x - center.x) + center.y;
-        Point p = new Point((int) x, (int) y);
-        if (n1.circleContains(p)) {
-            p.y = (int) (m*(intersection.x - 5 - center.x) + center.y);
+
+        if (intersections == 2) {
+            double dist1 = distance(intersection1, lineStart);
+            double dist2 = distance(intersection2, lineStart);
+
+            if (dist1 < dist2) {
+                return intersection1;
+            } else {
+                return intersection2;
+            }
         }
-        return p;
+        return new Point();
+    }
+
+    private double distance(Point p1, Point p2) {
+        return Math.sqrt(Math.pow(p2.x - p1.x, 2) + Math.pow(p2.y - p1.y, 2));
+    }
+
+    private int findLineCircleIntersections(float cx, float cy, float radius,
+                                            Point point1, Point point2, Point intersection1, Point intersection2)
+    {
+        float dx, dy, A, B, C, det, t;
+
+        dx = point2.x - point1.x;
+        dy = point2.y - point1.y;
+
+        A = dx * dx + dy * dy;
+        B = 2 * (dx * (point1.x - cx) + dy * (point1.y - cy));
+        C = (point1.x - cx) * (point1.x - cx) + (point1.y - cy) * (point1.y - cy) - radius * radius;
+
+        det = B * B - 4 * A * C;
+        if ((A <= 0.0000001) || (det < 0)) {
+            return 0;
+        } else if (det == 0) {
+            // One solution.
+            t = -B / (2 * A);
+            intersection1.x = (int) (point1.x + t * dx);
+            intersection1.y = (int) (point1.y + t * dy);
+            return 1;
+        } else {
+            // Two solutions.
+            t = (float)((-B + Math.sqrt(det)) / (2 * A));
+            intersection1.x = (int) (point1.x + t * dx);
+            intersection1.y = (int) (point1.y + t * dy);
+            t = (float)((-B - Math.sqrt(det)) / (2 * A));
+            intersection2.x = (int) (point1.x + t * dx);
+            intersection2.y = (int) (point1.y + t * dy);
+            return 2;
+        }
     }
 
     private Point findIntersection(Point p1, Point p2, int r1, int r2) {
@@ -190,25 +231,20 @@ public class Edge extends Element {
         double fx = (x1+x2) / 2f + a * (x2 - x1);
         double gx = c * (y2 - y1) / 2;
         double ix1 = fx + gx;
+        double ix2 = fx - gx;
 
         double fy = (y1+y2) / 2f + a * (y2 - y1);
         double gy = c * (x1 - x2) / 2;
         double iy1 = fy + gy;
+        double iy2 = fy - gy;
 
-        return new Point((int) ix1, (int) iy1);
+        return new Point((int) ix2, (int) iy2);
     }
     
     private Point bezierLinear(double t, Point p0, Point p1) {
         return new Point(
                 (int) (p0.x + t * (p1.x - p0.x)),
                 (int) (p0.y + t * (p1.y - p0.y))
-        );
-    }
-
-    private Point bezierQuadratic(double t, Point p0, Point p1, Point p2) {
-        return new Point(
-                (int) ((1 - t) * ((1 - t) * p0.x + t * p1.x) + t * ((1 - t) * p1.x + t * p2.x)),
-                (int) ((1 - t) * ((1 - t) * p0.y + t * p1.y) + t * ((1 - t) * p1.y + t * p2.y))
         );
     }
 
@@ -264,7 +300,8 @@ public class Edge extends Element {
             }
             if (type.equals(EdgeType.TRANSITION) || type.equals(EdgeType.INTERRUPT)) {
                 g.setColor(selected ? Color.GRAY : Color.BLACK);
-                drawCenteredText(g, namePoint.x, namePoint.y, name, FONT_LARGE, this);
+                Font f = type.equals(EdgeType.TRANSITION) ? FONT_MED : FONT_LARGE;
+                drawCenteredText(g, namePoint.x, namePoint.y, name, f, this);
             } else if (type.equals(EdgeType.INTERFACE)) {
                 g.setColor(Color.WHITE);
                 g.fillOval(nameBounds.x, nameBounds.y, nameBounds.width, nameBounds.height);
@@ -286,17 +323,6 @@ public class Edge extends Element {
         }
 
         if (action != null) action.draw(g);
-
-        /*if (n1 == n2) {
-            g.setStroke(new BasicStroke(3));
-            g.setColor(Color.RED);
-            for (int i = 0; i < H + 1; i++) {
-                 pos = pointOfEllipsePositive(i, centerPointSame.x, centerPointSame.y, H / 2);
-                Point neg = pointOfEllipseNegative(i, centerPointSame.x, centerPointSame.y, H / 2);
-                g.drawLine(pos.x, pos.Pointy, pos.x, pos.y);
-                g.drawLine(neg.x, neg.y, neg.x, neg.y);
-            }
-        }*/
     }
 
     public void setBidirectional(boolean bidir) {

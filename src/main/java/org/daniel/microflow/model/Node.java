@@ -50,7 +50,7 @@ public class Node extends Element {
         //radio^2 -> 45^2 = 2025 para un TAD
         //           22.5^2 = 506.25 para un estado
         //verificar si es circulo dado por esto tiene un punto p
-        return Math.pow(p.x - center.x, 2) + Math.pow(p.y - center.y, 2) <= (type.equals(NodeType.TAD) ? 2025 : 506.25);
+        return Math.pow(p.x - center.x, 2) + Math.pow(p.y - center.y, 2) <= (type.equals(NodeType.TAD) ? 3600 : 506.25);
     }
 
     @Override
@@ -115,13 +115,19 @@ public class Node extends Element {
                 g.drawOval(x, y, width, height);
 
                 if (type.equals(NodeType.TAD)) {
+                    Point bezOrigin = new Point(center.x, center.y - height / 2);
+                    Point bezDest = new Point(center.x + width / 2, center.y);
+                    Point bezControl = new Point(center.x + width / 2 - 5, center.y - height / 2 + 5);
+                    Point moonOrigin = bezierQuadratic(0.15, bezOrigin, bezControl, bezDest);
+                    Point moonDest = bezierQuadratic(0.85, bezOrigin, bezControl, bezDest);
+
                     g.draw(new QuadCurve2D.Float(
-                            x + width / 2, y, center.x + 15, center.y - 15,
-                            x + width, y + height / 2
+                            moonOrigin.x, moonOrigin.y, center.x + width / 5, center.y - height / 5,
+                            moonDest.x, moonDest.y
                     ));
 
                     g.setFont(FONT_SMALL);
-                    g.drawString(TAD, center.x - 20, center.y - 10);
+                    g.drawString(TAD, center.x - 20, center.y - 20);
                 }
 
                 break;
@@ -155,11 +161,19 @@ public class Node extends Element {
                 g.drawString(line, bounds.x + 5, bounds.y + (lineHeight * (i + 1)) + 4);
             }
         } else {
-            g.setFont(type.equals(NodeType.STATE) ? FONT_LARGE : FONT_MED);
+            Font f;
+            if (type.equals(NodeType.STATE)) {
+                f = FONT_LARGE;
+            } else if (type.equals(NodeType.TAD)) {
+                f = FONT_MED_SMALL;
+            } else {
+                f = FONT_MED;
+            }
+            g.setFont(f);
             g.setColor(Color.BLACK);
             int nameWidth = g.getFontMetrics().stringWidth(name);
             g.drawString(name, center.x - nameWidth / 2,
-                center.y + (type.equals(NodeType.STATE) ? FONT_LARGE.getSize() / 3 : FONT_MED.getSize() / 3));
+                center.y + f.getSize() / 3);
         }
     }
 

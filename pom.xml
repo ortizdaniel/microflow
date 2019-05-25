@@ -6,7 +6,7 @@
 
   <groupId>org.daniel.microflow</groupId>
   <artifactId>Microflow</artifactId>
-  <version>1.6.6</version>
+  <version>1.6.7</version>
 
   <name>Microflow</name>
   <url>https://github.com/ortizdaniel/microflow</url>
