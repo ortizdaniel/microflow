@@ -6,7 +6,7 @@
 
   <groupId>org.daniel.microflow</groupId>
   <artifactId>Microflow</artifactId>
-  <version>1.6.7</version>
+  <version>1.6.8</version>
 
   <name>Microflow</name>
   <url>https://github.com/ortizdaniel/microflow</url>
@@ -102,25 +102,6 @@
                 <originalFilename>${project.artifactId}-${project.version}.exe</originalFilename>
               </versionInfo>
             </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
-      <plugin>
-        <groupId>sh.tak.appbundler</groupId>
-        <artifactId>appbundle-maven-plugin</artifactId>
-        <version>1.2.0</version>
-        <configuration>
-          <mainClass>org.daniel.microflow.Microflow</mainClass>
-          <iconFile>src/main/resources/icon/icon.icns</iconFile>
-          <generateDiskImageFile>true</generateDiskImageFile>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>bundle</goal>
-            </goals>
           </execution>
         </executions>
       </plugin>
