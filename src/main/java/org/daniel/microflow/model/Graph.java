@@ -2,8 +2,15 @@ package org.daniel.microflow.model;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.daniel.microflow.gson.Ellipse2DFloatAdapter;
+import org.daniel.microflow.gson.PointAdapter;
+import org.daniel.microflow.gson.PolygonAdapter;
+import org.daniel.microflow.gson.QuadCurve2DFloatAdapter;
+import org.daniel.microflow.gson.RectangleAdapter;
 
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.QuadCurve2D;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
@@ -13,7 +20,13 @@ import java.util.List;
 
 public class Graph {
 
-    private transient static final Gson gson = new GsonBuilder().create();
+    private transient static final Gson gson = new GsonBuilder()
+            .registerTypeAdapter(Point.class, new PointAdapter())
+            .registerTypeAdapter(Rectangle.class, new RectangleAdapter())
+            .registerTypeAdapter(Polygon.class, new PolygonAdapter())
+            .registerTypeAdapter(QuadCurve2D.Float.class, new QuadCurve2DFloatAdapter())
+            .registerTypeAdapter(Ellipse2D.Float.class, new Ellipse2DFloatAdapter())
+            .create();
 
     private LinkedList<Node> nodes;
     private LinkedList<Edge> edges;
